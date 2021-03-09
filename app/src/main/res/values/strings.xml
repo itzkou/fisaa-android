@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Fisaa</string>
+    <string name="splash_intro">Transport de colis\nentre particuliers</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="label_auth">CONNEXION</string>
+    <string name="social_auth">OU SE CONNECTER AVEC </string>
+    <string name="signup_action"><u>Créer un compte</u></string>
+    <string name="home_bom">ACCUEIL</string>
+    <string name="ads_bom">ANNONCES</string>
+    <string name="trans_bom">ACCUEIL</string>
+    <string name="profile_bom">ACCUEIL</string>
+</resources>

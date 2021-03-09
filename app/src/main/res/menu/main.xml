@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/home_bom"
+        android:id="@+id/home"
+        android:icon="@drawable/ic_arrow"
+        android:menuCategory="secondary"/>
+
+    <item
+        android:title="@string/ads_bom"
+        android:id="@+id/ads"
+        android:icon="@drawable/ic_arrow"
+        android:menuCategory="secondary"/>
+
+    <item
+        android:title="@string/trans_bom"
+        android:id="@+id/trans"
+        android:icon="@drawable/ic_arrow"
+        android:menuCategory="secondary"/>
+
+    <item
+        android:title="@string/profile_bom"
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_arrow"
+        android:menuCategory="secondary"/>
+
+</menu>
