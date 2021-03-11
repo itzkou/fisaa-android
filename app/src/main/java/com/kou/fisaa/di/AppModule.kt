@@ -7,6 +7,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.local.FisaaDatabase
 import com.kou.fisaa.data.local.FisaaDao
 import com.kou.fisaa.data.remote.FisaaRemote
@@ -52,8 +53,6 @@ object AppModule {
 
     @Provides
     fun provideFisaaApi(retrofit: Retrofit): FisaaApi = retrofit.create(FisaaApi::class.java)
-
-
 
     /**** local ******/
 
