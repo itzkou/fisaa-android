@@ -1,5 +1,6 @@
 package com.kou.fisaa.data.remote
 
+import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
 import com.kou.fisaa.data.entities.User
 import retrofit2.Response
@@ -16,7 +17,7 @@ interface FisaaApi {
 
     /** Login **/
     @POST("users/login")
-    suspend fun login(@Body user: User): Response<LoginResponse>
+    suspend fun login(@Body loginQuery: LoginQuery): Response<LoginResponse>
 
     /** Sign Up **/
     suspend fun signUp(@Body user: User): Response<User>

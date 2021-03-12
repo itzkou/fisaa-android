@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.repository.FisaaRepository
@@ -14,21 +15,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: FisaaRepository):ViewModel() {
-    private val  _loginResponse= MutableLiveData<Resource<LoginResponse>>()
-     var user=User(null, "", null, null, null, null, null, null, null, "elbehi.koutheir@gmail.com", null, null, "aaa123", null, null, null)
+class LoginViewModel @Inject constructor(private val repository: FisaaRepository) : ViewModel() {
+    private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
+    val loginResponse = _loginResponse
 
-    val loginResponse =_loginResponse
 
-    init {
-            fetchLoginResponse(user)
-    }
-
-    private  fun fetchLoginResponse(user: User) {
+    fun fetchLoginResponse(loginQuery: LoginQuery) {
         viewModelScope.launch {
-            repository.login(user).collect {
+            repository.login(loginQuery).collect {
                 it?.let {
-                    _loginResponse.value=it
+                    _loginResponse.value = it
                 }
 
             }

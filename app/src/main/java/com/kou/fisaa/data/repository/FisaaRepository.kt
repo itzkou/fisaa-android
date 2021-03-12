@@ -1,5 +1,6 @@
 package com.kou.fisaa.data.repository
 
+import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.local.FisaaDao
@@ -12,19 +13,18 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class FisaaRepository @Inject constructor(
-    private  val remote: FisaaRemote,
-    private  val local :FisaaDao
+        private val remote: FisaaRemote,
+        private val local: FisaaDao
 ) {
 
-    suspend fun login(user:User):Flow<Resource<LoginResponse>?> {
+    suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
         return flow {
             emit(Resource.loading())
-            val response = remote.login(user)
+            val response = remote.login(loginQuery)
             emit(response)
 
         }.flowOn(Dispatchers.IO)
     }
-
 
 
 }
