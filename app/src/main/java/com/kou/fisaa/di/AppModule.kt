@@ -4,14 +4,20 @@ import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
-import com.kou.fisaa.data.entities.User
-import com.kou.fisaa.data.local.FisaaDatabase
+import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.FisaaDao
-import com.kou.fisaa.data.remote.FisaaRemote
+import com.kou.fisaa.data.local.FisaaDatabase
 import com.kou.fisaa.data.remote.FisaaApi
+import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.data.repository.FisaaRepository
 import dagger.Module
 import dagger.Provides
@@ -41,7 +47,7 @@ object AppModule {
     /**** Retrofit  ******/
     @Singleton
     @Provides
-    fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
+    fun provideRetrofit(gson: Gson): Retrofit = Retrofit.Builder()
         .baseUrl("https://fisaa.herokuapp.com/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
@@ -58,7 +64,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context) = FisaaDatabase.getDatabase(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        FisaaDatabase.getDatabase(appContext)
 
     @Singleton
     @Provides
@@ -68,7 +75,36 @@ object AppModule {
     /**** main Repo ******/
     @Singleton
     @Provides
-    fun provideRepo(remote: FisaaRemote,
-                    local: FisaaDao) =
-        FisaaRepository(remote, local)
+    fun provideRepo(
+        remote: FisaaRemote,
+        local: FisaaDao, firestore: FirestoreRemote
+    ) = FisaaRepository(remote, local,firestore)
+
+    /**** FireStore ******/
+    @Provides
+    @Singleton
+    fun provideFireBaseAuth(): FirebaseAuth {
+        return Firebase.auth
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirestore() = Firebase.firestore
+
+    /**** Google Sign-In ******/
+
+    @Provides
+    @Singleton
+    fun provideGso(@ApplicationContext context: Context) =
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideGoogleClient(@ApplicationContext context: Context, gso: GoogleSignInOptions) =
+        GoogleSignIn.getClient(context, gso)
+
+
 }

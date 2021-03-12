@@ -85,7 +85,15 @@ dependencies {
 
     // FireStore
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+     implementation 'com.google.firebase:firebase-firestore-ktx'
+
+    /* coroutines support for firebase operations */
+    def couroutine_firestore_support ="1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$couroutine_firestore_support"
+    //Google Sign-in
+    def google_version ="19.0.0"
+    implementation "com.google.android.gms:play-services-auth:$google_version"
 
 
 
