@@ -16,4 +16,8 @@
     <string name="ads_bom">ANNONCES</string>
     <string name="trans_bom">ACCUEIL</string>
     <string name="profile_bom">ACCUEIL</string>
+
+    <string name="facebook_app_id">1135022460280967</string>
+    <string name="fb_login_protocol_scheme">fb1135022460280967</string>
+
 </resources>

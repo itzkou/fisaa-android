@@ -112,7 +112,7 @@
         app:layout_constraintVertical_bias="0.19" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -128,6 +128,17 @@
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/ic_goo" />
+
+
+    <com.facebook.login.widget.LoginButton
+        android:visibility="gone"
+        android:id="@+id/btnFb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/imFacebook"
+        app:layout_constraintBottom_toBottomOf="@id/imFacebook"
+        app:layout_constraintStart_toStartOf="@id/imFacebook"
+        app:layout_constraintEnd_toEndOf="@id/imFacebook"/>
 
     <TextView
         android:id="@+id/textView5"

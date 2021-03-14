@@ -16,4 +16,6 @@ class FirestoreRemote @Inject constructor(
         GoogleAuthProvider.getCredential(acct.idToken, null)
     ).await()
 
+
+
 }

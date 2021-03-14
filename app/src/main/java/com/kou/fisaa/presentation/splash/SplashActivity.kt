@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import com.kou.fisaa.databinding.ActivitySplashBinding
 import com.kou.fisaa.presentation.login.LoginActivity
+import com.kou.fisaa.presentation.signup.SignUpActivity
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding

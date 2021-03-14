@@ -4,6 +4,7 @@ import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -78,7 +80,7 @@ object AppModule {
     fun provideRepo(
         remote: FisaaRemote,
         local: FisaaDao, firestore: FirestoreRemote
-    ) = FisaaRepository(remote, local,firestore)
+    ) = FisaaRepository(remote, local, firestore)
 
     /**** FireStore ******/
     @Provides
@@ -105,6 +107,17 @@ object AppModule {
     @Singleton
     fun provideGoogleClient(@ApplicationContext context: Context, gso: GoogleSignInOptions) =
         GoogleSignIn.getClient(context, gso)
+
+    /**** Facebook Sign-In ****/
+    @Provides
+    @Singleton
+    fun provideFacebookManager() = CallbackManager.Factory.create()
+
+    /*** SocialAuth String password ***/
+    @Provides
+    @Named("social")
+    @Singleton
+    fun provideSocialPassword(): String = "social123"
 
 
 }

@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
 import com.kou.fisaa.data.entities.User
@@ -17,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: FisaaRepository) : ViewModel() {
     private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
+    private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     val loginResponse = _loginResponse
+    val googleResponse = _googleResponse
 
 
     fun fetchLoginResponse(loginQuery: LoginQuery) {
@@ -27,6 +31,16 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
                     _loginResponse.value = it
                 }
 
+            }
+        }
+    }
+
+    fun signInWithGoogle(acct: GoogleSignInAccount) {
+        viewModelScope.launch {
+            repository.signInWithGoogle(acct).collect {
+                it?.let {
+                    _googleResponse.value = it
+                }
             }
         }
     }
