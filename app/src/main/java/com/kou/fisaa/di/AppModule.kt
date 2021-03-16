@@ -115,11 +115,6 @@ object AppModule {
     @Singleton
     fun provideFacebookManager() = CallbackManager.Factory.create()
 
-    /*** SocialAuth String password ***/
-    @Provides
-    @Named("social")
-    @Singleton
-    fun provideSocialPassword(): String = "social123"
 
     /*** SocialAuth String password ***/
 

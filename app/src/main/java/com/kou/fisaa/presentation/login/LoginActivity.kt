@@ -14,11 +14,10 @@ import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
 import com.kou.fisaa.presentation.signup.SignUpActivity
-import com.kou.fisaa.presentation.signup.SignUpViewModel
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import javax.inject.Named
 
 
 @AndroidEntryPoint
@@ -32,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
     private val GOOGLE_SIGN = 1
 
     //TODO in viewmodel
-
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
 
@@ -45,8 +43,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*** UI Validation ***/
+        coordinateBtnAndInputs(binding.login,binding.username,binding.password)
 
 
+        /*** Events ***/
         binding.login.setOnClickListener {
             viewModel.fetchLoginResponse(
                 LoginQuery(
@@ -66,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this,SignUpActivity::class.java))
         }
 
+        /*** Observables ***/
         viewModel.loginResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {

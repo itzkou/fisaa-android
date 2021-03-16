@@ -5,12 +5,12 @@ data class SignUpQuery (
     val firstName: String,
     val lastName: String,
     val password: String,
-    val adress: String?,
-    val cin: Int?,
-    val city: String?,
-    val country: String?,
-     val dateOfBirth: String?,
-    val description: String?,
-    val phoneNumber: Long?,
-     val zipCode: Int?
+    val adress: String?=null,
+    val cin: Int?=null,
+    val city: String?=null,
+    val country: String?=null,
+     val dateOfBirth: String?=null,
+    val description: String?=null,
+    val phoneNumber: Long?=null,
+     val zipCode: Int?=null
         )

@@ -7,6 +7,8 @@ import androidx.activity.viewModels
 import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.databinding.ActivitySignUpBinding
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.coordinateBtnAndInputs
+import com.kou.fisaa.utils.coordinatePwd
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,13 +24,35 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*** UI Validation ***/
+        coordinateBtnAndInputs(binding.signUp, binding.fname, binding.lname, binding.username)
+        coordinatePwd(binding.signUp, binding.password,binding.passInput)
 
 
+
+
+        /*** Events ***/
         binding.signUp.setOnClickListener {
-            signUpQuery = SignUpQuery(binding.username.text.toString(), binding.fname.text.toString(), binding.lname.text.toString(), binding.password.text.toString(), binding.address.text.toString(), binding.cin.text.toString().toInt(), binding.city.text.toString(), binding.pays.text.toString(), binding.birthdate.text.toString(), binding.desc.text.toString(), binding.phone.text.toString().toLong(), binding.zip.text.toString().toInt())
+            signUpQuery = SignUpQuery(
+                binding.username.text.toString(),
+                binding.fname.text.toString(),
+                binding.lname.text.toString(),
+                binding.password.text.toString(),
+             //TODO Solve Nullabity issues
+                binding.address.text.toString(),
+                binding.cin.text.toString().toInt(),
+                binding.city.text.toString(),
+                binding.pays.text.toString(),
+                binding.birthdate.text.toString(),
+                binding.desc.text.toString(),
+                binding.phone.text.toString().toLong(),
+                binding.zip.text.toString().toInt()
+            )
 
             viewmodel.signUp(signUpQuery!!)
         }
+
+        /*** Observables ***/
         viewmodel.signupResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
