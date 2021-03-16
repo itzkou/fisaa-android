@@ -15,11 +15,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
 import com.kou.fisaa.data.firestore.FirestoreRemote
-import com.kou.fisaa.data.local.FisaaDao
-import com.kou.fisaa.data.local.FisaaDatabase
+import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
+import com.kou.fisaa.data.local.authLocalManager.FisaaDao
+import com.kou.fisaa.data.local.roomManager.FisaaDatabase
 import com.kou.fisaa.data.remote.FisaaApi
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.data.repository.FisaaRepository
+import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -79,7 +81,7 @@ object AppModule {
     @Provides
     fun provideRepo(
         remote: FisaaRemote,
-        local: FisaaDao, firestore: FirestoreRemote
+        local: AuthLocalManager, firestore: FirestoreRemote
     ) = FisaaRepository(remote, local, firestore)
 
     /**** FireStore ******/
@@ -118,6 +120,16 @@ object AppModule {
     @Named("social")
     @Singleton
     fun provideSocialPassword(): String = "social123"
+
+    /*** SocialAuth String password ***/
+
+    @Provides
+    @Singleton
+    fun provideFisaaRepositoryAbstraction(
+        remote: FisaaRemote,
+        local: AuthLocalManager,
+        firestore: FirestoreRemote
+    ): FisaaRepositoryAbstraction = FisaaRepository(remote,local, firestore)
 
 
 }

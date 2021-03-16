@@ -1,10 +1,11 @@
-package com.kou.fisaa.data.local
+package com.kou.fisaa.data.local.roomManager
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.local.authLocalManager.FisaaDao
 
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class FisaaDatabase : RoomDatabase() {

@@ -34,7 +34,7 @@
         android:id="@+id/mail_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="34dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -141,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="@id/imFacebook"/>
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/createAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"

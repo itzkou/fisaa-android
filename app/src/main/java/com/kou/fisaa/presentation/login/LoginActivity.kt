@@ -13,6 +13,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
+import com.kou.fisaa.presentation.signup.SignUpActivity
+import com.kou.fisaa.presentation.signup.SignUpViewModel
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,9 +31,7 @@ class LoginActivity : AppCompatActivity() {
     /******* SOCIAL AUTH *******/
     private val GOOGLE_SIGN = 1
 
-    @Inject
-    @Named("social")
-    lateinit var socialPassword: String
+    //TODO in viewmodel
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
@@ -61,6 +61,9 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.imFacebook.setOnClickListener {
             signInWithFacebook()
+        }
+        binding.createAcc.setOnClickListener {
+            startActivity(Intent(this,SignUpActivity::class.java))
         }
 
         viewModel.loginResponse.observe(this, { resource ->
@@ -95,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                         viewModel.fetchLoginResponse(
                             LoginQuery(
                                 resource.data!!.user!!.email!!,
-                                socialPassword
+                                "socialPassword"
                             )
                         )
                     }
@@ -136,7 +139,6 @@ class LoginActivity : AppCompatActivity() {
         callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
-
     private fun signInWithGoogle() {
 
         val signInIntent: Intent = googleSignInClient.signInIntent
@@ -163,7 +165,7 @@ class LoginActivity : AppCompatActivity() {
                         val pic =
                             me.getJSONObject("picture").getJSONObject("data").get("url").toString()
 
-                        viewModel.fetchLoginResponse(LoginQuery(email, socialPassword))
+                        viewModel.fetchLoginResponse(LoginQuery(email, "socialPassword"))
                     }
 
                     val parameters = Bundle()

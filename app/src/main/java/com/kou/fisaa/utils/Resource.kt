@@ -1,6 +1,6 @@
 package com.kou.fisaa.utils
 
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+data class Resource<out T>(val status: Status, val data: T?, val message: String?) {//type generique
 
     enum class Status {
         SUCCESS,

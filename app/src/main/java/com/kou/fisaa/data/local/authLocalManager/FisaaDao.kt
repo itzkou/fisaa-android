@@ -1,4 +1,4 @@
-package com.kou.fisaa.data.local
+package com.kou.fisaa.data.local.authLocalManager
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -16,6 +16,6 @@ interface FisaaDao {
 
     /** Get User **/
     @Query("SELECT * FROM users WHERE _id = :id")  // Doesn't support suspend
-     fun getUser(id: Int): User?
+     fun getUser(id: Int): User
 
  }
