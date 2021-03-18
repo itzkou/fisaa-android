@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="@string/home_bom"
         android:id="@+id/home"
-        android:icon="@drawable/ic_arrow"
-        android:menuCategory="secondary"/>
+        android:icon="@drawable/ic_home_selector"
+        android:menuCategory="secondary"
+        android:title="@string/home_bom" />
 
     <item
-        android:title="@string/ads_bom"
         android:id="@+id/ads"
-        android:icon="@drawable/ic_arrow"
-        android:menuCategory="secondary"/>
+        android:icon="@drawable/ic_ads_selector"
+        android:menuCategory="secondary"
+        android:title="@string/ads_bom" />
 
     <item
-        android:title="@string/trans_bom"
         android:id="@+id/trans"
-        android:icon="@drawable/ic_arrow"
-        android:menuCategory="secondary"/>
+        android:icon="@drawable/ic_trans_selector"
+        android:menuCategory="secondary"
+        android:title="@string/trans_bom" />
 
     <item
-        android:title="@string/profile_bom"
         android:id="@+id/profile"
-        android:icon="@drawable/ic_arrow"
-        android:menuCategory="secondary"/>
+        android:icon="@drawable/ic_launcher_background"
+        android:menuCategory="secondary"
+        android:title="@string/profile_bom" />
 
 </menu>

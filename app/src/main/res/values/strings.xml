@@ -15,8 +15,10 @@
     <string name="signup_action"><u>Créer un compte</u></string>
     <string name="home_bom">ACCUEIL</string>
     <string name="ads_bom">ANNONCES</string>
-    <string name="trans_bom">ACCUEIL</string>
-    <string name="profile_bom">ACCUEIL</string>
+    <string name="trans_bom">TRANSACTIONS</string>
+    <string name="profile_bom">PROFIL</string>
+
+    <!-- Hints -->
     <string name="hintfname">Nom</string>
     <string name="hintlname">Prénom</string>
     <string name="hintemail">Email</string>
@@ -28,9 +30,18 @@
     <string name="hintCity">Ville</string>
     <string name="hintCountry">Pays</string>
     <string name="hintDescription">Description</string>
+    <!-- Home Fragment -->
+    <string name="txtHomeHeadline1">Je cherche un trajet</string>
+    <string name="txtHomeHeadline2">Les prochains départs</string>
+    <string name="btnAutocomplete">C’est Parti !</string>
+    <string name="allFlights">Tous les départs</string>
+    <string name="PopularFlights">Top des trajets</string>
+    <string name="allFLights1">Top des trajets</string>
 
 
     <string name="facebook_app_id">1135022460280967</string>
     <string name="fb_login_protocol_scheme">fb1135022460280967</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
