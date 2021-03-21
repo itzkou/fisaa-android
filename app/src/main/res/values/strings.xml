@@ -30,6 +30,11 @@
     <string name="hintCity">Ville</string>
     <string name="hintCountry">Pays</string>
     <string name="hintDescription">Description</string>
+
+    <!-- Drawer -->
+    <string name="txtDashboard">TABLEAU DE BORD</string>
+    <string name="txtNextFlights">PROCHAINS DEPARTS</string>
+
     <!-- Home Fragment -->
     <string name="txtHomeHeadline1">Je cherche un trajet</string>
     <string name="txtHomeHeadline2">Les prochains départs</string>

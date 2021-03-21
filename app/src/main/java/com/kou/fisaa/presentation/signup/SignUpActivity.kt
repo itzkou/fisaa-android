@@ -58,8 +58,6 @@ class SignUpActivity : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
                         Toast.makeText(this, resource.data!!._id, Toast.LENGTH_SHORT).show()
-
-
                     }
                 }
 

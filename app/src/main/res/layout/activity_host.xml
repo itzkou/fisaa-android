@@ -11,13 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/navHost"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main" />
+
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/navHost"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/main" />
+
 
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -25,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:fabCradleMargin="20dp"
+            app:fabCradleMargin="10dp"
             app:fabCradleRoundedCornerRadius="20dp"
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
@@ -36,9 +39,9 @@
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigationView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                app:itemTextAppearanceActive="@style/bomText"
                 app:itemHorizontalTranslationEnabled="false"
-                app:labelVisibilityMode="labeled"
                 app:menu="@menu/main" />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
@@ -60,9 +63,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemTextAppearance="@style/drawer"
         android:background="@color/primaryPurple"
         android:fitsSystemWindows="true"
-        app:menu="@menu/main">
+        app:itemTextColor="@color/white"
+        app:menu="@menu/drawer">
 
 
     </com.google.android.material.navigation.NavigationView>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/ic_dashboard"
+        android:menuCategory="secondary"
+        android:title="@string/txtDashboard" />
+
+    <item
+        android:id="@+id/transactions"
+        android:icon="@drawable/ic_transmauve"
+        android:menuCategory="secondary"
+        android:title="@string/trans_bom" />
+
+    <item
+        android:id="@+id/nxtFlights"
+        android:icon="@drawable/ic_nxt_flights"
+        android:menuCategory="secondary"
+        android:title="@string/txtNextFlights" />
+
+    <item
+        android:id="@+id/ads"
+        android:icon="@drawable/ic_adsmauve"
+        android:menuCategory="secondary"
+        android:title="@string/ads_bom" />
+
+</menu>

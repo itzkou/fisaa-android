@@ -2,30 +2,25 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navHost"
-    app:startDestination="@id/homeFragment">
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.kou.fisaa.presentation.home.HomeFragment"
-        android:label="HomeFragment">
+    android:id="@+id/nav_host_fragment"
+    app:startDestination="@id/home">
 
-    </fragment>
     <fragment
-        android:id="@+id/adsFragment"
+        android:id="@+id/home"
+        android:name="com.kou.fisaa.presentation.home.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/ads"
         android:name="com.kou.fisaa.presentation.ads.AdsFragment"
         android:label="fragment_ads"
-        tools:layout="@layout/fragment_ads">
-
-    </fragment>
+        tools:layout="@layout/fragment_ads" />
     <fragment
-        android:id="@+id/transactionFragment"
+        android:id="@+id/trans"
         android:name="com.kou.fisaa.presentation.transactions.TransactionFragment"
         android:label="fragment_transaction"
-        tools:layout="@layout/fragment_transaction">
-
-    </fragment>
+        tools:layout="@layout/fragment_transaction" />
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/profile"
         android:name="com.kou.fisaa.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
