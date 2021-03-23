@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
+import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.repository.FisaaRepository
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
@@ -24,6 +25,8 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
     private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
+    private val _signUpResponse = MutableLiveData<Resource<User>>()
+    val signupResponse = _signUpResponse
     val loginResponse = _loginResponse
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
@@ -56,6 +59,15 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
             repository.signInWithFacebook(token).collect {
                 it?.let {
                     _facebookResponse.value = it
+                }
+            }
+        }
+    }
+    fun signUp(signUpQuery: SignUpQuery) {
+        viewModelScope.launch {
+            repository.signUp(signUpQuery).collect {
+                it?.let {
+                    _signUpResponse.value = it
                 }
             }
         }

@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
+import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
 import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.presentation.signup.SignUpActivity
@@ -37,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
 
     @Inject
     lateinit var callbackManager: CallbackManager
+    private var generatedSocialAuth = "social123"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,12 +98,41 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+        viewModel.signupResponse.observe(this, { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource?.let {
+                        Toast.makeText(this, "Social Auth Successful", Toast.LENGTH_SHORT).show()
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    resource?.let {
+                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+
+                Resource.Status.LOADING -> {
+                    resource?.let {
+                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+
         viewModel.googleResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        Toast.makeText(this, resource.data!!.user!!.email, Toast.LENGTH_SHORT)
-                            .show()
+                        val user = resource.data!!.user!!
+                        val fullName = user.displayName!!
+                        val firstName: String = fullName.split(" ").first()
+                        val lastName: String = fullName.split(" ").last()
+
+
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -121,8 +153,11 @@ class LoginActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        Toast.makeText(this, resource.data!!.user!!.email, Toast.LENGTH_SHORT)
-                            .show()
+                        val user = resource.data!!.user!!
+                        val fullName = user.displayName!!
+                        val firstName: String = fullName.split(" ").first()
+                        val lastName: String = fullName.split(" ").last()
+
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -138,8 +173,7 @@ class LoginActivity : AppCompatActivity() {
 
 
             }
-        }
-        )
+        })
 
 
     }
