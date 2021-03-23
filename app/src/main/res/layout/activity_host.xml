@@ -16,6 +16,7 @@
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/navHost"
                 android:name="androidx.navigation.fragment.NavHostFragment"
+                android:paddingBottom="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="20dp"
+            app:fabCradleRoundedCornerRadius="0dp"
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
@@ -50,7 +51,10 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow"
+            android:src="@drawable/ic_plus"
+            android:tint="@color/white"
+            android:contentDescription="@string/imFab"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
             app:backgroundTint="@color/primaryPurple"
             app:layout_anchor="@id/bottomAppBar" />
 

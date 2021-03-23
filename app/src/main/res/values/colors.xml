@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primaryPurple">#5117AC</color>
     <color name="lightPurple">#7446BC</color>
+    <color name="lightGrey">#D2D2D2</color>
+
     <color name="aqua">#22CFC4</color>
     <color name="greyTextLight">#515F65</color>
     <color name="bluewey">#153E73</color>

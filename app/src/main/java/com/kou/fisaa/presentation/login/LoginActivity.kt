@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
+import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.presentation.signup.SignUpActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
@@ -72,8 +73,10 @@ class LoginActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        if (it.data != null && it.data.success)
+                        if (it.data != null && it.data.success) {
                             Toast.makeText(this, "Authorized", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this,HostActivity::class.java))
+                        }
                         else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
 

@@ -1,9 +1,9 @@
 package com.kou.fisaa.presentation.signup
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.databinding.ActivitySignUpBinding
 import com.kou.fisaa.utils.Resource
@@ -26,8 +26,7 @@ class SignUpActivity : AppCompatActivity() {
 
         /*** UI Validation ***/
         coordinateBtnAndInputs(binding.signUp, binding.fname, binding.lname, binding.username)
-        coordinatePwd(binding.signUp, binding.password,binding.passInput)
-
+        coordinatePwd(binding.signUp, binding.password, binding.passInput)
 
 
 
@@ -38,15 +37,16 @@ class SignUpActivity : AppCompatActivity() {
                 binding.fname.text.toString(),
                 binding.lname.text.toString(),
                 binding.password.text.toString(),
-             //TODO Solve Nullabity issues
-                binding.address.text.toString(),
-                binding.cin.text.toString().toInt(),
-                binding.city.text.toString(),
-                binding.pays.text.toString(),
-                binding.birthdate.text.toString(),
-                binding.desc.text.toString(),
-                binding.phone.text.toString().toLong(),
-                binding.zip.text.toString().toInt()
+                //TODO Solve Nullabity issues
+                if (!binding.address.text.isNullOrBlank()) binding.address.text.toString() else "",
+                if (!binding.cin.text.isNullOrBlank()) binding.cin.text.toString().toInt() else 0,
+                if (!binding.city.text.isNullOrBlank()) binding.city.text.toString() else "",
+                if (!binding.pays.text.isNullOrBlank()) binding.pays.text.toString() else "",
+                if (!binding.birthdate.text.isNullOrBlank()) binding.birthdate.text.toString() else "",
+                if (!binding.desc.text.isNullOrBlank()) binding.desc.text.toString() else "",
+                if (!binding.phone.text.isNullOrBlank()) binding.phone.text.toString()
+                    .toLong() else 0L,
+                if (!binding.zip.text.isNullOrBlank()) binding.zip.text.toString().toInt() else 0
             )
 
             viewmodel.signUp(signUpQuery!!)

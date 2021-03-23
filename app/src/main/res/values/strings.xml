@@ -43,10 +43,17 @@
     <string name="PopularFlights">Top des trajets</string>
     <string name="allFLights1">Top des trajets</string>
 
+    <!-- Ads Fragment -->
+    <string name="adstitle">ANNONCES</string>
+
+
 
     <string name="facebook_app_id">1135022460280967</string>
     <string name="fb_login_protocol_scheme">fb1135022460280967</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Content description -->
+    <string name="imFab">Add New Ad</string>
+
 
 </resources>
