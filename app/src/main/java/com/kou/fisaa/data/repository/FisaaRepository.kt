@@ -1,5 +1,6 @@
 package com.kou.fisaa.data.repository
 
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.LoginQuery
@@ -48,6 +49,16 @@ class FisaaRepository  constructor(
             emit(Resource.success(response))
         }.catch {
             // If exception is thrown, emit failed state along with message.
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(Dispatchers.IO)//TODO Call dispatchers from viewmodels
+    }
+
+    override suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?> {
+        return flow {
+            emit(Resource.loading())
+            val response= firestore.signInWithFacebook(token)
+            emit(Resource.success(response))
+        }.catch {
             emit(Resource.error(it.message.toString()))
         }.flowOn(Dispatchers.IO)
     }

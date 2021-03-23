@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         /*** UI Validation ***/
-        coordinateBtnAndInputs(binding.login,binding.username,binding.password)
+        coordinateBtnAndInputs(binding.login, binding.username, binding.password)
 
 
         /*** Events ***/
@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
             signInWithFacebook()
         }
         binding.createAcc.setOnClickListener {
-            startActivity(Intent(this,SignUpActivity::class.java))
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
 
         /*** Observables ***/
@@ -75,9 +75,8 @@ class LoginActivity : AppCompatActivity() {
                     resource?.let {
                         if (it.data != null && it.data.success) {
                             Toast.makeText(this, "Authorized", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this,HostActivity::class.java))
-                        }
-                        else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, HostActivity::class.java))
+                        } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
 
                     }
@@ -100,12 +99,8 @@ class LoginActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        viewModel.fetchLoginResponse(
-                            LoginQuery(
-                                resource.data!!.user!!.email!!,
-                                "socialPassword"
-                            )
-                        )
+                        Toast.makeText(this, resource.data!!.user!!.email, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -122,6 +117,29 @@ class LoginActivity : AppCompatActivity() {
 
             }
         })
+        viewModel.facebookResponse.observe(this, { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource?.let {
+                        Toast.makeText(this, resource.data!!.user!!.email, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    resource?.let {
+                        Log.d("facebooki", it.message.toString())
+                    }
+                }
+                Resource.Status.LOADING -> {
+                    resource?.let {
+                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+
+            }
+        }
+        )
 
 
     }
@@ -159,8 +177,8 @@ class LoginActivity : AppCompatActivity() {
             FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
-
-                if (AccessToken.getCurrentAccessToken() != null) {
+                val token = AccessToken.getCurrentAccessToken()
+                if (token != null) {
                     val request = GraphRequest.newMeRequest(
                         AccessToken.getCurrentAccessToken()
                     ) { me, _ ->
@@ -170,7 +188,7 @@ class LoginActivity : AppCompatActivity() {
                         val pic =
                             me.getJSONObject("picture").getJSONObject("data").get("url").toString()
 
-                        viewModel.fetchLoginResponse(LoginQuery(email, "socialPassword"))
+                        viewModel.signInWithFacebook(token)
                     }
 
                     val parameters = Bundle()
