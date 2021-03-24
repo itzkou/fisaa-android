@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kou.fisaa.data.entities.TopFLight
-import com.kou.fisaa.data.entities.UpcomingFlight
+import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.databinding.FragmentHomeBinding
-import com.kou.fisaa.presentation.home.adapter.TopFlightsAdapter
-import com.kou.fisaa.presentation.home.adapter.UpcomingFlightsAdapter
+import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
 
-class HomeFragment : Fragment(), UpcomingFlightsAdapter.Listener, TopFlightsAdapter.Listener {
+class HomeFragment : Fragment(), FlightsAdapter.Listener  {
 
 
     private var _binding: FragmentHomeBinding? = null
@@ -27,12 +25,13 @@ class HomeFragment : Fragment(), UpcomingFlightsAdapter.Listener, TopFlightsAdap
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
-        val mUpcomingAdapter = UpcomingFlightsAdapter(this@HomeFragment)
-        val mTopAdapter = TopFlightsAdapter(this@HomeFragment)
+        val upcomingAdapter = FlightsAdapter(this@HomeFragment)
+        val topAdapter = FlightsAdapter(this@HomeFragment)
+
         binding.rvUpcoming.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = mUpcomingAdapter
+            adapter = upcomingAdapter
             isNestedScrollingEnabled=false
             setHasFixedSize(true)
 
@@ -40,15 +39,16 @@ class HomeFragment : Fragment(), UpcomingFlightsAdapter.Listener, TopFlightsAdap
         binding.rvTop.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = mTopAdapter
+            adapter = topAdapter
             isNestedScrollingEnabled=false
             setHasFixedSize(true)
 
 
         }
 
-        loadUpcomingFligths(mUpcomingAdapter)
-        loadTopFligths(mTopAdapter)
+        loadUpcomingFlights(upcomingAdapter)
+        loadTopFlights(topAdapter)
+
 
         return view
     }
@@ -60,19 +60,20 @@ class HomeFragment : Fragment(), UpcomingFlightsAdapter.Listener, TopFlightsAdap
     }
 
 
-    override fun openTopFlight(flightId: String) {
+
+
+    override fun openFlight(flightId: String) {
     }
 
-    override fun openUpcomingFlight(flightId: String) {
+    private fun loadUpcomingFlights(adapter: FlightsAdapter) {
+        val flights = listOf(Flight("1",0), Flight("2",0), Flight("3",0))
+        adapter.updateFlights(flights)
     }
 
-    private fun loadUpcomingFligths(adapter: UpcomingFlightsAdapter) {
-        val flights = listOf(UpcomingFlight("1"), UpcomingFlight("2"), UpcomingFlight("3"))
-        adapter.updateUpcomingFlights(flights)
+    private fun loadTopFlights(adapter: FlightsAdapter) {
+        val flights = listOf(Flight("1",1), Flight("2",1), Flight("3",1))
+        adapter.updateFlights(flights)
     }
 
-    private fun loadTopFligths(adapter: TopFlightsAdapter) {
-        val flights = listOf(TopFLight("1"), TopFLight("2"), TopFLight("3"))
-        adapter.updateTopFlights(flights)
-    }
+
 }
