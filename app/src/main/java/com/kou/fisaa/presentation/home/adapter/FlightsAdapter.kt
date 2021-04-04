@@ -83,7 +83,7 @@ class FlightsAdapter(private val listener: Listener) :
 
     fun updateFlights(newFlights: List<Flight>) {
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.flights, newFlights) { it.id })
+            DiffUtil.calculateDiff(SimpleCallback(this.flights, newFlights) { it._id })
         this.flights = newFlights
         diffResult.dispatchUpdatesTo(this)
     }

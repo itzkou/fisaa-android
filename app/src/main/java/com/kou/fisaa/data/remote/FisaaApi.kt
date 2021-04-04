@@ -1,9 +1,6 @@
 package com.kou.fisaa.data.remote
 
-import com.kou.fisaa.data.entities.LoginQuery
-import com.kou.fisaa.data.entities.LoginResponse
-import com.kou.fisaa.data.entities.SignUpQuery
-import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.entities.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,4 +20,9 @@ interface FisaaApi {
     /** Sign Up **/
     @POST("users/")
     suspend fun signUp(@Body signUpQuery: SignUpQuery): Response<User>
+
+
+    /** Flights **/
+    @POST("advertisements/flights")
+    suspend fun searchFlights(@Body searchQuery: FlightSearchQuery): Response<FlightSearchResponse>
 }

@@ -1,6 +1,5 @@
 package com.kou.fisaa.presentation.login
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +8,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
-import com.kou.fisaa.data.entities.SignUpQuery
-import com.kou.fisaa.data.entities.User
-import com.kou.fisaa.data.repository.FisaaRepository
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +21,6 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
     private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
-    private val _signUpResponse = MutableLiveData<Resource<User>>()
-    val signupResponse = _signUpResponse
     val loginResponse = _loginResponse
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
@@ -34,9 +28,10 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
 
     fun fetchLoginResponse(loginQuery: LoginQuery) {
         viewModelScope.launch {
-            repository.login(loginQuery).collect {
-                it?.let {
-                    _loginResponse.value = it
+            repository.login(loginQuery).collect { response ->
+                response?.let {
+                    _loginResponse.value = response
+
                 }
 
             }
@@ -63,13 +58,5 @@ class LoginViewModel @Inject constructor(private val repository: FisaaRepository
             }
         }
     }
-    fun signUp(signUpQuery: SignUpQuery) {
-        viewModelScope.launch {
-            repository.signUp(signUpQuery).collect {
-                it?.let {
-                    _signUpResponse.value = it
-                }
-            }
-        }
-    }
+
 }

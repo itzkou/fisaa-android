@@ -12,7 +12,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
-import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
 import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.presentation.signup.SignUpActivity
@@ -25,21 +24,18 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
+
 
     /******* SOCIAL AUTH *******/
     private val GOOGLE_SIGN = 1
 
-    //TODO in viewmodel
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
 
     @Inject
     lateinit var callbackManager: CallbackManager
-    private var generatedSocialAuth = "social123"
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +45,6 @@ class LoginActivity : AppCompatActivity() {
 
         /*** UI Validation ***/
         coordinateBtnAndInputs(binding.login, binding.username, binding.password)
-
 
         /*** Events ***/
         binding.login.setOnClickListener {
@@ -75,13 +70,14 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        if (it.data != null && it.data.success) {
+                    resource.data?.let { loginResponse ->
+                        if (resource.data.success) {
+
+
                             Toast.makeText(this, "Authorized", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, HostActivity::class.java))
                         } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
-
                     }
                 }
 
@@ -98,55 +94,29 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
-        viewModel.signupResponse.observe(this, { resource ->
-            when (resource.status) {
-                Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        Toast.makeText(this, "Social Auth Successful", Toast.LENGTH_SHORT).show()
-
-
-                    }
-                }
-
-                Resource.Status.ERROR -> {
-                    resource?.let {
-                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-
-                    }
-                }
-
-                Resource.Status.LOADING -> {
-                    resource?.let {
-                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
-
         viewModel.googleResponse.observe(this, { resource ->
-            when (resource.status) {
-                Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        val user = resource.data!!.user!!
-                        val fullName = user.displayName!!
-                        val firstName: String = fullName.split(" ").first()
-                        val lastName: String = fullName.split(" ").last()
+            if (resource.status == Resource.Status.SUCCESS) {
+                resource?.let {
+                    val user = resource.data!!.user!!
+                    val fullName = user.displayName!!
+                    val firstName: String = fullName.split(" ").first()
+                    val lastName: String = fullName.split(" ").last()
+                    viewModel.fetchLoginResponse(
+                        LoginQuery(
+                            user.email!!,
+                            social = true,
+                            image = user.photoUrl!!.toString(),
+                            firstName = firstName,
+                            lastName = lastName
+                        )
+                    )
 
 
-                    }
                 }
-                Resource.Status.ERROR -> {
-                    resource?.let {
-                        Log.d("googli", it.message.toString())
-                    }
+            } else if (resource.status == Resource.Status.ERROR) {
+                resource?.let {
+                    Log.d("googli", it.message.toString())
                 }
-                Resource.Status.LOADING -> {
-                    resource?.let {
-                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-
             }
         })
         viewModel.facebookResponse.observe(this, { resource ->
@@ -157,6 +127,17 @@ class LoginActivity : AppCompatActivity() {
                         val fullName = user.displayName!!
                         val firstName: String = fullName.split(" ").first()
                         val lastName: String = fullName.split(" ").last()
+
+                        viewModel.fetchLoginResponse(
+                            LoginQuery(
+                                user.email!!,
+                                social = true,
+                                image = user.photoUrl!!.toString(),
+                                firstName = firstName,
+                                lastName = lastName
+                            )
+                        )
+
 
                     }
                 }

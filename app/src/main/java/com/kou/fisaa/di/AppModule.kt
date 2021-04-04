@@ -6,6 +6,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,7 +17,6 @@ import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
-import com.kou.fisaa.data.local.authLocalManager.FisaaDao
 import com.kou.fisaa.data.local.roomManager.FisaaDatabase
 import com.kou.fisaa.data.remote.FisaaApi
 import com.kou.fisaa.data.remote.FisaaRemote
@@ -29,7 +29,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -59,8 +58,38 @@ object AppModule {
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()
 
-    /**** Remote ******/
 
+    /**** Google Sign-In ******/
+
+    @Provides
+    @Singleton
+    fun provideGso(@ApplicationContext context: Context) =
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideGoogleClient(
+        @ApplicationContext context: Context,
+        gso: GoogleSignInOptions
+    ): GoogleSignInClient =
+        GoogleSignIn.getClient(context, gso)
+
+    /**** Facebook Sign-In ****/
+    @Provides
+    @Singleton
+    fun provideFacebookManager(): CallbackManager = CallbackManager.Factory.create()
+
+    /**** DataStore ******/
+
+    /* @Provides
+     @Singleton
+     fun provideUserManager(@ApplicationContext appContext: Context): UserManager =
+         UserManager(appContext)*/
+
+    /**** Remote ******/
     @Provides
     fun provideFisaaApi(retrofit: Retrofit): FisaaApi = retrofit.create(FisaaApi::class.java)
 
@@ -76,14 +105,6 @@ object AppModule {
     fun provideFisaaDao(db: FisaaDatabase) = db.fisaaDao()
 
 
-    /**** main Repo ******/
-    @Singleton
-    @Provides
-    fun provideRepo(
-        remote: FisaaRemote,
-        local: AuthLocalManager, firestore: FirestoreRemote
-    ) = FisaaRepository(remote, local, firestore)
-
     /**** FireStore ******/
     @Provides
     @Singleton
@@ -95,28 +116,13 @@ object AppModule {
     @Singleton
     fun provideFirestore() = Firebase.firestore
 
-    /**** Google Sign-In ******/
-
-    @Provides
-    @Singleton
-    fun provideGso(@ApplicationContext context: Context) =
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-    @Provides
-    @Singleton
-    fun provideGoogleClient(@ApplicationContext context: Context, gso: GoogleSignInOptions) =
-        GoogleSignIn.getClient(context, gso)
-
-    /**** Facebook Sign-In ****/
-    @Provides
-    @Singleton
-    fun provideFacebookManager() = CallbackManager.Factory.create()
-
-
-    /*** SocialAuth String password ***/
+    /**** main Repo ******/
+    /* @Singleton
+     @Provides
+     fun provideFisaaRepository(
+         remote: FisaaRemote,
+         local: AuthLocalManager, firestore: FirestoreRemote
+     ) = FisaaRepository(remote, local, firestore)*/
 
     @Provides
     @Singleton
@@ -124,7 +130,7 @@ object AppModule {
         remote: FisaaRemote,
         local: AuthLocalManager,
         firestore: FirestoreRemote
-    ): FisaaRepositoryAbstraction = FisaaRepository(remote,local, firestore)
+    ): FisaaRepositoryAbstraction = FisaaRepository(remote, local, firestore)
 
 
 }

@@ -2,7 +2,6 @@
 
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homeSwipeToRefresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -38,36 +37,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spDeparture"
+            <EditText
+                android:id="@+id/edDeparture"
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_bg"
-                android:dropDownWidth="match_parent"
-                android:popupBackground="@drawable/round_bom"
-                android:spinnerMode="dropdown"
+                android:inputType="text"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spArrival"
+            <EditText
+                android:id="@+id/edArrival"
+                android:inputType="text"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_two"
-                android:dropDownWidth="match_parent"
-                android:popupBackground="@drawable/round_bom"
-                android:spinnerMode="dropdown"
-                app:layout_constraintEnd_toStartOf="@+id/editTextDate"
-                app:layout_constraintStart_toEndOf="@+id/spDeparture"
+                app:layout_constraintEnd_toStartOf="@+id/edDate"
+                app:layout_constraintStart_toEndOf="@+id/edDeparture"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <EditText
-                android:id="@+id/editTextDate"
+                android:id="@+id/edDate"
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
@@ -80,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/go"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -91,7 +87,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spDeparture" />
+                app:layout_constraintTop_toBottomOf="@+id/edDeparture" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -103,7 +99,7 @@
                 android:textColor="#153E73"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button2" />
+                app:layout_constraintTop_toBottomOf="@+id/go" />
 
             <TextView
                 android:id="@+id/textView7"

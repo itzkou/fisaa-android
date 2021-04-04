@@ -53,9 +53,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //LifeCycle
-    def lifecycle_version = "2.3.0"
+    def lifecycle_version = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // for instanciating fragments viewmodels with Nav Component
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0-beta01'
+
+
+
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -97,6 +102,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:$google_version"
     //Facebook Sign-in
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha08"
+
+
 
 
 
