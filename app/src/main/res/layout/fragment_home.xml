@@ -69,6 +69,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_bg_three"
                 android:ems="10"
+                android:focusable="false"
                 android:inputType="date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

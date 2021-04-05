@@ -82,12 +82,6 @@ object AppModule {
     @Singleton
     fun provideFacebookManager(): CallbackManager = CallbackManager.Factory.create()
 
-    /**** DataStore ******/
-
-    /* @Provides
-     @Singleton
-     fun provideUserManager(@ApplicationContext appContext: Context): UserManager =
-         UserManager(appContext)*/
 
     /**** Remote ******/
     @Provides

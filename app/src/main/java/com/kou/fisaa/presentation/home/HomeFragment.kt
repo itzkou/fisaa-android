@@ -13,6 +13,7 @@ import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.databinding.FragmentHomeBinding
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
+import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 
@@ -33,8 +34,8 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
         val view = binding.root
         val upcomingAdapter = FlightsAdapter(this@HomeFragment)
         val topAdapter = FlightsAdapter(this@HomeFragment)
+
         coordinateBtnAndInputs(binding.go, binding.edDeparture, binding.edArrival, binding.edDate)
-        searchFlights()
 
 
         binding.rvUpcoming.apply {
@@ -106,6 +107,10 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
     }
 
     private fun searchFlights() {
+        binding.edDate.setOnClickListener {
+            BuilderDatePicker.showDialog(requireActivity(), binding.edDate)
+        }
+
         binding.go.setOnClickListener {
             viewModel.searchFlights(
                 FlightSearchQuery(
