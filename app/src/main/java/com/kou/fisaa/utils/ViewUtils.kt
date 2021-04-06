@@ -1,14 +1,15 @@
 package com.kou.fisaa.utils
 
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.text.format.DateUtils
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.kou.fisaa.R
+import java.util.*
 
 
 fun coordinateBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
@@ -75,3 +76,23 @@ fun ImageView.loadCircle(photoUrl: String?) =
     Glide.with(this).load(photoUrl).circleCrop().fallback(
         R.drawable.ic_launcher_background
     ).into(this)
+
+fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
+    DateUtils.getRelativeTimeSpanString(
+        start.time, end.time, DateUtils.SECOND_IN_MILLIS,
+        DateUtils.FORMAT_ABBREV_RELATIVE
+    ).replace(Regex("\\. ago$"), "")
+
+fun TextView.setDate(date: Date? = null) {
+    val dateSpannable = date?.let {
+        val dateText = formatRelativeTimestamp(date, Date())
+        val spannableString = SpannableString(dateText)
+        spannableString.setSpan(
+            null,
+            0, dateText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString
+    }
+}
+
+

@@ -90,7 +90,7 @@ class FlightsAdapter(private val listener: Listener) :
         return flights[position].viewType
     }
 
-    fun updateFlights(newFlights: List<Flight>) {
+    fun updateUpcoming(newFlights: List<Flight>) {
         val diffResult =
             DiffUtil.calculateDiff(SimpleCallback(this.flights, newFlights) { it._id })
         this.flights = newFlights
@@ -98,8 +98,9 @@ class FlightsAdapter(private val listener: Listener) :
     }
 
     fun updateTopFlights(newFlights: List<Flight>) {
+
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.flights, newFlights) { it.count!! })
+            DiffUtil.calculateDiff(SimpleCallback(this.flights, newFlights) { it.count ?: 0 })
         this.flights = newFlights
         diffResult.dispatchUpdatesTo(this)
     }

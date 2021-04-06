@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.navigation.fragment.findNavController
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentFlightsBinding
 import com.kou.fisaa.presentation.home.HomeViewModel
@@ -27,7 +26,12 @@ class FlightsFragment : Fragment() {
     ): View? {
         _binding = FragmentFlightsBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModel.flightSearchResponse.observe(requireActivity(), { resource ->
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.flightSearchResponse.observe(viewLifecycleOwner, { resource ->
 
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
@@ -53,11 +57,6 @@ class FlightsFragment : Fragment() {
             }
 
         })
-
-        binding.imBack.setOnClickListener {
-            findNavController().navigate(R.id.action_flightsFragment_to_home)
-        }
-        return view
     }
 
 

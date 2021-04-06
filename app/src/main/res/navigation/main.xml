@@ -11,7 +11,10 @@
         android:label="HomeFragment">
         <action
             android:id="@+id/action_home_to_flightsFragment"
-            app:destination="@id/flightsFragment" />
+            app:destination="@id/flightsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_host_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/ads"

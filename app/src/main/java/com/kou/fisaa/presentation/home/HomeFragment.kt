@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.FlightSearchQuery
@@ -18,7 +19,9 @@ import com.kou.fisaa.utils.coordinateBtnAndInputs
 
 class HomeFragment : Fragment(), FlightsAdapter.Listener {
 
-
+    //TODO check requireActivity to viewlifecyclescope
+    //TODO swipeToRefresh WIFI connectivity
+    //TODO remove Loading States if not used
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
@@ -36,32 +39,11 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
-        coordinateBtnAndInputs(binding.go, binding.edDeparture, binding.edArrival, binding.edDate)
-
-        binding.rvUpcoming.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = upcomingAdapter
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
-
-        }
-        binding.rvTop.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = topAdapter
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
-
-
-        }
-
+        setUpUi()
         searchFlights()
         viewModel.getUpcomingFlights()
         viewModel.getTopFlights()
-
-
+        refresh()
 
         return view
     }
@@ -74,9 +56,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { flightSearchResponse ->
                         if (flightSearchResponse.flights.isNotEmpty())
-                            Toast.makeText(requireActivity(), "Found Flights", Toast.LENGTH_SHORT)
-                                .show()
-                        //findNavController().navigate(R.id.action_home_to_flightsFragment)
+                            findNavController().navigate(R.id.action_home_to_flightsFragment)
 
                     }
                 }
@@ -107,11 +87,13 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                             if (upcomingFlightsResponse.flights.isNotEmpty()) {
                                 binding.shimmerUpcoming.stopShimmer()
                                 binding.shimmerUpcoming.visibility = View.GONE
+                                binding.homeSwipeToRefresh.isRefreshing = false
+
                                 upcomingFlightsResponse.flights.forEach { flight ->
                                     flight.viewType = 0
                                 }
 
-                                upcomingAdapter.updateFlights(upcomingFlightsResponse.flights)
+                                upcomingAdapter.updateUpcoming(upcomingFlightsResponse.flights)
 
                             }
 
@@ -166,6 +148,8 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                 }
             }
         })
+
+
     }
 
 
@@ -190,6 +174,41 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                     binding.edArrival.text.toString()
                 )
             )
+        }
+
+    }
+
+    private fun setUpUi() {
+        coordinateBtnAndInputs(binding.go, binding.edDeparture, binding.edArrival, binding.edDate)
+        binding.rvUpcoming.apply {
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = upcomingAdapter
+            isNestedScrollingEnabled = false
+            setHasFixedSize(true)
+
+        }
+        binding.rvTop.apply {
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = topAdapter
+            isNestedScrollingEnabled = false
+            setHasFixedSize(true)
+
+
+        }
+    }
+
+    private fun refresh() {
+        binding.homeSwipeToRefresh.setOnRefreshListener {
+            binding.shimmerUpcoming.visibility = View.VISIBLE
+            binding.shimmerTop.visibility = View.VISIBLE
+            binding.shimmerTop.startShimmer()
+            binding.shimmerUpcoming.startShimmer()
+            topAdapter.updateTopFlights(listOf())
+            upcomingAdapter.updateUpcoming(listOf())
+            viewModel.getUpcomingFlights()
+            viewModel.getTopFlights()
         }
 
     }

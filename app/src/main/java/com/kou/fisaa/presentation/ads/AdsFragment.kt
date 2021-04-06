@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.databinding.FragmentAdsBinding
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 
@@ -35,7 +34,6 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
             setHasFixedSize(true)
         }
 
-        loadAds(mAdsAdapter)
 
         return view
     }
@@ -44,8 +42,5 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
 
     }
 
-    private fun loadAds(adapter: AdsAdapter) {
-        val ads = listOf(Advertisement("1"), Advertisement("2"))
-        adapter.updateAds(ads)
-    }
+
 }
