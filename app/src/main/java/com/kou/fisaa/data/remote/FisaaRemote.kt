@@ -6,7 +6,7 @@ import com.kou.fisaa.data.entities.SignUpQuery
 import javax.inject.Inject
 
 class FisaaRemote @Inject constructor(
-        private val fisaaApi: FisaaApi
+    private val fisaaApi: FisaaApi
 ) : RetrofitSource() {
 
     suspend fun login(loginQuery: LoginQuery) = getResource { fisaaApi.login(loginQuery) }
@@ -14,6 +14,12 @@ class FisaaRemote @Inject constructor(
     suspend fun signUp(signUpQuery: SignUpQuery) = getResource { fisaaApi.signUp(signUpQuery) }
     suspend fun searchFlights(searchQuery: FlightSearchQuery) =
         getResource { fisaaApi.searchFlights(searchQuery) }
+
+    suspend fun getUpcomingFlights() =
+        getResource { fisaaApi.getUpcomingFlights() }
+
+    suspend fun getTopFlights() =
+        getResource { fisaaApi.getTopFlights() }
 
 
 }

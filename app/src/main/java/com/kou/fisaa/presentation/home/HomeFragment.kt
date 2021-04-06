@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
-import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.databinding.FragmentHomeBinding
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
@@ -32,6 +31,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
         val upcomingAdapter = FlightsAdapter(this@HomeFragment)
         val topAdapter = FlightsAdapter(this@HomeFragment)
 
@@ -56,22 +56,15 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
 
         }
 
-        searchFlights()
-        loadUpcomingFlights(upcomingAdapter)
-        loadTopFlights(topAdapter)
-
-
         viewModel.flightSearchResponse.observe(requireActivity(), { resource ->
 
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { flightSearchResponse ->
-
-                        Toast.makeText(
-                            requireActivity(),
-                            flightSearchResponse.flights[0].departure,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (flightSearchResponse.flights.isNotEmpty())
+                            Toast.makeText(requireActivity(), "Found Flights", Toast.LENGTH_SHORT)
+                                .show()
+                        //findNavController().navigate(R.id.action_home_to_flightsFragment)
 
                     }
                 }
@@ -91,6 +84,79 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
             }
 
         })
+        viewModel.upcomingFlightsResponse.observe(requireActivity(), { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource.data?.let { upcomingFlightsResponse ->
+
+
+                        if (upcomingFlightsResponse.flights.isNotEmpty()) {
+                            upcomingFlightsResponse.flights.forEach { flight ->
+                                flight.viewType = 0
+                            }
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.visibility = View.GONE
+                            upcomingAdapter.updateFlights(upcomingFlightsResponse.flights)
+
+                        }
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    resource?.let {
+
+                        binding.shimmerLayout.stopShimmer()
+
+                        Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                Resource.Status.LOADING -> {
+                    resource?.let {
+                        binding.shimmerLayout.startShimmer()
+                    }
+                }
+            }
+        })
+        viewModel.topFlightsResponse.observe(requireActivity(), { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource.data?.let { topFlightsResponse ->
+                        if (topFlightsResponse.flights.isNotEmpty()) {
+                            topFlightsResponse.flights.forEach { flight ->
+                                flight.viewType = 1
+                            }
+                            topAdapter.updateTopFlights(topFlightsResponse.flights)
+
+                        }
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    resource?.let {
+                        Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                Resource.Status.LOADING -> {
+                    resource?.let {
+                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+
+        searchFlights()
+
+        viewModel.getUpcomingFlights()
+        viewModel.getTopFlights()
+
 
 
         return view
@@ -110,7 +176,6 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
         binding.edDate.setOnClickListener {
             BuilderDatePicker.showDialog(requireActivity(), binding.edDate)
         }
-
         binding.go.setOnClickListener {
             viewModel.searchFlights(
                 FlightSearchQuery(
@@ -121,16 +186,6 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
             )
         }
 
-    }
-
-    private fun loadUpcomingFlights(adapter: FlightsAdapter) {
-        val flights = listOf(Flight("1", 0), Flight("2", 0), Flight("3", 0))
-        adapter.updateFlights(flights)
-    }
-
-    private fun loadTopFlights(adapter: FlightsAdapter) {
-        val flights = listOf(Flight("1", 1), Flight("2", 1), Flight("3", 1))
-        adapter.updateFlights(flights)
     }
 
 

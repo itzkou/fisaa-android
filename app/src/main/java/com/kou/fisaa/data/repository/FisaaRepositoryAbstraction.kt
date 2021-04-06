@@ -11,7 +11,10 @@ interface FisaaRepositoryAbstraction {
     /*** Remote ***/
     suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?>
     suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?>
-    suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightSearchResponse>?>
+    suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightsResponse>?>
+    suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?>
+    suspend fun getTopFlights(): Flow<Resource<FlightsResponse>?>
+
 
     /** Social **/
     suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>

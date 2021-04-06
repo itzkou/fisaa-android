@@ -5,7 +5,10 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
+import com.kou.fisaa.R
 
 
 fun coordinateBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
@@ -66,3 +69,9 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
     btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 
 }
+
+fun ImageView.loadCircle(photoUrl: String?) =
+
+    Glide.with(this).load(photoUrl).circleCrop().fallback(
+        R.drawable.ic_launcher_background
+    ).into(this)

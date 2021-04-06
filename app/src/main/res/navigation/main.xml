@@ -8,7 +8,11 @@
     <fragment
         android:id="@+id/home"
         android:name="com.kou.fisaa.presentation.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_home_to_flightsFragment"
+            app:destination="@id/flightsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ads"
         android:name="com.kou.fisaa.presentation.ads.AdsFragment"
@@ -24,4 +28,12 @@
         android:name="com.kou.fisaa.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/flightsFragment"
+        android:name="com.kou.fisaa.presentation.flights.FlightsFragment"
+        android:label="FlightsFragment">
+        <action
+            android:id="@+id/action_flightsFragment_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>

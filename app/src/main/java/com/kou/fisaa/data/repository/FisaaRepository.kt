@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class FisaaRepository  constructor(
+class FisaaRepository constructor(
     private val remote: FisaaRemote,
     private val local: AuthLocalManager,
     private val firestore: FirestoreRemote
-) :FisaaRepositoryAbstraction{
+) : FisaaRepositoryAbstraction {
 
     override suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
         return flow {
@@ -37,10 +37,26 @@ class FisaaRepository  constructor(
         }.flowOn(Dispatchers.IO) // Dispatchers are called from viewmodel
     }
 
-    override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightSearchResponse>?> {
+    override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightsResponse>?> {
         return flow {
             emit(Resource.loading())
             val response = remote.searchFlights(searchQuery)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.getUpcomingFlights()
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun getTopFlights(): Flow<Resource<FlightsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.getTopFlights()
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
@@ -60,7 +76,7 @@ class FisaaRepository  constructor(
     override suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?> {
         return flow {
             emit(Resource.loading())
-            val response= firestore.signInWithFacebook(token)
+            val response = firestore.signInWithFacebook(token)
             emit(Resource.success(response))
         }.catch {
             emit(Resource.error(it.message.toString()))

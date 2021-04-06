@@ -46,6 +46,8 @@
     <!-- Ads Fragment -->
     <string name="adstitle">ANNONCES</string>
 
+    <!-- Adapter Flights -->
+    <string name="fullname">%s %s</string>
 
 
     <string name="facebook_app_id">1135022460280967</string>
