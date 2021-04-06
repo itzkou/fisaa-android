@@ -5,6 +5,7 @@
     android:id="@+id/homeSwipeToRefresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,11 +53,11 @@
 
             <EditText
                 android:id="@+id/edArrival"
-                android:inputType="text"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_two"
+                android:inputType="text"
                 app:layout_constraintEnd_toStartOf="@+id/edDate"
                 app:layout_constraintStart_toEndOf="@+id/edDeparture"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -136,15 +137,15 @@
                 app:layout_constraintTop_toTopOf="@+id/textView7" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerLayout"
+                android:id="@+id/shimmerUpcoming"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@id/rvUpcoming"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/rvUpcoming"
-                app:shimmer_repeat_mode="restart"
-                app:shimmer_shape="radial">
+
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -171,10 +172,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/rvTop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/rvTop"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/shimmer_top" />
+
+                    <include layout="@layout/shimmer_top" />
+
+                    <include layout="@layout/shimmer_top" />
+
+                    <include layout="@layout/shimmer_top" />
+
+
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTop"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />

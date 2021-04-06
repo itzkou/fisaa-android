@@ -23,20 +23,21 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
+    private val upcomingAdapter = FlightsAdapter(this@HomeFragment)
+    private val topAdapter = FlightsAdapter(this@HomeFragment)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val upcomingAdapter = FlightsAdapter(this@HomeFragment)
-        val topAdapter = FlightsAdapter(this@HomeFragment)
 
         coordinateBtnAndInputs(binding.go, binding.edDeparture, binding.edArrival, binding.edDate)
-
 
         binding.rvUpcoming.apply {
             layoutManager =
@@ -56,7 +57,18 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
 
         }
 
-        viewModel.flightSearchResponse.observe(requireActivity(), { resource ->
+        searchFlights()
+        viewModel.getUpcomingFlights()
+        viewModel.getTopFlights()
+
+
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.flightSearchResponse.observe(viewLifecycleOwner, { resource ->
 
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
@@ -84,48 +96,51 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
             }
 
         })
-        viewModel.upcomingFlightsResponse.observe(requireActivity(), { resource ->
-            when (resource.status) {
-                Resource.Status.SUCCESS -> {
-                    resource.data?.let { upcomingFlightsResponse ->
+        viewModel.upcomingFlightsResponse.observe(viewLifecycleOwner,   // if we put requireActivity the code will crash when navigating to other fragments / viewLifeCycleOwner worked
+            { resource ->
+                when (resource.status) {
+                    Resource.Status.SUCCESS -> {
+
+                        resource.data?.let { upcomingFlightsResponse ->
 
 
-                        if (upcomingFlightsResponse.flights.isNotEmpty()) {
-                            upcomingFlightsResponse.flights.forEach { flight ->
-                                flight.viewType = 0
+                            if (upcomingFlightsResponse.flights.isNotEmpty()) {
+                                binding.shimmerUpcoming.stopShimmer()
+                                binding.shimmerUpcoming.visibility = View.GONE
+                                upcomingFlightsResponse.flights.forEach { flight ->
+                                    flight.viewType = 0
+                                }
+
+                                upcomingAdapter.updateFlights(upcomingFlightsResponse.flights)
+
                             }
-                            binding.shimmerLayout.stopShimmer()
-                            binding.shimmerLayout.visibility = View.GONE
-                            upcomingAdapter.updateFlights(upcomingFlightsResponse.flights)
+
 
                         }
+                    }
 
+                    Resource.Status.ERROR -> {
+                        resource?.let {
 
+                            Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+
+                    Resource.Status.LOADING -> {
+                        resource?.let {
+
+                        }
                     }
                 }
-
-                Resource.Status.ERROR -> {
-                    resource?.let {
-
-                        binding.shimmerLayout.stopShimmer()
-
-                        Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                Resource.Status.LOADING -> {
-                    resource?.let {
-                        binding.shimmerLayout.startShimmer()
-                    }
-                }
-            }
-        })
-        viewModel.topFlightsResponse.observe(requireActivity(), { resource ->
+            })
+        viewModel.topFlightsResponse.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { topFlightsResponse ->
                         if (topFlightsResponse.flights.isNotEmpty()) {
+                            binding.shimmerTop.stopShimmer()
+                            binding.shimmerTop.visibility = View.GONE
                             topFlightsResponse.flights.forEach { flight ->
                                 flight.viewType = 1
                             }
@@ -151,15 +166,6 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                 }
             }
         })
-
-        searchFlights()
-
-        viewModel.getUpcomingFlights()
-        viewModel.getTopFlights()
-
-
-
-        return view
     }
 
 
