@@ -6,6 +6,7 @@ import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
+import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.flowOn
 
 class FisaaRepository constructor(
     private val remote: FisaaRemote,
-    private val local: AuthLocalManager,
+    private val authLocalManager: AuthLocalManager,
+    private val flightLocalManager: FlightLocalManager,
     private val firestore: FirestoreRemote
 ) : FisaaRepositoryAbstraction {
 
@@ -34,7 +36,7 @@ class FisaaRepository constructor(
             emit(Resource.loading())
             val response = remote.signUp(signUpQuery)
             emit(response)
-        }.flowOn(Dispatchers.IO) // Dispatchers are called from viewmodel
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightsResponse>?> {
@@ -47,9 +49,19 @@ class FisaaRepository constructor(
 
     override suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?> {
         return flow {
+
+            emit(getUpcomingFlightsCached())
             emit(Resource.loading())
             val response = remote.getUpcomingFlights()
-            emit(response)
+            if (response.status == Resource.Status.SUCCESS) {
+                response.data?.flights?.let { flights ->
+                    flightLocalManager.deleteAll(flights)
+                    flightLocalManager.insertAll(flights)
+                }
+            }
+
+
+            //emit(response)
         }.flowOn(Dispatchers.IO)
     }
 
@@ -60,7 +72,6 @@ class FisaaRepository constructor(
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
-
 
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
         return flow {
@@ -83,5 +94,9 @@ class FisaaRepository constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-
+    /****  Local fetching ***/
+    private fun getUpcomingFlightsCached(): Resource<FlightsResponse>? =
+        flightLocalManager.getAll()?.let { flights ->
+            Resource.success(FlightsResponse(flights))
+        }
 }

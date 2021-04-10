@@ -6,7 +6,7 @@ import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.kou.fisaa.R
-
+//TODO when user clicks many times many instances of this class is opened
 class BuilderDatePicker {
     companion object {
         var pickedDate: String = ""

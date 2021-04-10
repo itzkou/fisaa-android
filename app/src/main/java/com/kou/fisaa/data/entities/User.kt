@@ -1,12 +1,13 @@
 package com.kou.fisaa.data.entities
 
+import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "users")
+@Entity(tableName = "user")
 data class User(
-    val __v: Int? = null,
+    @NonNull
     @PrimaryKey
     val _id: String,
     val adress: String? = null,

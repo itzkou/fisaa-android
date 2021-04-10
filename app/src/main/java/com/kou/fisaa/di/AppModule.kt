@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
+import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.local.roomManager.FisaaDatabase
 import com.kou.fisaa.data.remote.FisaaApi
 import com.kou.fisaa.data.remote.FisaaRemote
@@ -96,7 +97,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFisaaDao(db: FisaaDatabase) = db.fisaaDao()
+    fun provideAuthDao(db: FisaaDatabase) = db.authDao()
+
+    @Singleton
+    @Provides
+    fun provideFlightDao(db: FisaaDatabase) = db.flightDao()
 
 
     /**** FireStore ******/
@@ -122,9 +127,10 @@ object AppModule {
     @Singleton
     fun provideFisaaRepositoryAbstraction(
         remote: FisaaRemote,
-        local: AuthLocalManager,
+        authLocalManager: AuthLocalManager, flightLocalManager: FlightLocalManager,
         firestore: FirestoreRemote
-    ): FisaaRepositoryAbstraction = FisaaRepository(remote, local, firestore)
+    ): FisaaRepositoryAbstraction =
+        FisaaRepository(remote, authLocalManager, flightLocalManager, firestore)
 
 
 }

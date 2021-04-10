@@ -8,14 +8,14 @@ import com.kou.fisaa.data.entities.User
 
 
 @Dao
-interface FisaaDao {
+interface AuthDao {
 
     /** Insert User **/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     fun insertUser(user: User)
+    fun insertUser(user: User)
 
     /** Get User **/
-    @Query("SELECT * FROM users WHERE _id = :id")  // Doesn't support suspend
-     fun getUser(id: Int): User
+    @Query("SELECT * FROM user WHERE _id = :id")  // Doesn't support suspend
+    fun getUser(id: Int): User
 
- }
+}
