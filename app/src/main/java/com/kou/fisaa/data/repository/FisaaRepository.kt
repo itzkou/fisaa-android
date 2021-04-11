@@ -5,21 +5,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.firestore.FirestoreRemote
+import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
 import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.utils.Resource
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class FisaaRepository constructor(
+class FisaaRepository @Inject constructor(
     private val remote: FisaaRemote,
     private val authLocalManager: AuthLocalManager,
     private val flightLocalManager: FlightLocalManager,
-    private val firestore: FirestoreRemote
+    private val adLocalManager: AdLocalManager,
+    private val firestore: FirestoreRemote,
+    private val ioDispatcher: CoroutineDispatcher
 ) : FisaaRepositoryAbstraction {
 
     override suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
@@ -28,7 +32,7 @@ class FisaaRepository constructor(
             val response = remote.login(loginQuery)
             emit(response)
 
-        }.flowOn(Dispatchers.IO)// TODO viewmodel calls dispatcher
+        }.flowOn(ioDispatcher)// TODO viewmodel calls dispatcher
     }
 
     override suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?> {
@@ -36,7 +40,7 @@ class FisaaRepository constructor(
             emit(Resource.loading())
             val response = remote.signUp(signUpQuery)
             emit(response)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightsResponse>?> {
@@ -44,7 +48,7 @@ class FisaaRepository constructor(
             emit(Resource.loading())
             val response = remote.searchFlights(searchQuery)
             emit(response)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?> {
@@ -60,17 +64,40 @@ class FisaaRepository constructor(
                 }
             }
 
-
-            //emit(response)
-        }.flowOn(Dispatchers.IO)
+            emit(response)
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun getTopFlights(): Flow<Resource<FlightsResponse>?> {
         return flow {
+            // emit(getTopFlightsCached())  //TODO null exception Room _id not exist in sortBycount API
             emit(Resource.loading())
             val response = remote.getTopFlights()
+            /* if (response.status == Resource.Status.SUCCESS) {
+                 response.data?.flights?.let { flights ->
+                     flightLocalManager.deleteAll(flights)
+                     flightLocalManager.insertAll(flights)
+                 }
+             }*/
             emit(response)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun getAds(): Flow<Resource<AdsResponse>?> {
+        return flow {
+
+            emit(getAdsCached())
+            val response = remote.getAds()
+            if (response.status == Resource.Status.SUCCESS) {
+                response.data?.ads?.let { ads ->
+                    adLocalManager.deleteAll(ads)
+                    adLocalManager.insertAll(ads)
+
+                }
+            }
+            emit(response)
+
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
@@ -81,7 +108,7 @@ class FisaaRepository constructor(
         }.catch {
             // If exception is thrown, emit failed state along with message.
             emit(Resource.error(it.message.toString()))
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?> {
@@ -91,7 +118,7 @@ class FisaaRepository constructor(
             emit(Resource.success(response))
         }.catch {
             emit(Resource.error(it.message.toString()))
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
     }
 
     /****  Local fetching ***/
@@ -99,4 +126,15 @@ class FisaaRepository constructor(
         flightLocalManager.getAll()?.let { flights ->
             Resource.success(FlightsResponse(flights))
         }
+
+    private fun getTopFlightsCached(): Resource<FlightsResponse>? =
+        flightLocalManager.getAll()?.let { flights ->
+            Resource.success(FlightsResponse(flights))
+        }
+
+    private fun getAdsCached(): Resource<AdsResponse>? =
+        adLocalManager.getAll()?.let { ads ->
+            Resource.success(AdsResponse(ads))
+        }
+
 }

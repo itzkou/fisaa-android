@@ -21,5 +21,8 @@ class FisaaRemote @Inject constructor(
     suspend fun getTopFlights() =
         getResource { fisaaApi.getTopFlights() }
 
+    suspend fun getAds() =
+        getResource { fisaaApi.getAds() }
+
 
 }

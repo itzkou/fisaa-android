@@ -23,6 +23,9 @@ interface FisaaApi {
 
 
     /** Flights **/
+    @GET("advertisements")
+    suspend fun getAds(): Response<AdsResponse>
+
     @POST("advertisements/flights")
     suspend fun searchFlights(@Body searchQuery: FlightSearchQuery): Response<FlightsResponse>
 

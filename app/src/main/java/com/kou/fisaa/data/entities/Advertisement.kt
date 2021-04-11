@@ -1,13 +1,21 @@
 package com.kou.fisaa.data.entities
 
+import androidx.annotation.NonNull
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "advertisement")
 data class Advertisement(
+    @NonNull
+    @PrimaryKey
     val _id: String,
-    var viewType: Int,
-    val createdAt: String? = null,
-    val departure: String? = null,
-    val departureDate: String? = null,
-    val destination: String? = null,
-    val type: String? = null,
-    val updatedAt: String? = null,
-    val createdBy: User? = null,
+    val arivalDate: String?,
+    val createdAt: String,
+    @Embedded(prefix = "user")
+    val createdBy: AdCreator,
+    val departure: String,
+    val departureDate: String,
+    val destination: String,
+    val type: String,
 )

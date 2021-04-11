@@ -6,7 +6,8 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.widget.*
-import com.bumptech.glide.Glide
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
 import com.kou.fisaa.R
 import java.util.*
@@ -14,21 +15,21 @@ import java.util.*
 
 fun coordinateBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
 
-        val watcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                btn.isEnabled = inputs.all { it.text.isNotEmpty()  }
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    val watcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 
         }
-        inputs.forEach { it.addTextChangedListener(watcher) }
-        btn.isEnabled = inputs.all { it.text.isNotEmpty()  }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
     }
+    inputs.forEach { it.addTextChangedListener(watcher) }
+    btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+
+}
 
 fun coordinatePwd(btn: ImageButton, input: EditText, il: TextInputLayout) {
     val watcher = object : TextWatcher {
@@ -41,17 +42,16 @@ fun coordinatePwd(btn: ImageButton, input: EditText, il: TextInputLayout) {
         override fun afterTextChanged(s: Editable?) {
             btn.isEnabled = input.text.length >= 6
             if (input.text.length < 6) {
-                    il.error = "Password is a least 6 charachters"
-                }
-                else il.error=null
+                il.error = "Password is a least 6 charachters"
+            } else il.error = null
 
 
-            }
         }
-        input.addTextChangedListener(watcher)
-        btn.isEnabled = input.text.length >= 6
-
     }
+    input.addTextChangedListener(watcher)
+    btn.isEnabled = input.text.length >= 6
+
+}
 
 fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 
@@ -71,11 +71,12 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 
 }
 
-fun ImageView.loadCircle(photoUrl: String?) =
-
-    Glide.with(this).load(photoUrl).circleCrop().fallback(
-        R.drawable.ic_launcher_background
-    ).into(this)
+fun ImageView.loadCircle(photoUrl: String?) =    //TODO inject coil if injectable
+    this.load("https://fisaa.herokuapp.com/images/$photoUrl") {
+        crossfade(true)
+        placeholder(R.drawable.ic_launcher_background)
+        transformations(CircleCropTransformation())
+    }
 
 fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
     DateUtils.getRelativeTimeSpanString(

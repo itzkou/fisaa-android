@@ -7,7 +7,7 @@ import com.kou.fisaa.data.entities.Flight
 @Dao
 interface FlightDao {
 
-    @Query("SELECT * FROM  flight order by departure") //order by "colomun" DESC
+    @Query("SELECT * FROM  flight ") //order by "colomun" DESC
     fun getAll(): List<Flight>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

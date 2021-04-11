@@ -3,7 +3,6 @@ package com.kou.fisaa.presentation.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.data.entities.FlightsResponse
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -16,8 +15,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val repository: FisaaRepositoryAbstraction) :
     ViewModel() {
 
-    private val _flightsSearchResponse = MutableLiveData<Resource<FlightsResponse>>()
-    val flightSearchResponse = _flightsSearchResponse
 
     private val _upcomingFlightsResponse = MutableLiveData<Resource<FlightsResponse>>()
     val upcomingFlightsResponse = _upcomingFlightsResponse
@@ -26,16 +23,7 @@ class HomeViewModel @Inject constructor(private val repository: FisaaRepositoryA
     val topFlightsResponse = _topFlightsResponse
 
 
-    fun searchFlights(searchQuery: FlightSearchQuery) {
-        viewModelScope.launch {
-            repository.searchFlights(searchQuery).collect { response ->
-                response?.let {
-                    _flightsSearchResponse.value = response
-                }
 
-            }
-        }
-    }
 
     fun getUpcomingFlights() {
         viewModelScope.launch {

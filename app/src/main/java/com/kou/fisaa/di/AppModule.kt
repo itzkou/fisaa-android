@@ -1,9 +1,6 @@
 package com.kou.fisaa.di
 
 import android.content.Context
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -16,6 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
 import com.kou.fisaa.data.firestore.FirestoreRemote
+import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
 import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.local.roomManager.FisaaDatabase
@@ -28,6 +26,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -36,17 +36,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)   // all these dependencies inside AppModule will live as long as our application does
 object AppModule {
-
-    /**** Glide  ******/
-    @Singleton // This specific glide instance has only one instance inside our app
-    @Provides
-    fun provideGlideInstance(@ApplicationContext context: Context) = Glide.with(context)
-        .setDefaultRequestOptions(
-            RequestOptions()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_foreground)
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
-        )
 
     /**** Retrofit  ******/
     @Singleton
@@ -103,6 +92,10 @@ object AppModule {
     @Provides
     fun provideFlightDao(db: FisaaDatabase) = db.flightDao()
 
+    @Singleton
+    @Provides
+    fun provideAdDao(db: FisaaDatabase) = db.adDao()
+
 
     /**** FireStore ******/
     @Provides
@@ -116,21 +109,30 @@ object AppModule {
     fun provideFirestore() = Firebase.firestore
 
     /**** main Repo ******/
-    /* @Singleton
-     @Provides
-     fun provideFisaaRepository(
-         remote: FisaaRemote,
-         local: AuthLocalManager, firestore: FirestoreRemote
-     ) = FisaaRepository(remote, local, firestore)*/
+    @Singleton
+    @Provides
+    fun provideIoDispatcher() = Dispatchers.IO
+
 
     @Provides
     @Singleton
     fun provideFisaaRepositoryAbstraction(
         remote: FisaaRemote,
-        authLocalManager: AuthLocalManager, flightLocalManager: FlightLocalManager,
-        firestore: FirestoreRemote
+        authLocalManager: AuthLocalManager,
+        flightLocalManager: FlightLocalManager,
+        adLocalManager: AdLocalManager,
+        firestore: FirestoreRemote,
+        ioDispatcher: CoroutineDispatcher
+
     ): FisaaRepositoryAbstraction =
-        FisaaRepository(remote, authLocalManager, flightLocalManager, firestore)
+        FisaaRepository(
+            remote,
+            authLocalManager,
+            flightLocalManager,
+            adLocalManager,
+            firestore,
+            ioDispatcher
+        )
 
 
 }

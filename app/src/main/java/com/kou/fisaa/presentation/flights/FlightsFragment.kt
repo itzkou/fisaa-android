@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentFlightsBinding
-import com.kou.fisaa.presentation.home.HomeViewModel
 import com.kou.fisaa.utils.Resource
 
 class FlightsFragment : Fragment() {
@@ -17,7 +17,7 @@ class FlightsFragment : Fragment() {
     private var _binding: FragmentFlightsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private val viewModel: FlightViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +37,7 @@ class FlightsFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { flightSearchResponse ->
                         if (flightSearchResponse.flights.isNotEmpty())
-                            binding.textView9.text = flightSearchResponse.flights.toString()
+                            findNavController().navigate(R.id.action_home_to_flightsFragment)
 
                     }
                 }
