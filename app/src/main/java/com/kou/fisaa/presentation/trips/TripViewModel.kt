@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.flights
+package com.kou.fisaa.presentation.trips
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FlightViewModel @Inject constructor(private val repository: FisaaRepositoryAbstraction) :
+class TripViewModel @Inject constructor(private val repository: FisaaRepositoryAbstraction) :
     ViewModel() {
     private val _flightsSearchResponse = MutableLiveData<Resource<FlightsResponse>>()
     val flightSearchResponse = _flightsSearchResponse

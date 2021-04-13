@@ -7,15 +7,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentHomeBinding
+import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
+import javax.inject.Inject
 
-class HomeFragment : Fragment(), FlightsAdapter.Listener {
+class HomeFragment : Fragment(), FlightAdapterItemListener {
 
     //TODO check requireActivity to viewlifecyclescope
     //TODO swipeToRefresh WIFI connectivity
@@ -24,8 +27,10 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
-    private val upcomingAdapter = FlightsAdapter(this@HomeFragment)
-    private val topAdapter = FlightsAdapter(this@HomeFragment)
+    @Inject
+    lateinit var flightsAdapter: FlightsAdapter  // couplage fort entre les classes tna7a
+    /// private val upcomingAdapter = FlightsAdapter(this@HomeFragment)
+    // private val topAdapter = FlightsAdapter(this@HomeFragment)
 
 
     override fun onCreateView(
@@ -66,7 +71,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                                     flight.viewType = 0
                                 }
 
-                                upcomingAdapter.updateUpcoming(upcomingFlightsResponse.flights)
+                                //flightsAdapter.updateUpcoming(upcomingFlightsResponse.flights)
 
                             }
 
@@ -99,7 +104,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
                             topFlightsResponse.flights.forEach { flight ->
                                 flight.viewType = 1
                             }
-                            topAdapter.updateTopFlights(topFlightsResponse.flights)
+                            //flightsAdapter.updateTopFlights(topFlightsResponse.flights)
 
                         }
 
@@ -140,7 +145,12 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
             BuilderDatePicker.showDialog(requireActivity(), binding.edDate)
         }
         binding.go.setOnClickListener {
-            //pass data
+            val date = binding.edDate.text.toString()
+            val destination = binding.edArrival.text.toString()
+            val departure = binding.edDeparture.text.toString()
+            val action =
+                HomeFragmentDirections.actionHomeToFlightsFragment(destination, departure, date)
+            findNavController().navigate(action)
         }
 
     }
@@ -150,7 +160,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
         binding.rvUpcoming.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = upcomingAdapter
+            //adapter = flightsAdapter
             isNestedScrollingEnabled = false
             setHasFixedSize(true)
 
@@ -158,7 +168,7 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
         binding.rvTop.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = topAdapter
+            //adapter = flightsAdapter
             isNestedScrollingEnabled = false
             setHasFixedSize(true)
 
@@ -172,8 +182,8 @@ class HomeFragment : Fragment(), FlightsAdapter.Listener {
             binding.shimmerTop.visibility = View.VISIBLE
             binding.shimmerTop.startShimmer()
             binding.shimmerUpcoming.startShimmer()
-            topAdapter.updateTopFlights(listOf())
-            upcomingAdapter.updateUpcoming(listOf())
+            //flightsAdapter.updateTopFlights(listOf())
+            //flightsAdapter.updateUpcoming(listOf())
             viewModel.getUpcomingFlights()
             viewModel.getTopFlights()
         }

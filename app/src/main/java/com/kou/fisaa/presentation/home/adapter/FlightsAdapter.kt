@@ -10,13 +10,11 @@ import com.kou.fisaa.databinding.ItemTopFlightsBinding
 import com.kou.fisaa.databinding.ItemUpcomingFlightsBinding
 import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
+import javax.inject.Inject
 
-class FlightsAdapter(private val listener: Listener) :
+//TODO search why viewtype is only usable when we have different items (objects) not layouts
+class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    interface Listener {
-        fun openFlight(flightId: String)
-    }
 
     companion object {
         const val TYPE_UPCOMING = 0
@@ -53,7 +51,6 @@ class FlightsAdapter(private val listener: Listener) :
 
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val flight = flights[position]
 
@@ -86,6 +83,7 @@ class FlightsAdapter(private val listener: Listener) :
     }
 
     override fun getItemCount() = flights.size
+
     override fun getItemViewType(position: Int): Int {
         return flights[position].viewType
     }

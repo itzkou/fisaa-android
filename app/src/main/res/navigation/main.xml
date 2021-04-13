@@ -35,8 +35,23 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/flightsFragment"
-        android:name="com.kou.fisaa.presentation.flights.FlightsFragment"
+        android:name="com.kou.fisaa.presentation.trips.TripsFragment"
         android:label="FlightsFragment">
 
+        <argument
+            android:name="destination"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="departure"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="date"
+            android:defaultValue='""'
+            app:argType="string" />
+        <action
+            android:id="@+id/action_flightsFragment_to_home"
+            app:destination="@id/home" />
     </fragment>
 </navigation>
