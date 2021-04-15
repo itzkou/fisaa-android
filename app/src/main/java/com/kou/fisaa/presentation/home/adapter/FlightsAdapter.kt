@@ -23,10 +23,10 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
 
     private var flights = listOf<Flight>()
 
-    inner class UpcomingViewHolder(val binding: ItemUpcomingFlightsBinding) :
-        RecyclerView.ViewHolder(binding.root)
+     class UpcomingViewHolder(val binding: ItemUpcomingFlightsBinding) :
+         RecyclerView.ViewHolder(binding.root)
 
-    inner class TopViewHolder(val binding: ItemTopFlightsBinding) :
+    class TopViewHolder(val binding: ItemTopFlightsBinding) :
         RecyclerView.ViewHolder(binding.root)
 
 

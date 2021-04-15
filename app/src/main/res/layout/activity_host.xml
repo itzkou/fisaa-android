@@ -40,7 +40,6 @@
                 android:id="@+id/bottomNavigationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bom_bg"
                 app:itemHorizontalTranslationEnabled="false"
                 app:itemTextAppearanceActive="@style/bomText"
                 app:menu="@menu/main" />
@@ -51,10 +50,9 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/primaryPurple"
             android:contentDescription="@string/imFab"
             android:src="@drawable/ic_plus"
-            android:tint="@color/white"
-            app:backgroundTint="@color/primaryPurple"
             app:layout_anchor="@id/bottomAppBar"
             app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
 

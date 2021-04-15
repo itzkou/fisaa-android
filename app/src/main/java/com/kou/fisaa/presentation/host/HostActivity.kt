@@ -19,15 +19,19 @@ class HostActivity : AppCompatActivity() {
         binding = ActivityHostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //setupNavontroller with navigationoption
 
-
-
-        binding.bottomNavigationView.background = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
         val navController = navHostFragment.navController
-
+        binding.bottomNavigationView.background = null
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        /* val bomBg = binding.bottomAppBar.background as MaterialShapeDrawable
+         bomBg.shapeAppearanceModel = bomBg.shapeAppearanceModel
+             .toBuilder()
+             .setTopRightCorner(CornerFamily.ROUNDED, 20f)
+             .setTopLeftCorner(CornerFamily.ROUNDED, 20f).build()*/
 
 
     }

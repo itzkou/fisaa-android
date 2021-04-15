@@ -18,10 +18,10 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
 
     }
 
-    inner class ViewHolder(val binding: ItemAdsBinding) : RecyclerView.ViewHolder(binding.root)
 
     private var ads = listOf<Advertisement>()
 
+    class ViewHolder(val binding: ItemAdsBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

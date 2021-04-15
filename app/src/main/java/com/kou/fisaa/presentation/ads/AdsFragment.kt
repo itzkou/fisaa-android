@@ -98,8 +98,6 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
 
     private fun refresh() {
         binding.adsSwipeToRefresh.setOnRefreshListener {
-            binding.shimmerAds.visibility = View.VISIBLE
-            binding.shimmerAds.startShimmer()
             adsAdapter.updateAds(listOf())
             viewmodel.getAds()
 

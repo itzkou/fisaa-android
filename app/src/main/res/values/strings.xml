@@ -42,6 +42,9 @@
     <string name="allFlights">Tous les départs</string>
     <string name="PopularFlights">Top des trajets</string>
     <string name="allFLights1">Top des trajets</string>
+    <string name="hintDeparture">Départ</string>
+    <string name="hintDestination">Destination</string>
+
 
     <!-- Ads Fragment -->
     <string name="adstitle">ANNONCES</string>

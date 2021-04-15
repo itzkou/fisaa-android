@@ -40,6 +40,7 @@
 
             <EditText
                 android:id="@+id/edDeparture"
+                android:hint="@string/hintDeparture"
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
@@ -55,6 +56,7 @@
                 android:id="@+id/edArrival"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
+                android:hint="@string/hintDestination"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/spinner_two"
                 android:inputType="text"

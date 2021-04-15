@@ -12,8 +12,8 @@ class FlightLocalManager @Inject constructor(private val flightDao: FlightDao) {
         return flightDao.insertAll(flights)
     }
 
-    fun deleteAll(flights: List<Flight>) {
-        return flightDao.deleteAll(flights)
+    fun deleteAll() {
+        return flightDao.deleteAll()
     }
 
 

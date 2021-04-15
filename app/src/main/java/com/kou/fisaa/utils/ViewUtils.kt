@@ -10,6 +10,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
 import com.kou.fisaa.R
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -78,6 +79,9 @@ fun ImageView.loadCircle(photoUrl: String?) =    //TODO inject coil if injectabl
         transformations(CircleCropTransformation())
     }
 
+fun ImageView.loadPlace(place: String) =
+    this.load("https://api.teleport.org/api/urban_areas/slug:tunis/images/")
+
 fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
     DateUtils.getRelativeTimeSpanString(
         start.time, end.time, DateUtils.SECOND_IN_MILLIS,
@@ -94,6 +98,14 @@ fun TextView.setDate(date: Date? = null) {
         )
         spannableString
     }
+}
+
+fun stringToDate(string: String): Date {
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+    val date = formatter.parse(string)
+    return date
+
+
 }
 
 

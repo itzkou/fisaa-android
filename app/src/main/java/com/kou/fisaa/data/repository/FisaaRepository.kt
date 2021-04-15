@@ -43,7 +43,7 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<FlightsResponse>?> {
+    override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<TripsResponse>?> {
         return flow {
             emit(Resource.loading())
             val response = remote.searchFlights(searchQuery)
@@ -59,7 +59,7 @@ class FisaaRepository @Inject constructor(
             val response = remote.getUpcomingFlights()
             if (response.status == Resource.Status.SUCCESS) {
                 response.data?.flights?.let { flights ->
-                    flightLocalManager.deleteAll(flights)
+                    flightLocalManager.deleteAll()
                     flightLocalManager.insertAll(flights)
                 }
             }

@@ -16,21 +16,24 @@ import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), FlightAdapterItemListener {
 
     //TODO check requireActivity to viewlifecyclescope
     //TODO swipeToRefresh WIFI connectivity
-    //TODO remove Loading States if not used
+    //TODO Tap to update
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
     @Inject
-    lateinit var flightsAdapter: FlightsAdapter  // couplage fort entre les classes tna7a
-    /// private val upcomingAdapter = FlightsAdapter(this@HomeFragment)
-    // private val topAdapter = FlightsAdapter(this@HomeFragment)
+    lateinit var upcomingAdapter: FlightsAdapter  // couplage fort entre les classes tna7a
+
+    @Inject
+    lateinit var topAdapter: FlightsAdapter
 
 
     override fun onCreateView(
@@ -71,7 +74,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
                                     flight.viewType = 0
                                 }
 
-                                //flightsAdapter.updateUpcoming(upcomingFlightsResponse.flights)
+                                upcomingAdapter.updateUpcoming(upcomingFlightsResponse.flights)
 
                             }
 
@@ -104,7 +107,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
                             topFlightsResponse.flights.forEach { flight ->
                                 flight.viewType = 1
                             }
-                            //flightsAdapter.updateTopFlights(topFlightsResponse.flights)
+                            topAdapter.updateTopFlights(topFlightsResponse.flights)
 
                         }
 
@@ -160,7 +163,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
         binding.rvUpcoming.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            //adapter = flightsAdapter
+            adapter = upcomingAdapter
             isNestedScrollingEnabled = false
             setHasFixedSize(true)
 
@@ -168,7 +171,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
         binding.rvTop.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-            //adapter = flightsAdapter
+            adapter = topAdapter
             isNestedScrollingEnabled = false
             setHasFixedSize(true)
 
@@ -178,12 +181,8 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
 
     private fun refresh() {
         binding.homeSwipeToRefresh.setOnRefreshListener {
-            binding.shimmerUpcoming.visibility = View.VISIBLE
-            binding.shimmerTop.visibility = View.VISIBLE
-            binding.shimmerTop.startShimmer()
-            binding.shimmerUpcoming.startShimmer()
-            //flightsAdapter.updateTopFlights(listOf())
-            //flightsAdapter.updateUpcoming(listOf())
+            topAdapter.updateTopFlights(listOf())
+            upcomingAdapter.updateUpcoming(listOf())
             viewModel.getUpcomingFlights()
             viewModel.getTopFlights()
         }

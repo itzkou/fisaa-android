@@ -3,27 +3,37 @@ package com.kou.fisaa.di
 import com.kou.fisaa.presentation.home.HomeFragment
 import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
+import com.kou.fisaa.presentation.trips.TripsFragment
+import com.kou.fisaa.presentation.trips.adapter.TripAdapter
+import com.kou.fisaa.presentation.trips.adapter.TripAdapterItemListener
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
-import javax.inject.Singleton
 
 
 @Module
 @InstallIn(FragmentComponent::class)
 object AppUtilsModule {
 
-    @Singleton
-    @Provides
+    @Provides        //adding singleton = crash
     fun provideFlightAdapterItemListener(): FlightAdapterItemListener {
         return HomeFragment()
     }
 
-    @Singleton
     @Provides
     fun provideFlightsAdapter(flightAdapterItemListener: FlightAdapterItemListener): FlightsAdapter {
         return FlightsAdapter(flightAdapterItemListener)
+    }
+
+    @Provides        //adding singleton = crash
+    fun provideTripsAdapterItemListener(): TripAdapterItemListener {
+        return TripsFragment()  //always refrence the interface (listener) in fragment
+    }
+
+    @Provides
+    fun provideTripsAdapter(tripAdapterItemListener: TripAdapterItemListener): TripAdapter {
+        return TripAdapter(tripAdapterItemListener)
     }
 
 }
