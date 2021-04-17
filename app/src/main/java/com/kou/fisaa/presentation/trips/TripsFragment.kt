@@ -11,17 +11,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.FlightSearchQuery
-import com.kou.fisaa.databinding.FragmentFlightsBinding
+import com.kou.fisaa.databinding.FragmentTripsBinding
 import com.kou.fisaa.presentation.trips.adapter.TripAdapter
 import com.kou.fisaa.presentation.trips.adapter.TripAdapterItemListener
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+//TODO(two actions , one destination , eachaction with different params)
 @AndroidEntryPoint
 class TripsFragment : Fragment(), TripAdapterItemListener {
 
-    private var _binding: FragmentFlightsBinding? = null
+    private var _binding: FragmentTripsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     val args: TripsFragmentArgs by navArgs()
@@ -35,10 +36,11 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFlightsBinding.inflate(inflater, container, false)
+        _binding = FragmentTripsBinding.inflate(inflater, container, false)
         val view = binding.root
 
         setupUi()
+        refresh()
         return view
     }
 
@@ -52,7 +54,8 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                         if (tripsResponse.flights.isNotEmpty()) {
                             binding.shimmerTrips.stopShimmer()
                             binding.shimmerTrips.visibility = View.GONE
-                            tripsAdapter.updateAds(tripsResponse.flights)
+                            binding.swipe.isRefreshing = false
+                            tripsAdapter.updateTrips(tripsResponse.flights)
                         }
 
                     }
@@ -79,9 +82,16 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     private fun setupUi() {
         binding.rvTrips.apply {
             layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = tripsAdapter
-            isNestedScrollingEnabled = false
+            isNestedScrollingEnabled = false //TODO("Check this later")
+        }
+    }
+
+    private fun refresh() {
+        binding.swipe.setOnRefreshListener {
+            tripsAdapter.updateTrips(listOf())
+            viewModel.searchFlights(FlightSearchQuery(args.date, args.departure, args.destination))
         }
     }
 

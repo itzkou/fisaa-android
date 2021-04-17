@@ -98,14 +98,15 @@ fun TextView.setDate(date: Date? = null) {
         )
         spannableString
     }
+    this.text = dateSpannable
 }
 
 fun stringToDate(string: String): Date {
     val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-    val date = formatter.parse(string)
-    return date
-
-
+    val date: Date = formatter.parse(string)
+    return Date(date.time)
 }
+
+
 
 

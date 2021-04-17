@@ -12,10 +12,12 @@ data class Advertisement(
     val _id: String,
     val arivalDate: String?,
     val createdAt: String,
-    @Embedded(prefix = "user")
+    @Embedded(prefix = "user")  //TODO check if embedded is the right option
     val createdBy: AdCreator,
     val departure: String,
     val departureDate: String,
     val destination: String,
     val type: String,
+    @Embedded(prefix = "parcel")
+    val parcel: Parcel? = null
 )

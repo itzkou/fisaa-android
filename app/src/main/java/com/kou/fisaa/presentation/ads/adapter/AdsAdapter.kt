@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.databinding.ItemAdsBinding
 import com.kou.fisaa.utils.SimpleCallback
+import com.kou.fisaa.utils.loadCircle
+import com.kou.fisaa.utils.setDate
+import com.kou.fisaa.utils.stringToDate
 
 
 class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
@@ -39,7 +41,8 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
 
 
         with(holder.binding) {
-            picture.load(ad.createdBy.image)
+            date.setDate(stringToDate(ad.departureDate))
+            picture.loadCircle(ad.createdBy.image)
             name.text = holder.itemView.context.getString(
                 R.string.fullname,
                 ad.createdBy.firstName,
@@ -47,9 +50,15 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
             )
             departure.text = ad.departure
             arrival.text = ad.destination
-
-
-            //date.setDate(Date(ad.departureDate as String))
+            when (ad.type) {
+                "purchase" -> type.text = holder.itemView.context.getString(R.string.purchase)
+                "travel" -> type.text = holder.itemView.context.getString(R.string.travel)
+                "transport" -> type.text = holder.itemView.context.getString(R.string.transport)
+            }
+            if (ad.parcel != null) {
+                dimension.text = ad.parcel.dimension
+                weight.text = ad.parcel.weight.toString()  //TODO add a string template
+            }
 
 
         }

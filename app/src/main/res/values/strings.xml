@@ -48,8 +48,14 @@
 
     <!-- Ads Fragment -->
     <string name="adstitle">ANNONCES</string>
+    <string name="purchase">Achat</string>
+    <string name="travel">Voyage</string>
+    <string name="transport">Transport</string>
+
+
     <!-- Flights Fragment -->
     <string name="flightsTitle">LES PROCHAINS DEPARTS</string>
+    <string name="chat">Contacter</string>
 
     <!-- Adapter Flights -->
     <string name="fullname">%s %s</string>

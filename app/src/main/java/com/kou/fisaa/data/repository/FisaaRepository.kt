@@ -90,7 +90,7 @@ class FisaaRepository @Inject constructor(
             val response = remote.getAds()
             if (response.status == Resource.Status.SUCCESS) {
                 response.data?.ads?.let { ads ->
-                    adLocalManager.deleteAll(ads)
+                    adLocalManager.deleteAll()
                     adLocalManager.insertAll(ads)
 
                 }

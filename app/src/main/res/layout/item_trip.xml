@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="@+id/imageView4"
             app:srcCompat="@drawable/white_circle" />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/picture"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -99,7 +99,7 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
@@ -111,15 +111,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="TextView"
+            android:text="rating"
+            android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/date" />
 
         <Button
             android:id="@+id/chat"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:text="@string/chat"
+            android:textAllCaps="false"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rating">

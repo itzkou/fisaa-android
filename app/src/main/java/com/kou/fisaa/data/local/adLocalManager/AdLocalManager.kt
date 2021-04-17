@@ -12,7 +12,8 @@ class AdLocalManager @Inject constructor(private val adDao: AdDao) {
         return adDao.insertAll(ads)
     }
 
-    fun deleteAll(ads: List<Advertisement>) {
-        return adDao.deleteAll(ads)
+
+    fun deleteAll() {
+        return adDao.deleteAll()
     }
 }
