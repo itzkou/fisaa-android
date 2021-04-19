@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     android:layout_margin="16dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="4dp">
+    app:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -56,21 +56,22 @@
             android:id="@+id/imageView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/arrival"
-            app:layout_constraintEnd_toStartOf="@+id/departure"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="@+id/departure"
+            app:layout_constraintVertical_bias="0.42000002"
             app:srcCompat="@drawable/ic_destarr" />
 
         <TextView
             android:id="@+id/departure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_regular"
             android:textColor="@color/bluewey"
             android:textSize="10sp"
-            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:text="Departure" />
 
@@ -99,28 +100,37 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/primaryPurple"
+            android:textSize="8sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.25"
+            tools:text="26 janv" />
 
 
         <TextView
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="rating"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/date" />
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/poppins_regular"
+            android:text="6"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/name"
+            app:layout_constraintEnd_toStartOf="@+id/imageView11"
+            app:layout_constraintTop_toTopOf="@+id/date"
+            tools:text="5" />
 
         <Button
             android:id="@+id/chat"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/roundbtn"
+            android:fontFamily="@font/poppins_bold"
             android:text="@string/chat"
             android:textAllCaps="false"
             android:textSize="10sp"
@@ -129,6 +139,15 @@
             app:layout_constraintTop_toBottomOf="@+id/rating">
 
         </Button>
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/date"
+            app:srcCompat="@drawable/ic_star" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

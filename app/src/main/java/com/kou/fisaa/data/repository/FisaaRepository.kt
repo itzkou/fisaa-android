@@ -83,6 +83,14 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun getAllFLights(): Flow<Resource<TripsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.getALlFlights()
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
     override suspend fun getAds(): Flow<Resource<AdsResponse>?> {
         return flow {
 

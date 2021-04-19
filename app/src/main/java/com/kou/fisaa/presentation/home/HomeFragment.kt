@@ -29,6 +29,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
+
     @Inject
     lateinit var upcomingAdapter: FlightsAdapter  // couplage fort entre les classes tna7a
 
@@ -47,6 +48,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
 
         setUpUi()
         searchFlights()
+        getAllFlights()
         viewModel.getUpcomingFlights()
         viewModel.getTopFlights()
         refresh()
@@ -152,7 +154,11 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
             val destination = binding.edArrival.text.toString()
             val departure = binding.edDeparture.text.toString()
             val action =
-                HomeFragmentDirections.actionHomeToFlightsFragment(destination, departure, date)
+                HomeFragmentDirections.actionHomeToFlightsFragment(
+                    destination,
+                    departure,
+                    date
+                ) //Check if boolean flag is a best practice
             findNavController().navigate(action)
         }
 
@@ -187,6 +193,18 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
             viewModel.getTopFlights()
         }
 
+    }
+
+    private fun getAllFlights() {
+        binding.allFlights.setOnClickListener {
+            val action =
+                HomeFragmentDirections.actionHomeToFlightsFragment(
+                    "all",
+                    "all",
+                    ""
+                ) //TODO(" This is trashy find a better approach ")
+            findNavController().navigate(action)
+        }
     }
 
 

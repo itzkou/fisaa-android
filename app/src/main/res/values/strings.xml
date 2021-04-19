@@ -39,9 +39,9 @@
     <string name="txtHomeHeadline1">Je cherche un trajet</string>
     <string name="txtHomeHeadline2">Les prochains départs</string>
     <string name="btnAutocomplete">C’est Parti !</string>
-    <string name="allFlights">Tous les départs</string>
+    <string name="allFlights"><u>Tous les départs</u></string>
     <string name="PopularFlights">Top des trajets</string>
-    <string name="allFLights1">Top des trajets</string>
+    <string name="allFLights1"><u>Top des trajets</u></string>
     <string name="hintDeparture">Départ</string>
     <string name="hintDestination">Destination</string>
 
@@ -67,6 +67,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Content description -->
     <string name="imFab">Add New Ad</string>
+    <string name="date">Date</string>
 
 
 </resources>

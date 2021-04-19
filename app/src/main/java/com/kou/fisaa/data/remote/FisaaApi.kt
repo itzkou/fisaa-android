@@ -22,12 +22,15 @@ interface FisaaApi {
     suspend fun signUp(@Body signUpQuery: SignUpQuery): Response<User>
 
 
-    /** Flights **/
+    /** ads **/
     @GET("advertisements")
     suspend fun getAds(): Response<AdsResponse>
 
     @POST("advertisements/flights")
     suspend fun searchFlights(@Body searchQuery: FlightSearchQuery): Response<TripsResponse>
+
+    @GET("advertisements/flights")
+    suspend fun getAllFLights(): Response<TripsResponse>
 
     @GET("advertisements/upcoming")
     suspend fun getUpcomingFlights(): Response<FlightsResponse>

@@ -18,6 +18,7 @@ class TripViewModel @Inject constructor(private val repository: FisaaRepositoryA
     private val _tripsResponse = MutableLiveData<Resource<TripsResponse>>()
     val tripsResponse = _tripsResponse
 
+
     fun searchFlights(searchQuery: FlightSearchQuery) {
         viewModelScope.launch {
             repository.searchFlights(searchQuery).collect { response ->
@@ -28,5 +29,17 @@ class TripViewModel @Inject constructor(private val repository: FisaaRepositoryA
             }
         }
     }
+
+    fun getAllFlights() {
+        viewModelScope.launch {
+            repository.getAllFLights().collect { response ->
+                response?.let {
+                    _tripsResponse.value = response
+                }
+
+            }
+        }
+    }
+
 
 }

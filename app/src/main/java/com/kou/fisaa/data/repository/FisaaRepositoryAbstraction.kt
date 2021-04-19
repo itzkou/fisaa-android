@@ -14,6 +14,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<TripsResponse>?>
     suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?>
     suspend fun getTopFlights(): Flow<Resource<FlightsResponse>?>
+    suspend fun getAllFLights(): Flow<Resource<TripsResponse>?>
     suspend fun getAds(): Flow<Resource<AdsResponse>?>
 
 

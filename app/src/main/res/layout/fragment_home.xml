@@ -40,12 +40,16 @@
 
             <EditText
                 android:id="@+id/edDeparture"
-                android:hint="@string/hintDeparture"
                 android:layout_width="100dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/spinner_bg"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/hintDeparture"
                 android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,24 +59,34 @@
             <EditText
                 android:id="@+id/edArrival"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:hint="@string/hintDestination"
-                android:layout_marginTop="8dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/spinner_two"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/hintDestination"
                 android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/edDate"
                 app:layout_constraintStart_toEndOf="@+id/edDeparture"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <EditText
                 android:id="@+id/edDate"
+                android:layout_height="40dp"
                 android:layout_width="100dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
+                android:drawableEnd="@drawable/ic_calendar"
                 android:background="@drawable/spinner_bg_three"
+                android:fontFamily="@font/poppins_regular"
                 android:ems="10"
                 android:focusable="false"
+                android:hint="@string/date"
                 android:inputType="date"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +122,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/PopularFlights"
                 android:textColor="#153E73"
@@ -161,7 +175,6 @@
                     <include layout="@layout/shimmer_upcoming" />
 
                     <include layout="@layout/shimmer_upcoming" />
-
 
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>

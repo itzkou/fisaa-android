@@ -76,7 +76,12 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
             }
 
         })
-        viewModel.searchFlights(FlightSearchQuery(args.date, args.departure, args.destination))
+        if (args.destination == "all" || args.departure == "all")
+            viewModel.getAllFlights()
+        else
+            viewModel.searchFlights(FlightSearchQuery(args.date, args.departure, args.destination))
+
+
     }
 
     private fun setupUi() {
@@ -91,7 +96,16 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     private fun refresh() {
         binding.swipe.setOnRefreshListener {
             tripsAdapter.updateTrips(listOf())
-            viewModel.searchFlights(FlightSearchQuery(args.date, args.departure, args.destination))
+            if (args.destination == "all" || args.departure == "all")
+                viewModel.getAllFlights()
+            else
+                viewModel.searchFlights(
+                    FlightSearchQuery(
+                        args.date,
+                        args.departure,
+                        args.destination
+                    )
+                )
         }
     }
 
