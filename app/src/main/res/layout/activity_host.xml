@@ -11,16 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navHost"
             android:name="androidx.navigation.fragment.NavHostFragment"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="50dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main" />
+
 
 
         <com.google.android.material.bottomappbar.BottomAppBar

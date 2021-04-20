@@ -37,6 +37,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)   // all these dependencies inside AppModule will live as long as our application does
 object AppModule {
 
+
     /**** Retrofit  ******/
     @Singleton
     @Provides

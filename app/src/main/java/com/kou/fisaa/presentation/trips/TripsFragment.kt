@@ -84,6 +84,11 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupUi() {
         binding.rvTrips.apply {
             layoutManager =

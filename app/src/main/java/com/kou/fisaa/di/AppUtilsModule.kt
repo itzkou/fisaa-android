@@ -1,5 +1,6 @@
 package com.kou.fisaa.di
 
+import com.appexecutors.picker.utils.PickerOptions
 import com.kou.fisaa.presentation.home.HomeFragment
 import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
@@ -35,5 +36,9 @@ object AppUtilsModule {
     fun provideTripsAdapter(tripAdapterItemListener: TripAdapterItemListener): TripAdapter {
         return TripAdapter(tripAdapterItemListener)
     }
+
+    @Provides
+    fun providePickerOptions(): PickerOptions = PickerOptions.init()
+
 
 }

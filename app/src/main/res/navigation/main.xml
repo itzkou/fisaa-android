@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_host_fragment"
     app:startDestination="@id/home">
-
+    <action
+        android:id="@+id/action_create_ads"
+        app:destination="@id/createAdsFragment"
+        app:launchSingleTop="true" />
     <fragment
         android:id="@+id/home"
         android:name="com.kou.fisaa.presentation.home.HomeFragment"
@@ -56,8 +59,9 @@
             android:name="date"
             android:defaultValue='""'
             app:argType="string" />
-        <action
-            android:id="@+id/action_flightsFragment_to_home"
-            app:destination="@id/home" />
     </fragment>
+    <fragment
+        android:id="@+id/createAdsFragment"
+        android:name="com.kou.fisaa.presentation.adscreation.CreateAdsFragment"
+        android:label="CreateAdsFragment" />
 </navigation>

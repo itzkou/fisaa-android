@@ -19,13 +19,15 @@ class HostActivity : AppCompatActivity() {
         binding = ActivityHostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //setupNavontroller with navigationoption
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.setupWithNavController(navController)
+        binding.fab.setOnClickListener {
+            navController.navigate(R.id.action_create_ads)
+        }
 
         /* val bomBg = binding.bottomAppBar.background as MaterialShapeDrawable
          bomBg.shapeAppearanceModel = bomBg.shapeAppearanceModel

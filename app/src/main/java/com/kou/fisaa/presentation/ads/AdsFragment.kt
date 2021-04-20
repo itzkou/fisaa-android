@@ -49,6 +49,11 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun openUser(adId: String) {
 
     }

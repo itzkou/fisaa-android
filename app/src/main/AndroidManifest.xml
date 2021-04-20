@@ -3,6 +3,8 @@
     package="com.kou.fisaa">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <!-- android:launchMode="singleInstance"-->
     <application
         android:name=".FisaaApplication"
@@ -12,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Fisaa">
-        <activity android:name=".presentation.signup.SignUpActivity"
+        <activity
+            android:name=".presentation.signup.SignUpActivity"
             android:exported="true"/>
         <activity
             android:name=".presentation.host.HostActivity"

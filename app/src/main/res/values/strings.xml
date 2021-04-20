@@ -68,6 +68,12 @@
     <!-- Content description -->
     <string name="imFab">Add New Ad</string>
     <string name="date">Date</string>
+    <string name="CreateAd">Créer une annonce</string>
+    <string name="colis">Je veux envoyer un colis</string>
+    <string name="travelad">Je veux annoncer mon voyage</string>
+    <string name="Purchase">Je veux acheter et recevoir un produit</string>
+    <string name="dates">Dates</string>
+    <string name="no_date">Pas de date particulière</string>
 
 
 </resources>
