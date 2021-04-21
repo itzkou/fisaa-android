@@ -60,6 +60,9 @@
     <!-- Adapter Flights -->
     <string name="fullname">%s %s</string>
 
+    <!-- Camera -->
+    <string name="rqCameraPerms">Veuillez autoriser les permissions</string>
+
 
     <string name="facebook_app_id">1135022460280967</string>
     <string name="fb_login_protocol_scheme">fb1135022460280967</string>

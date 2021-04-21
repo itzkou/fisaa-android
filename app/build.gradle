@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-android-extensions'
 
 
 }
@@ -101,9 +102,17 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    //image picker
-    def picker_version ="1.0.8"
-    implementation "com.appexecutors.picker:picker:$picker_version"
+    def camerax_version = "1.0.0-rc04"
+// CameraX core library using camera2 implementation
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+// CameraX Lifecycle Library
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+// CameraX View class
+    implementation "androidx.camera:camera-view:1.0.0-alpha23"
+
+    //LottieFiles
+    def lottieVersion ="3.7.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 
 
