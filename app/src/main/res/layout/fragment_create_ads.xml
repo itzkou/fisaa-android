@@ -87,10 +87,19 @@
             app:layout_constraintStart_toEndOf="@+id/imageView13"
             app:layout_constraintTop_toTopOf="@+id/imageView13" />
 
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edDate"
+            app:srcCompat="@drawable/ic_plane_up" />
+
         <EditText
             android:id="@+id/edDate"
             style="@style/createAdsInputs"
-
             android:layout_marginTop="22dp"
             android:background="@drawable/wormy"
             android:ems="10"
@@ -99,33 +108,6 @@
             android:inputType="date"
             app:layout_constraintStart_toStartOf="@+id/imageView13"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-        <Spinner
-            android:id="@+id/spinnerParcelType"
-            android:layout_width="154dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/wormy"
-            android:dropDownSelector="@drawable/sp_bg"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="date"
-            app:layout_constraintStart_toStartOf="@+id/imageView13"
-            app:layout_constraintTop_toBottomOf="@id/textView13" />
-
-        <Spinner
-            android:id="@+id/spinnerWeight"
-            android:layout_width="154dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/wormy"
-            android:dropDownSelector="@drawable/sp_bg"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageView18"
-            app:layout_constraintTop_toTopOf="@+id/spinnerParcelType" />
 
         <RadioButton
             android:id="@+id/rdNoDate"
@@ -142,154 +124,39 @@
 
         <EditText
             android:id="@+id/departure"
-
             style="@style/createAdsInputs"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/hintDeparture"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/imageView14"
-            app:layout_constraintTop_toBottomOf="@id/imageView14" />
-
-
-        <EditText
-            android:id="@+id/departure4"
-
-            style="@style/createAdsInputs"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Décrivez l’objet à envoyer…"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.08"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView21" />
-
-        <EditText
-            android:id="@+id/departure5"
-
-            style="@style/createAdsInputs"
-            android:layout_width="60dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <EditText
             android:id="@+id/destination"
             style="@style/createAdsInputs"
-
-            android:layout_marginTop="22dp"
             android:ems="10"
             android:hint="@string/hintDestination"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.94"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView15" />
-
-        <ImageView
-            android:id="@+id/imageView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edDate"
-            app:srcCompat="@drawable/ic_plane_up" />
-
-        <ImageView
-            android:id="@+id/imageView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="22dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/departure"
-            app:srcCompat="@drawable/ic_dim" />
+            app:layout_constraintTop_toTopOf="@+id/departure" />
 
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="Départ"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView14"
-            app:layout_constraintStart_toEndOf="@+id/imageView14"
-            app:layout_constraintTop_toTopOf="@+id/imageView14" />
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Dimensions du colis"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView16"
-            app:layout_constraintStart_toEndOf="@+id/imageView16"
-            app:layout_constraintTop_toTopOf="@+id/imageView16" />
-
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Type du colis"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView17"
-            app:layout_constraintStart_toEndOf="@+id/imageView17"
-            app:layout_constraintTop_toTopOf="@+id/imageView17" />
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Ajouter une photo"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView19"
-            app:layout_constraintStart_toEndOf="@+id/imageView17"
-            app:layout_constraintTop_toTopOf="@+id/imageView19" />
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Description"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView21"
-            app:layout_constraintStart_toEndOf="@+id/imageView21"
-            app:layout_constraintTop_toTopOf="@+id/imageView21" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Bonus voyageur"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView22"
-            app:layout_constraintStart_toEndOf="@+id/imageView22"
-            app:layout_constraintTop_toTopOf="@+id/imageView22" />
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Poids"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView18"
-            app:layout_constraintStart_toEndOf="@+id/imageView18"
-            app:layout_constraintTop_toTopOf="@+id/imageView18" />
+            app:layout_constraintBottom_toBottomOf="@id/imageView14"
+            app:layout_constraintStart_toEndOf="@id/imageView14"
+            app:layout_constraintTop_toBottomOf="@id/edDate"
+            app:layout_constraintTop_toTopOf="@id/imageView14" />
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:text="Destination"
             app:layout_constraintBottom_toBottomOf="@+id/imageView15"
             app:layout_constraintStart_toEndOf="@+id/imageView15"
@@ -304,151 +171,282 @@
             app:layout_constraintTop_toTopOf="@+id/imageView14"
             app:srcCompat="@drawable/ic_plane_down" />
 
-        <RadioGroup
-            android:id="@+id/dimensions"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consToHide"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView16">
+            app:layout_constraintTop_toBottomOf="@+id/departure">
 
-            <RadioButton
-                android:id="@+id/rdSmall"
+            <ImageView
+                android:id="@+id/imageView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/box_blue"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center_horizontal|bottom"
-                android:text="Petit"
-                android:textColor="@color/bluewey" />
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_dim" />
 
-            <RadioButton
-                android:id="@+id/rdMedium"
+            <TextView
+                android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/box_blue"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Moyen"
-                android:textColor="@color/bluewey" />
+                android:layout_marginStart="16dp"
+                android:text="Type du colis"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView17"
+                app:layout_constraintStart_toEndOf="@+id/imageView17"
+                app:layout_constraintTop_toTopOf="@+id/imageView17" />
 
-            <RadioButton
-                android:id="@+id/rdBig"
+            <RadioGroup
+                android:id="@+id/dimensions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/box_blue"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Grand"
-                android:textColor="@color/bluewey" />
+                android:layout_marginTop="22dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView16">
 
-            <RadioButton
-                android:id="@+id/rdLarge"
+                <RadioButton
+                    android:id="@+id/rdSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/box_blue"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="Petit"
+                    android:textColor="@color/bluewey" />
+
+                <RadioButton
+                    android:id="@+id/rdMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/box_blue"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="Moyen"
+                    android:textColor="@color/bluewey" />
+
+                <RadioButton
+                    android:id="@+id/rdBig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/box_blue"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="Grand"
+                    android:textColor="@color/bluewey" />
+
+                <RadioButton
+                    android:id="@+id/rdLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/box_blue"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="Très grand"
+                    android:textColor="@color/bluewey" />
+            </RadioGroup>
+
+            <Spinner
+                android:id="@+id/spinnerParcelType"
+                android:layout_width="154dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/wormy"
+                android:dropDownSelector="@drawable/sp_bg"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.06"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView13" />
+
+            <Spinner
+                android:id="@+id/spinnerWeight"
+                android:layout_width="154dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/wormy"
+                android:dropDownSelector="@drawable/sp_bg"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.94"
+                app:layout_constraintStart_toStartOf="@+id/imageView18"
+                app:layout_constraintTop_toTopOf="@+id/spinnerParcelType" />
+
+            <EditText
+                android:id="@+id/description"
+
+                style="@style/createAdsInputs"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Décrivez l’objet à envoyer…"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView21" />
+
+            <EditText
+                android:id="@+id/txBonus"
+
+                style="@style/createAdsInputs"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+
+            <TextView
+                android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/box_blue"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Très grand"
-                android:textColor="@color/bluewey" />
-        </RadioGroup>
+                android:layout_marginStart="16dp"
+                android:text="Ajouter une photo"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView19"
+                app:layout_constraintStart_toEndOf="@+id/imageView17"
+                app:layout_constraintTop_toTopOf="@+id/imageView19" />
 
-        <ImageView
-            android:id="@+id/imageView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dimensions"
-            app:srcCompat="@drawable/box_blue" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Description"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView21"
+                app:layout_constraintStart_toEndOf="@+id/imageView21"
+                app:layout_constraintTop_toTopOf="@+id/imageView21" />
 
-        <ImageView
-            android:id="@+id/imageView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="@+id/imageView15"
-            app:layout_constraintTop_toBottomOf="@+id/dimensions"
-            app:srcCompat="@drawable/box_blue" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Bonus voyageur"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+                app:layout_constraintStart_toEndOf="@+id/imageView22"
+                app:layout_constraintTop_toTopOf="@+id/imageView22" />
 
-        <ImageView
-            android:id="@+id/imageView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerParcelType"
-            app:srcCompat="@drawable/ic_gallery" />
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Poids"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView13" />
 
-        <ImageView
-            android:id="@+id/imageView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageToUpload"
-            app:srcCompat="@drawable/ic_gallery" />
+            <ImageView
+                android:id="@+id/imageView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dimensions"
+                app:srcCompat="@drawable/box_blue" />
 
-        <ImageView
-            android:id="@+id/imageView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/departure4"
-            app:srcCompat="@drawable/ic_gallery" />
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                app:layout_constraintEnd_toStartOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14"
+                app:srcCompat="@drawable/box_blue" />
 
-        <ImageView
-            android:id="@+id/imageToUpload"
-            android:layout_width="124dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="22dp"
-            app:layout_constraintStart_toStartOf="@+id/imageView19"
-            app:layout_constraintTop_toBottomOf="@+id/textView15"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            <ImageView
+                android:id="@+id/imageView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerParcelType"
+                app:srcCompat="@drawable/ic_gallery" />
 
-        <TextView
-            android:id="@+id/rxUploadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Télécharger une photo"
-            app:layout_constraintBottom_toBottomOf="@+id/imageToUpload"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageToUpload" />
+            <ImageView
+                android:id="@+id/imageView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageToUpload"
+                app:srcCompat="@drawable/ic_gallery" />
 
-        <ImageView
-            android:id="@+id/imageView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/departure5"
-            app:layout_constraintEnd_toStartOf="@+id/departure5"
-            app:layout_constraintTop_toTopOf="@+id/departure5"
-            app:srcCompat="@drawable/ic_minus" />
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                app:srcCompat="@drawable/ic_gallery" />
 
-        <ImageView
-            android:id="@+id/imageView24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/departure5"
-            app:layout_constraintStart_toEndOf="@+id/departure5"
-            app:layout_constraintTop_toTopOf="@+id/departure5"
-            app:srcCompat="@drawable/ic_plus" />
+            <ImageView
+                android:id="@+id/imageToUpload"
+                android:layout_width="124dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="22dp"
+                app:layout_constraintStart_toStartOf="@+id/imageView19"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                app:srcCompat="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/uploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Télécharger une photo"
+                app:layout_constraintBottom_toBottomOf="@+id/imageToUpload"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageToUpload" />
+
+            <ImageView
+                android:id="@+id/imageView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txBonus"
+                app:layout_constraintEnd_toStartOf="@+id/txBonus"
+                app:layout_constraintTop_toTopOf="@+id/txBonus"
+                app:srcCompat="@drawable/ic_minus" />
+
+            <ImageView
+                android:id="@+id/imageView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txBonus"
+                app:layout_constraintStart_toEndOf="@+id/txBonus"
+                app:layout_constraintTop_toTopOf="@+id/txBonus"
+                app:srcCompat="@drawable/ic_plus" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/publish"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -457,11 +455,9 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/btn_login"
             android:text="Publier !"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/departure5" />
-
+            app:layout_constraintTop_toBottomOf="@id/consToHide" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

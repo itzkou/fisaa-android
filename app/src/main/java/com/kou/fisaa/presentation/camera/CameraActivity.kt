@@ -39,6 +39,7 @@ class CameraActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.arscanner.playAnimation()
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -103,7 +104,7 @@ class CameraActivity : AppCompatActivity() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri =
-                        Uri.fromFile(photoFile)   //TODO ( this might be our photo to upload uri )
+                        Uri.fromFile(photoFile)
                     binding.display.load(savedUri)
                     val msg = "Photo capture succeeded: $savedUri"
                     Log.d("tsawri", msg)
@@ -169,6 +170,6 @@ class CameraActivity : AppCompatActivity() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
-            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            arrayOf(Manifest.permission.CAMERA)
     }
 }

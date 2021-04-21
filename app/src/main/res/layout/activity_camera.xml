@@ -43,7 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/capture"
         app:layout_constraintTop_toTopOf="@+id/capture"
-        app:lottie_autoPlay="true"
         app:lottie_fileName="arscanner.json"
         app:lottie_loop="true" />
 

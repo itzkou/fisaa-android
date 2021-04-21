@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
@@ -14,13 +13,13 @@ import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.CustomAdapter
+import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null
     private val binding get() = _binding!!
-
 
 
     private var m1 = Material("Clothes", R.drawable.box_blue)
@@ -41,15 +40,15 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         return view
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
 
-
-
     private fun setupUi() {
+        binding.publish.isEnabled = false
         binding.rdParcel.setOnClickListener(this)
         binding.rdTransport.setOnClickListener(this)
         binding.rdTravel.setOnClickListener(this)
@@ -58,10 +57,10 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         binding.edDate.setOnClickListener {
             BuilderDatePicker.showDialog(requireActivity(), binding.edDate)
         }
-
-        binding.rxUploadImage.setOnClickListener {
+        binding.uploadImage.setOnClickListener {
             startActivity(Intent(activity, CameraActivity::class.java))
         }
+
     }
 
 
@@ -73,21 +72,30 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 binding.rdParcel.id -> {
 
                     if (checked) {
-                        Toast.makeText(requireActivity(), "Parcel", Toast.LENGTH_SHORT).show()
+                        binding.publish.isEnabled = false
+                        binding.consToHide.visibility = View.VISIBLE
                     }
 
                 }
 
                 binding.rdTravel.id -> {
                     if (checked) {
-                        Toast.makeText(requireActivity(), "travel", Toast.LENGTH_SHORT).show()
+                        binding.publish.isEnabled = false
+                        binding.consToHide.visibility = View.GONE
+                        coordinateBtnAndInputs(
+                            binding.publish,
+                            binding.departure,
+                            binding.destination
+                        )
+
 
                     }
                 }
 
                 binding.rdTransport.id -> {
                     if (checked) {
-                        Toast.makeText(requireActivity(), "Transport", Toast.LENGTH_SHORT).show()
+                        binding.publish.isEnabled = false
+                        binding.consToHide.visibility = View.VISIBLE
 
                     }
                 }
