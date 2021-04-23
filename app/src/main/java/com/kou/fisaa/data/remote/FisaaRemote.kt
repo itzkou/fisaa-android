@@ -1,5 +1,6 @@
 package com.kou.fisaa.data.remote
 
+import com.kou.fisaa.data.entities.FlightSearchDatesQuery
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.SignUpQuery
@@ -32,6 +33,9 @@ class FisaaRemote @Inject constructor(
 
     suspend fun getAds() =
         getResource { fisaaApi.getAds() }
+
+    suspend fun searchFlights(searchDatesQuery: FlightSearchDatesQuery) =
+        getResource { fisaaApi.searchFlights(searchDatesQuery) }
 
 
 }

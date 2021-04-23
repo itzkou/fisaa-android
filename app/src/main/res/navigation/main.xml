@@ -14,18 +14,7 @@
         android:label="HomeFragment">
         <action
             android:id="@+id/action_home_to_flightsFragment"
-            app:destination="@id/flightsFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/nav_host_fragment"
-            app:popUpToInclusive="true">
-
-            <argument android:name="destination" />
-            <argument android:name="departure" />
-            <argument android:name="date" />
-
-
-        </action>
-
+            app:destination="@id/flightsFragment" />
     </fragment>
     <fragment
         android:id="@+id/ads"
@@ -56,7 +45,14 @@
             android:defaultValue='""'
             app:argType="string" />
         <argument
-            android:name="date"
+            android:name="depDate"
+            android:defaultValue='""'
+            app:argType="string" />
+        <action
+            android:id="@+id/action_flightsFragment_to_searchFlightsFragment"
+            app:destination="@id/searchFlightsFragment" />
+        <argument
+            android:name="arrDate"
             android:defaultValue='""'
             app:argType="string" />
     </fragment>
@@ -64,4 +60,12 @@
         android:id="@+id/createAdsFragment"
         android:name="com.kou.fisaa.presentation.adscreation.CreateAdsFragment"
         android:label="CreateAdsFragment" />
+    <fragment
+        android:id="@+id/searchFlightsFragment"
+        android:name="com.kou.fisaa.presentation.search.SearchFlightsFragment"
+        android:label="SearchFlightsFragment">
+        <action
+            android:id="@+id/action_searchFlightsFragment_to_flightsFragment4"
+            app:destination="@id/flightsFragment" />
+    </fragment>
 </navigation>

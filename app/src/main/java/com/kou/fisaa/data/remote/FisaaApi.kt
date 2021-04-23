@@ -37,4 +37,7 @@ interface FisaaApi {
 
     @GET("advertisements/top")
     suspend fun getTopFlights(): Response<FlightsResponse>
+
+    @POST("advertisements/search/dates")
+    suspend fun searchFlights(@Body searchDatesQuery: FlightSearchDatesQuery): Response<TripsResponse>
 }

@@ -154,11 +154,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
             val destination = binding.edArrival.text.toString()
             val departure = binding.edDeparture.text.toString()
             val action =
-                HomeFragmentDirections.actionHomeToFlightsFragment(
-                    destination,
-                    departure,
-                    date
-                ) //Check if boolean flag is a best practice
+                HomeFragmentDirections.actionHomeToFlightsFragment(destination, departure, date)
             findNavController().navigate(action)
         }
 

@@ -51,6 +51,14 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun searchFlights(searchDatesQuery: FlightSearchDatesQuery): Flow<Resource<TripsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.searchFlights(searchDatesQuery)
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
     override suspend fun getUpcomingFlights(): Flow<Resource<FlightsResponse>?> {
         return flow {
 

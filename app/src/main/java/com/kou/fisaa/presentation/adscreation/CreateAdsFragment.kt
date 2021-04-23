@@ -14,9 +14,7 @@ import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.CustomAdapter
 import com.kou.fisaa.utils.coordinateBtnAndInputs
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null
     private val binding get() = _binding!!

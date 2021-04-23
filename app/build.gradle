@@ -114,6 +114,10 @@ dependencies {
     def lottieVersion ="3.7.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
+    //Canary Leaks
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+
 
 
 

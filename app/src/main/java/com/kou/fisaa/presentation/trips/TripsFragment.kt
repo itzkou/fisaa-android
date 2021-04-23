@@ -1,15 +1,18 @@
 package com.kou.fisaa.presentation.trips
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.FlightSearchDatesQuery
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.databinding.FragmentTripsBinding
 import com.kou.fisaa.presentation.trips.adapter.TripAdapter
@@ -25,7 +28,8 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     private var _binding: FragmentTripsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
-    val args: TripsFragmentArgs by navArgs()
+    private val tripsArgs: TripsFragmentArgs by navArgs()
+
 
     @Inject
     lateinit var tripsAdapter: TripAdapter
@@ -47,7 +51,6 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.tripsResponse.observe(viewLifecycleOwner, { resource ->
-
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { tripsResponse ->
@@ -76,10 +79,33 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
             }
 
         })
-        if (args.destination == "all" || args.departure == "all")
+
+        Log.d(
+            "myArgs",
+            "destination: ${tripsArgs.destination}  departure : ${tripsArgs.departure}  arrdate : ${tripsArgs.arrDate}  depDate: ${tripsArgs.depDate}"
+        )
+
+
+        //TODO change this trashy logic
+        if (tripsArgs.destination == "all" || tripsArgs.departure == "all")
             viewModel.getAllFlights()
+        else if (tripsArgs.arrDate.isNotEmpty())
+            viewModel.searchFilter(
+                FlightSearchDatesQuery(
+                    tripsArgs.arrDate,
+                    tripsArgs.departure,
+                    tripsArgs.depDate,
+                    tripsArgs.destination
+                )
+            )
         else
-            viewModel.searchFlights(FlightSearchQuery(args.date, args.departure, args.destination))
+            viewModel.searchFlights(
+                FlightSearchQuery(
+                    tripsArgs.depDate,
+                    tripsArgs.departure,
+                    tripsArgs.destination
+                )
+            )
 
 
     }
@@ -96,19 +122,23 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
             adapter = tripsAdapter
             isNestedScrollingEnabled = false //TODO("Check this later")
         }
+        binding.search.setOnClickListener {
+            val action = TripsFragmentDirections.actionFlightsFragmentToSearchFlightsFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun refresh() {
         binding.swipe.setOnRefreshListener {
             tripsAdapter.updateTrips(listOf())
-            if (args.destination == "all" || args.departure == "all")
+            if (tripsArgs.destination == "all" || tripsArgs.departure == "all")
                 viewModel.getAllFlights()
             else
                 viewModel.searchFlights(
                     FlightSearchQuery(
-                        args.date,
-                        args.departure,
-                        args.destination
+                        tripsArgs.depDate,
+                        tripsArgs.departure,
+                        tripsArgs.destination
                     )
                 )
         }

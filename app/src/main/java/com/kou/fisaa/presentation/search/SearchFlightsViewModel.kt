@@ -1,10 +1,9 @@
-package com.kou.fisaa.presentation.trips
+package com.kou.fisaa.presentation.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kou.fisaa.data.entities.FlightSearchDatesQuery
-import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.data.entities.TripsResponse
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -14,13 +13,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TripViewModel @Inject constructor(private val repository: FisaaRepositoryAbstraction) :
+class SearchFlightsViewModel @Inject constructor(private val repository: FisaaRepositoryAbstraction) :
     ViewModel() {
+
     private val _tripsResponse = MutableLiveData<Resource<TripsResponse>>()
     val tripsResponse = _tripsResponse
 
-
-    fun searchFlights(searchQuery: FlightSearchQuery) {
+    fun searchFlightsWithDates(searchQuery: FlightSearchDatesQuery) {
         viewModelScope.launch {
             repository.searchFlights(searchQuery).collect { response ->
                 response?.let {
@@ -30,28 +29,4 @@ class TripViewModel @Inject constructor(private val repository: FisaaRepositoryA
             }
         }
     }
-
-    fun searchFilter(searchQuery: FlightSearchDatesQuery) {
-        viewModelScope.launch {
-            repository.searchFlights(searchQuery).collect { response ->
-                response?.let {
-                    _tripsResponse.value = response
-                }
-
-            }
-        }
-    }
-
-    fun getAllFlights() {
-        viewModelScope.launch {
-            repository.getAllFLights().collect { response ->
-                response?.let {
-                    _tripsResponse.value = response
-                }
-
-            }
-        }
-    }
-
-
 }
