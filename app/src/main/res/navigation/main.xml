@@ -38,22 +38,26 @@
 
         <argument
             android:name="destination"
-            android:defaultValue='""'
+            android:defaultValue="none"
             app:argType="string" />
         <argument
             android:name="departure"
-            android:defaultValue='""'
+            android:defaultValue="none"
             app:argType="string" />
         <argument
             android:name="depDate"
-            android:defaultValue='""'
+            android:defaultValue="none"
             app:argType="string" />
         <action
             android:id="@+id/action_flightsFragment_to_searchFlightsFragment"
             app:destination="@id/searchFlightsFragment" />
         <argument
             android:name="arrDate"
-            android:defaultValue='""'
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="source"
+            android:defaultValue="none"
             app:argType="string" />
     </fragment>
     <fragment

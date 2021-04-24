@@ -13,6 +13,7 @@ import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
 import javax.inject.Inject
 
+//TODO( make user Image nullable or give him a placeholder by default )
 class TripAdapter @Inject constructor(private val tripItemListener: TripAdapterItemListener) :
     RecyclerView.Adapter<TripAdapter.ViewHolder>() {
     private var trips = listOf<Trip>()

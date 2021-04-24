@@ -1,7 +1,6 @@
 package com.kou.fisaa.presentation.trips
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,9 +54,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { tripsResponse ->
                         if (tripsResponse.flights.isNotEmpty()) {
-                            binding.shimmerTrips.stopShimmer()
-                            binding.shimmerTrips.visibility = View.GONE
-                            binding.swipe.isRefreshing = false
+                            stopRefresh()
                             tripsAdapter.updateTrips(tripsResponse.flights)
                         }
 
@@ -66,6 +63,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
 
                 Resource.Status.ERROR -> {
                     resource?.let {
+                        tripsAdapter.updateTrips(listOf())
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -73,24 +71,18 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
 
                 Resource.Status.LOADING -> {
                     resource?.let {
-                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
         })
 
-        Log.d(
-            "myArgs",
-            "destination: ${tripsArgs.destination}  departure : ${tripsArgs.departure}  arrdate : ${tripsArgs.arrDate}  depDate: ${tripsArgs.depDate}"
-        )
 
-
-        //TODO change this trashy logic
-        if (tripsArgs.destination == "all" || tripsArgs.departure == "all")
-            viewModel.getAllFlights()
-        else if (tripsArgs.arrDate.isNotEmpty())
-            viewModel.searchFilter(
+        //TODO There is a boring Toast always appearing
+        when (tripsArgs.source) {
+            "all" -> viewModel.getAllFlights()
+            "secondFilter" -> viewModel.searchFilter(
                 FlightSearchDatesQuery(
                     tripsArgs.arrDate,
                     tripsArgs.departure,
@@ -98,14 +90,14 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                     tripsArgs.destination
                 )
             )
-        else
-            viewModel.searchFlights(
+            else -> viewModel.searchFlights(
                 FlightSearchQuery(
                     tripsArgs.depDate,
                     tripsArgs.departure,
                     tripsArgs.destination
                 )
             )
+        }
 
 
     }
@@ -142,6 +134,12 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                     )
                 )
         }
+    }
+
+    private fun stopRefresh() {
+        binding.shimmerTrips.stopShimmer()
+        binding.shimmerTrips.visibility = View.GONE
+        binding.swipe.isRefreshing = false
     }
 
     override fun openFlight(flightId: String) {

@@ -52,7 +52,7 @@ class SearchFlightsFragment : Fragment() {
                     arrival,
                     departure,
                     depDate,
-                    arrDate
+                    arrDate, source = "secondFilter"
                 )
             findNavController().navigate(action)
         }

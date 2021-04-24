@@ -154,7 +154,12 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
             val destination = binding.edArrival.text.toString()
             val departure = binding.edDeparture.text.toString()
             val action =
-                HomeFragmentDirections.actionHomeToFlightsFragment(destination, departure, date)
+                HomeFragmentDirections.actionHomeToFlightsFragment(
+                    destination,
+                    departure,
+                    date,
+                    source = "firstFilter"
+                )
             findNavController().navigate(action)
         }
 
@@ -194,11 +199,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
     private fun getAllFlights() {
         binding.allFlights.setOnClickListener {
             val action =
-                HomeFragmentDirections.actionHomeToFlightsFragment(
-                    "all",
-                    "all",
-                    ""
-                ) //TODO(" This is trashy find a better approach ")
+                HomeFragmentDirections.actionHomeToFlightsFragment(source = "all")
             findNavController().navigate(action)
         }
     }
