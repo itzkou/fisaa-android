@@ -77,27 +77,8 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
             }
 
         })
-
-
-        //TODO There is a boring Toast always appearing
-        when (tripsArgs.source) {
-            "all" -> viewModel.getAllFlights()
-            "secondFilter" -> viewModel.searchFilter(
-                FlightSearchDatesQuery(
-                    tripsArgs.arrDate,
-                    tripsArgs.departure,
-                    tripsArgs.depDate,
-                    tripsArgs.destination
-                )
-            )
-            else -> viewModel.searchFlights(
-                FlightSearchQuery(
-                    tripsArgs.depDate,
-                    tripsArgs.departure,
-                    tripsArgs.destination
-                )
-            )
-        }
+        searchTrips()
+        //TODO There is a boring Toast always appearing from old responses onviewcreated
 
 
     }
@@ -123,16 +104,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     private fun refresh() {
         binding.swipe.setOnRefreshListener {
             tripsAdapter.updateTrips(listOf())
-            if (tripsArgs.destination == "all" || tripsArgs.departure == "all")
-                viewModel.getAllFlights()
-            else
-                viewModel.searchFlights(
-                    FlightSearchQuery(
-                        tripsArgs.depDate,
-                        tripsArgs.departure,
-                        tripsArgs.destination
-                    )
-                )
+            searchTrips()
         }
     }
 
@@ -140,6 +112,27 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         binding.shimmerTrips.stopShimmer()
         binding.shimmerTrips.visibility = View.GONE
         binding.swipe.isRefreshing = false
+    }
+
+    private fun searchTrips() {
+        when (tripsArgs.source) {
+            "all" -> viewModel.getAllFlights()
+            "secondFilter" -> viewModel.searchFilter(
+                FlightSearchDatesQuery(
+                    tripsArgs.arrDate,
+                    tripsArgs.departure,
+                    tripsArgs.depDate,
+                    tripsArgs.destination
+                )
+            )
+            else -> viewModel.searchFlights(
+                FlightSearchQuery(
+                    tripsArgs.depDate,
+                    tripsArgs.departure,
+                    tripsArgs.destination
+                )
+            )
+        }
     }
 
     override fun openFlight(flightId: String) {
