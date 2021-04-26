@@ -116,6 +116,14 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun postAd(advertisement: Advertisement): Flow<Resource<Advertisement>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.postAd(advertisement)
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
         return flow {
             emit(Resource.loading())

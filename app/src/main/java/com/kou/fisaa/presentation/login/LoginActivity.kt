@@ -72,9 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     resource.data?.let { loginResponse ->
                         if (resource.data.success) {
-
-
-                            Toast.makeText(this, "Authorized", Toast.LENGTH_SHORT).show()
+                            viewModel.setId(loginResponse.data._id)
                             startActivity(Intent(this, HostActivity::class.java))
                         } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 

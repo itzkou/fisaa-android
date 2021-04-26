@@ -17,6 +17,7 @@ import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
 import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.local.roomManager.FisaaDatabase
+import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.remote.FisaaApi
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.data.repository.FisaaRepository
@@ -96,6 +97,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideAdDao(db: FisaaDatabase) = db.adDao()
+
+    /** DataStore **/
+    @Provides
+    @Singleton
+    fun providePrefsStoreAbstraction(@ApplicationContext appContext: Context) =
+        PrefsStore(appContext)  //TODO ask : when I inject using predsStoreImpl hilt generates errors
 
 
     /**** FireStore ******/
