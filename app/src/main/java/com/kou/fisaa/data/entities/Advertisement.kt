@@ -10,7 +10,7 @@ data class Advertisement(
     @NonNull
     @PrimaryKey
     val _id: String,
-    val arivalDate: String?,
+    val arivalDate: String? = "",
     val createdAt: String,
     @Embedded(prefix = "user")  //TODO check if embedded is the right option
     val createdBy: AdCreator,

@@ -116,7 +116,7 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun postAd(advertisement: Advertisement): Flow<Resource<Advertisement>?> {
+    override suspend fun postAd(advertisement: AdsQuery): Flow<Resource<AdsQuery>?> {
         return flow {
             emit(Resource.loading())
             val response = remote.postAd(advertisement)

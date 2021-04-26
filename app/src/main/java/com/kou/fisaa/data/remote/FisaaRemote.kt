@@ -34,7 +34,7 @@ class FisaaRemote @Inject constructor(
     suspend fun searchFlights(searchDatesQuery: FlightSearchDatesQuery) =
         getResource { fisaaApi.searchFlights(searchDatesQuery) }
 
-    suspend fun postAd(advertisement: Advertisement) =
+    suspend fun postAd(advertisement: AdsQuery) =
         getResource { fisaaApi.postAd(advertisement) }
 
 

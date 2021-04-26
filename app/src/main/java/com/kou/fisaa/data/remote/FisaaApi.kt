@@ -42,5 +42,5 @@ interface FisaaApi {
     suspend fun searchFlights(@Body searchDatesQuery: FlightSearchDatesQuery): Response<TripsResponse>
 
     @POST("advertisements/")
-    suspend fun postAd(@Body advertisement: Advertisement): Response<Advertisement>
+    suspend fun postAd(@Body advertisement: AdsQuery): Response<AdsQuery>
 }

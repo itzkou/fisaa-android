@@ -6,18 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Material
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.CustomAdapter
+import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: CreateAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
 
     private var m1 = Material("Clothes", R.drawable.box_blue)
@@ -36,6 +43,41 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         setupUi()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.adCreationResponse.observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource?.let {
+
+                        Toast.makeText(
+                            requireActivity(),
+                            " Ad created by ${it.data?.createdBy}",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    resource?.let {
+
+                        Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                Resource.Status.LOADING -> {
+                    resource?.let {
+
+                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        })
+
     }
 
 
@@ -86,6 +128,26 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                             binding.destination
                         )
 
+                        binding.publish.setOnClickListener {
+                            viewModel.userId.observe(viewLifecycleOwner, { userId ->
+                                userId?.let {
+                                    val date = binding.edDate.text.toString()
+                                    val dep = binding.departure.text.toString()
+                                    val dest = binding.destination.text.toString()
+                                    viewModel.postAd(
+                                        AdsQuery(
+                                            type = "travel",
+                                            departureDate = date,
+                                            departure = dep,
+                                            destination = dest,
+                                            createdBy = userId
+                                        )
+                                    )
+
+
+                                }
+                            })
+                        }
 
                     }
                 }
