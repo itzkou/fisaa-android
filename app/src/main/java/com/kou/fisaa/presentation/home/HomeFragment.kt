@@ -135,6 +135,17 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.homeSwipeToRefresh.isEnabled = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.homeSwipeToRefresh.isEnabled = true
+
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

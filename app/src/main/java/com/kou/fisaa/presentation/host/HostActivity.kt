@@ -11,6 +11,10 @@ import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
 import com.kou.fisaa.presentation.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
@@ -34,7 +38,17 @@ class HostActivity : AppCompatActivity() {
             navController.navigate(R.id.action_create_ads)
 
         }
-        // viewModel.toggleNightMode()
+        binding.darko.setOnClickListener {
+            binding.darko.playAnimation()
+            val activityScope = CoroutineScope(Dispatchers.Main)
+            activityScope.launch {
+                delay(2000)
+                viewModel.toggleNightMode()
+            }
+
+
+        }
+
         viewModel.darkThemeEnabled.observe(this, { nightModeActive ->
 
             val defaultMode = if (nightModeActive) {

@@ -21,7 +21,6 @@
             app:navGraph="@navigation/main" />
 
 
-
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
@@ -70,7 +69,13 @@
         app:itemTextColor="@color/white"
         app:menu="@menu/drawer">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/darko"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="darkotheme.json" />
 
     </com.google.android.material.navigation.NavigationView>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

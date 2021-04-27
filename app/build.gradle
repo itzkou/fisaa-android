@@ -118,6 +118,12 @@ dependencies {
     def prefsVersion ="1.0.0-beta01"
     implementation "androidx.datastore:datastore-preferences:$prefsVersion"
 
+    //Activity KTX
+    def activity_ktx ="1.2.2"
+    implementation "androidx.activity:activity-ktx:$activity_ktx"
+
+
+
 
     //Canary Leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'

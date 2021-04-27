@@ -1,6 +1,7 @@
 package com.kou.fisaa.data.remote
 
 import com.kou.fisaa.data.entities.*
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -43,4 +44,9 @@ interface FisaaApi {
 
     @POST("advertisements/")
     suspend fun postAd(@Body advertisement: AdsQuery): Response<AdsQuery>
+
+    @POST("parcels/")
+    suspend fun postParcel(
+        @Body body: RequestBody
+    ): Response<Parcel>
 }
