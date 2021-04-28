@@ -1,6 +1,7 @@
 package com.kou.fisaa.data.remote
 
 import com.kou.fisaa.data.entities.*
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -38,12 +39,8 @@ class FisaaRemote @Inject constructor(
     suspend fun postAd(advertisement: AdsQuery) =
         getResource { fisaaApi.postAd(advertisement) }
 
-    suspend fun postParcel(body: RequestBody) =
-        getResource {
-            fisaaApi.postParcel(
-                body
-            )
-        }
+    suspend fun postParcel(partMap: Map<String, RequestBody>, file: MultipartBody.Part) =
+        getResource { fisaaApi.postParcel(partMap, file) }
 
 
 }

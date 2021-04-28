@@ -1,6 +1,8 @@
 package com.kou.fisaa.presentation.camera
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -31,8 +33,9 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-
     private lateinit var binding: ActivityCameraBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
@@ -55,6 +58,11 @@ class CameraActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 
     override fun onRequestPermissionsResult(
@@ -107,7 +115,14 @@ class CameraActivity : AppCompatActivity() {
                         Uri.fromFile(photoFile)
                     binding.display.load(savedUri)
                     val msg = "Photo capture succeeded: $savedUri"
-                    Log.d("tsawri", msg)
+                    Log.d("CameraActivity", msg)
+
+                    val intent = Intent().apply {
+                        putExtra("cameraX", savedUri.toString())
+                    }
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+
                 }
             })
     }
@@ -160,10 +175,6 @@ class CameraActivity : AppCompatActivity() {
             mediaDir else filesDir
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
 
     companion object {
         private const val TAG = "CameraXBasic"

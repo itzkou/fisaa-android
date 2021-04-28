@@ -1,12 +1,10 @@
 package com.kou.fisaa.data.remote
 
 import com.kou.fisaa.data.entities.*
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface FisaaApi {
 
@@ -45,8 +43,11 @@ interface FisaaApi {
     @POST("advertisements/")
     suspend fun postAd(@Body advertisement: AdsQuery): Response<AdsQuery>
 
+    //@Headers("Content-Type: multipart/form-data")
+    @Multipart
     @POST("parcels/")
     suspend fun postParcel(
-        @Body body: RequestBody
+        @PartMap() partMap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part file: MultipartBody.Part
     ): Response<Parcel>
 }

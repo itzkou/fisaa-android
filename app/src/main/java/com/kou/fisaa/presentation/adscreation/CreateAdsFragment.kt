@@ -16,7 +16,6 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Material
-import com.kou.fisaa.data.entities.Parcel
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.BuilderDatePicker
@@ -24,32 +23,30 @@ import com.kou.fisaa.utils.CustomAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CreateAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
-    private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // There are no request codes
-                val data: Intent? = result.data
-                Log.d("myURI", data.toString())
-            }
-        }
+
+
     private lateinit var userId: String
-    private lateinit var imageUri: Uri
+    private var imageUri: Uri? = null
 
 
     private var m1 = Material("Clothes", R.drawable.box_blue)
     private var m2 = Material("Food", R.drawable.box_blue)
     private var m3 = Material("Bois", R.drawable.box_blue)
 
+    private val getUriFromCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result?.resultCode == Activity.RESULT_OK) {
+                imageUri = Uri.parse(result.data?.getStringExtra("cameraX"))
+                binding.imageToUpload.setImageURI(imageUri)
+
+            } else Log.d("CreateAdsFragment", "naaah")
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +82,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 }
                 Resource.Status.ERROR -> {
                     resource?.let {
-
+                        Log.d("MyParcel", resource.message!!)
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -153,9 +150,8 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
     }
 
-    fun openCamera() {
-        val intent = Intent(activity, CameraActivity::class.java)
-        resultLauncher.launch(intent)
+    private fun openCamera() {
+        getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
     }
 
     override fun onClick(view: View?) {
@@ -174,27 +170,23 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                             binding.destination
                         )
                         binding.publish.setOnClickListener {
-                            val chosenFile = File("kou")
-                            val requestFile =
-                                RequestBody.create(MediaType.parse("image/*"), chosenFile)
-                            val image =
-                                MultipartBody.Part.createFormData("image", "wuh", requestFile)
-                            val parcel = Parcel(
-                                14,
-                                "wow 14 dinars mala sfa9",
-                                "25",
-                                "keys",
-                                "",
-                                22
-                            )
-                            val body = MultipartBody.Builder()
-                                .addFormDataPart("dimension", parcel.dimension)
-                                .addFormDataPart("bonus", parcel.bonus.toString())
-                                .addFormDataPart("parcelType", parcel.parcelType)
-                                .addFormDataPart("weight", parcel.weight.toString())
-                                .build()
-                            Log.d("mehParcel", body.part(0).toString())
-                            //viewModel.postParcel(body = body)
+                            if (imageUri != null) {
+                                val bonus = binding.txBonus.text.toString()
+                                val description = binding.description.text.toString()
+                                val dimension = ""  //TODO
+                                val parcelType = "small"  //TODO
+                                val weight = "6"
+                                viewModel.prepareParcel(
+                                    imageUri!!,
+                                    bonus,
+                                    description,
+                                    dimension,
+                                    parcelType,
+                                    weight
+                                )
+
+                            }
+
                         }
                     }
 

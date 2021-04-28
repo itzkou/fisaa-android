@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -130,11 +131,11 @@ class FisaaRepository @Inject constructor(
     }
 
     override suspend fun postParcel(
-        body: RequestBody
+        partMap: Map<String, RequestBody>, file: MultipartBody.Part
     ): Flow<Resource<Parcel>?> {
         return flow {
             emit(Resource.loading())
-            val response = remote.postParcel(body)
+            val response = remote.postParcel(partMap, file)
             emit(response)
         }.flowOn(ioDispatcher)
     }
