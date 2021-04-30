@@ -1,6 +1,5 @@
 package com.kou.fisaa.utils
 
-import android.net.Uri
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -13,9 +12,7 @@ fun createPartFromString(descriptionString: String): RequestBody {
     )
 }
 
-fun prepareImageFilePart(partName: String, imageUri: Uri): MultipartBody.Part {
-
-    val file = File(imageUri.path ?: "")
+fun prepareImageFilePart(partName: String, file: File): MultipartBody.Part {
 
     // create RequestBody instance from file
     val requestFile: RequestBody = RequestBody.create(MediaType.parse("image/jpeg"), file)

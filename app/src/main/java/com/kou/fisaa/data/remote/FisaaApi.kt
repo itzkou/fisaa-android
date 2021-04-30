@@ -5,7 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
-
+@JvmSuppressWildcards
 interface FisaaApi {
 
     /** Get User **/
@@ -47,7 +47,7 @@ interface FisaaApi {
     @Multipart
     @POST("parcels/")
     suspend fun postParcel(
-        @PartMap() partMap: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part file: MultipartBody.Part
+        @PartMap() partMap: Map<String, RequestBody>,
+        @Part file: @JvmSuppressWildcards MultipartBody.Part
     ): Response<Parcel>
 }

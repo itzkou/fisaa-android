@@ -2,6 +2,7 @@ package com.kou.fisaa.presentation.adscreation
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Material
@@ -23,6 +25,13 @@ import com.kou.fisaa.utils.CustomAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.launch
+import java.io.File
 
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
@@ -170,14 +179,28 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                             binding.destination
                         )
                         binding.publish.setOnClickListener {
-                            if (imageUri != null) {
+                            imageUri?.let {
+                                var compressedImageFile = File(imageUri!!.path ?: "")
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    compressedImageFile =
+                                        Compressor.compress(
+                                            requireActivity(),
+                                            compressedImageFile
+                                        ) {
+                                            resolution(1280, 720)
+                                            quality(10)
+                                            format(Bitmap.CompressFormat.JPEG)
+                                            size(2_097_152) // 2 MB
+                                        }
+                                }
+
                                 val bonus = binding.txBonus.text.toString()
                                 val description = binding.description.text.toString()
-                                val dimension = ""  //TODO
+                                val dimension = "8"  //TODO
                                 val parcelType = "small"  //TODO
                                 val weight = "6"
                                 viewModel.prepareParcel(
-                                    imageUri!!,
+                                    compressedImageFile,
                                     bonus,
                                     description,
                                     dimension,

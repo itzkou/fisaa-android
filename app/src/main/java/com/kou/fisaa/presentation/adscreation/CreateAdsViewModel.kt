@@ -1,6 +1,5 @@
 package com.kou.fisaa.presentation.adscreation
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,27 +54,21 @@ class CreateAdsViewModel @Inject constructor(
     }
 
     fun prepareParcel(
-        imageUri: Uri,
+        file: File,
         bonus: String,
         description: String,
         dimension: String,
         parcelType: String,
         weight: String
     ) {
-        val image = prepareImageFilePart("photo", imageUri)
-        val bonus = createPartFromString(bonus)
-        val description = createPartFromString(description)
-        val dimension = createPartFromString(dimension)
-        val parcelType = createPartFromString(parcelType)
-        val weight = createPartFromString(weight)
-
+        val image = prepareImageFilePart("photo", file)
         val map: HashMap<String, RequestBody> = HashMap()
 
-        map["bonus"] = bonus
-        map["description"] = description
-        map["dimension"] = dimension
-        map["parcelType"] = parcelType
-        map["weight"] = weight
+        map["bonus"] = createPartFromString(bonus)
+        map["description"] = createPartFromString(description)
+        map["dimension"] = createPartFromString(dimension)
+        map["parcelType"] = createPartFromString(parcelType)
+        map["weight"] = createPartFromString(weight)
 
         postParcel(map, image)
 
