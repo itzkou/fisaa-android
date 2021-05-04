@@ -72,6 +72,7 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 
 }
 
+
 fun ImageView.loadCircle(photoUrl: String?) =    //TODO inject coil if injectable
     this.load(photoUrl) {
         crossfade(true)
@@ -103,7 +104,7 @@ fun TextView.setDate(date: Date? = null) {
 
 fun stringToDate(string: String): Date {
     val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-    val date: Date = formatter.parse(string)
+    val date: Date = formatter.parse(string)//?:Date()
     return Date(date.time)
 }
 

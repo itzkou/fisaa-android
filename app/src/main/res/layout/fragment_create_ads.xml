@@ -300,8 +300,8 @@
 
             <EditText
                 android:id="@+id/txBonus"
-
                 style="@style/createAdsInputs"
+                android:inputType="number"
                 android:layout_width="60dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"

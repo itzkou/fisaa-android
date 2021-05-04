@@ -7,15 +7,13 @@ import java.io.File
 
 
 fun createPartFromString(descriptionString: String): RequestBody {
-    return RequestBody.create(
-        MultipartBody.FORM, descriptionString
-    )
+    return RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString)
 }
 
 fun prepareImageFilePart(partName: String, file: File): MultipartBody.Part {
 
     // create RequestBody instance from file
-    val requestFile: RequestBody = RequestBody.create(MediaType.parse("image/jpeg"), file)
+    val requestFile: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
 
     // MultipartBody.Part is used to send also the actual file name
     return MultipartBody.Part.createFormData(partName, file.name, requestFile)

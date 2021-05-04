@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,11 +19,11 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.AdsQuery
-import com.kou.fisaa.data.entities.Material
+import com.kou.fisaa.data.entities.Parcel
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.BuilderDatePicker
-import com.kou.fisaa.utils.CustomAdapter
+import com.kou.fisaa.utils.MaterialAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,9 +31,9 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.resolution
-import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
@@ -44,9 +46,17 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var imageUri: Uri? = null
 
 
-    private var m1 = Material("Clothes", R.drawable.box_blue)
-    private var m2 = Material("Food", R.drawable.box_blue)
-    private var m3 = Material("Bois", R.drawable.box_blue)
+    @Inject
+    lateinit var materialAdapter: MaterialAdapter
+
+    @Inject
+    lateinit var weightAdapter: ArrayAdapter<String>
+    private val parcelTypes =
+        arrayListOf("clothing", "electronic", "books", "documents", "food", "other")
+    private val parcelWeights = arrayListOf("1K-2K", "3K-8K", "9K-20K", "20K+")
+    private lateinit var dimension: String
+    private lateinit var parcelType: String
+    private lateinit var parcelWeight: String
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -54,7 +64,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 imageUri = Uri.parse(result.data?.getStringExtra("cameraX"))
                 binding.imageToUpload.setImageURI(imageUri)
 
-            } else Log.d("CreateAdsFragment", "naaah")
+            } else Log.d("CreateAdsFragment", "Uri from camera is null")
         }
 
     override fun onCreateView(
@@ -109,12 +119,15 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-
+                        val parcel: Parcel? = resource.data
                         Toast.makeText(
                             requireActivity(),
                             " Parcel created  ",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        /* if (parcel != null)
+                          viewModel.postAd(AdsQuery("", userId, binding.departure.text.toString(),, dest, "transport", null))*/
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -127,7 +140,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 Resource.Status.LOADING -> {
                     resource?.let {
 
-                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT)
+                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_LONG)
                             .show()
                     }
                 }
@@ -136,26 +149,59 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     private fun setupUi() {
         binding.publish.isEnabled = false
         binding.rdParcel.setOnClickListener(this)
         binding.rdTransport.setOnClickListener(this)
         binding.rdTravel.setOnClickListener(this)
-        binding.spinnerParcelType.adapter =
-            CustomAdapter(requireActivity(), arrayListOf(m1, m2, m3))
+        binding.rdLarge.setOnClickListener(this)
+        binding.rdBig.setOnClickListener(this)
+        binding.rdMedium.setOnClickListener(this)
+        binding.rdSmall.setOnClickListener(this)
+        binding.spinnerParcelType.adapter = materialAdapter
+        binding.spinnerWeight.adapter = weightAdapter
         binding.edDate.setOnClickListener {
             BuilderDatePicker.showDialog(requireActivity(), binding.edDate)
         }
         binding.uploadImage.setOnClickListener {
             openCamera()
         }
+        binding.spinnerWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                parcelWeight = parcelWeights[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                parcelWeight = "0"
+            }
+
+        }
+        binding.spinnerParcelType.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    parcelType = parcelTypes[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    parcelType = "other"
+                }
+
+            }
 
     }
 
@@ -163,49 +209,52 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
     }
 
+    private fun compressImage(uri: Uri): File {
+        var compressedImageFile = File(uri.path ?: "")
+        viewLifecycleOwner.lifecycleScope.launch {
+            compressedImageFile =
+                Compressor.compress(
+                    requireActivity(),
+                    compressedImageFile
+                ) {
+                    resolution(1280, 720)
+                    quality(80)
+                    format(Bitmap.CompressFormat.JPEG)
+                }
+        }
+        return compressedImageFile
+    }
+
+
     override fun onClick(view: View?) {
         if (view is RadioButton) {
             val checked = view.isChecked
 
+
+
             when (view.getId()) {
                 binding.rdParcel.id -> {
-
                     if (checked) {
                         binding.publish.isEnabled = false
                         binding.consToHide.visibility = View.VISIBLE
                         coordinateBtnAndInputs(
                             binding.publish,
                             binding.departure,
-                            binding.destination
+                            binding.destination,
+                            binding.txBonus,
+                            binding.description
                         )
-                        binding.publish.setOnClickListener {
-                            imageUri?.let {
-                                var compressedImageFile = File(imageUri!!.path ?: "")
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    compressedImageFile =
-                                        Compressor.compress(
-                                            requireActivity(),
-                                            compressedImageFile
-                                        ) {
-                                            resolution(1280, 720)
-                                            quality(10)
-                                            format(Bitmap.CompressFormat.JPEG)
-                                            size(2_097_152) // 2 MB
-                                        }
-                                }
 
-                                val bonus = binding.txBonus.text.toString()
-                                val description = binding.description.text.toString()
-                                val dimension = "8"  //TODO
-                                val parcelType = "small"  //TODO
-                                val weight = "6"
+                        binding.publish.setOnClickListener {
+                            imageUri?.let { imageUri ->
+
                                 viewModel.prepareParcel(
-                                    compressedImageFile,
-                                    bonus,
-                                    description,
+                                    compressImage(imageUri),
+                                    binding.txBonus.text.toString(),
+                                    binding.description.text.toString(),
                                     dimension,
                                     parcelType,
-                                    weight
+                                    parcelWeight
                                 )
 
                             }
@@ -242,9 +291,20 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
                     }
                 }
+
+                /** Dimension ***/
+                binding.rdLarge.id -> dimension = "very large"
+
+                binding.rdBig.id -> dimension = "large"
+
+                binding.rdMedium.id -> dimension = "medium"
+
+                binding.rdSmall.id -> dimension = "small"
             }
         }
     }
+
+
 }
 
 

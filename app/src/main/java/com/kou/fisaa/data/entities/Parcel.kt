@@ -6,5 +6,5 @@ data class Parcel(
     val dimension: String,
     val parcelType: String,
     val photo: String,
-    val weight: Int
+    val weight: String
 )
