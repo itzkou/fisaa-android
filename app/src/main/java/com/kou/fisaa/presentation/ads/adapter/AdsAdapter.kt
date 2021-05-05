@@ -41,7 +41,7 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
 
 
         with(holder.binding) {
-            date.setDate(stringToDate(ad.departureDate))
+
             picture.loadCircle(ad.createdBy.image)
             name.text = holder.itemView.context.getString(
                 R.string.fullname,
@@ -57,8 +57,10 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
             }
             if (ad.parcel != null) {
                 dimension.text = ad.parcel.dimension
-                weight.text = ad.parcel.weight.toString()  //TODO add a string template
+                weight.text = ad.parcel.weight  //TODO add a string template
             }
+            if (ad.departureDate != null)
+                date.setDate(stringToDate(ad.departureDate))
 
 
         }

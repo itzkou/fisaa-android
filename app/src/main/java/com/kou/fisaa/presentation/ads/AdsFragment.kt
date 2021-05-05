@@ -21,7 +21,7 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
 
     private val viewmodel: AdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
-    private val adsAdapter = AdsAdapter(this)
+    private val adsAdapter = AdsAdapter(this)  //TODO inject it
 
 
     override fun onCreateView(
