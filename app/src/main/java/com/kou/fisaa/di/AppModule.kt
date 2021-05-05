@@ -7,11 +7,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kou.fisaa.R
+import com.kou.fisaa.data.firestore.FirestoreAbstraction
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
 import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
@@ -115,6 +117,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirestore() = Firebase.firestore
+
+    @Singleton
+    @Provides
+    fun provideFirestoreRemote(
+        firebaseAuth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): FirestoreAbstraction = FirestoreRemote(firebaseAuth, firestore)
 
     /**** main Repo ******/
     @Singleton
