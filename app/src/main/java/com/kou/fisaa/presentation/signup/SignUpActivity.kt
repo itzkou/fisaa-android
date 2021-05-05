@@ -16,7 +16,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private val viewmodel: SignUpViewModel by viewModels()
-    private var signUpQuery: SignUpQuery? = null
+    private lateinit var signUpQuery: SignUpQuery
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,6 @@ class SignUpActivity : AppCompatActivity() {
                 binding.fname.text.toString(),
                 binding.lname.text.toString(),
                 binding.password.text.toString(),
-                //TODO Solve Nullabity issues
                 if (!binding.address.text.isNullOrBlank()) binding.address.text.toString() else "",
                 if (!binding.cin.text.isNullOrBlank()) binding.cin.text.toString().toInt() else 0,
                 if (!binding.city.text.isNullOrBlank()) binding.city.text.toString() else "",
@@ -49,7 +48,7 @@ class SignUpActivity : AppCompatActivity() {
                 if (!binding.zip.text.isNullOrBlank()) binding.zip.text.toString().toInt() else 0
             )
 
-            viewmodel.signUp(signUpQuery!!)
+            viewmodel.signUp(signUpQuery)
         }
 
         /*** Observables ***/

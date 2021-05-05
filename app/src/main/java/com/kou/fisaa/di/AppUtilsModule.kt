@@ -4,6 +4,9 @@ import android.content.Context
 import android.widget.ArrayAdapter
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
+import com.kou.fisaa.presentation.ads.AdsFragment
+import com.kou.fisaa.presentation.ads.adapter.AdAdapterListener
+import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.presentation.home.HomeFragment
 import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
@@ -40,6 +43,16 @@ object AppUtilsModule {
     @Provides
     fun provideTripsAdapter(tripAdapterItemListener: TripAdapterItemListener): TripAdapter {
         return TripAdapter(tripAdapterItemListener)
+    }
+
+    @Provides        //adding singleton = crash
+    fun provideAdsAdapterItemListener(): AdAdapterListener {
+        return AdsFragment()
+    }
+
+    @Provides
+    fun provideAdsAdapter(adAdapterListener: AdAdapterListener): AdsAdapter {
+        return AdsAdapter(adAdapterListener)
     }
 
     @Provides

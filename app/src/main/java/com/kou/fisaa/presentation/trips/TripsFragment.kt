@@ -20,7 +20,7 @@ import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-//TODO(two actions , one destination , eachaction with different params)
+
 @AndroidEntryPoint
 class TripsFragment : Fragment(), TripAdapterItemListener {
 
@@ -78,7 +78,6 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
 
         })
         searchTrips()
-        //TODO There is a boring Toast always appearing from old responses onviewcreated
 
 
     }
@@ -93,7 +92,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = tripsAdapter
-            isNestedScrollingEnabled = false //TODO("Check this later")
+
         }
         binding.search.setOnClickListener {
             val action = TripsFragmentDirections.actionFlightsFragmentToSearchFlightsFragment()
@@ -136,6 +135,5 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     }
 
     override fun openFlight(flightId: String) {
-        TODO("Not yet implemented")
     }
 }

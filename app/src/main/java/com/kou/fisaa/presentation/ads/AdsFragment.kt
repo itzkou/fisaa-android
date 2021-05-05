@@ -10,18 +10,24 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentAdsBinding
+import com.kou.fisaa.presentation.ads.adapter.AdAdapterListener
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.utils.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class AdsFragment : Fragment(), AdsAdapter.Listener {
+@AndroidEntryPoint
+class AdsFragment : Fragment(), AdAdapterListener {
 
     private var _binding: FragmentAdsBinding? = null
     private val binding get() = _binding!!
 
+
     private val viewmodel: AdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
-    private val adsAdapter = AdsAdapter(this)  //TODO inject it
+
+    @Inject
+    lateinit var adsAdapter: AdsAdapter
 
 
     override fun onCreateView(
@@ -52,10 +58,6 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun openUser(adId: String) {
-
     }
 
 
@@ -107,6 +109,10 @@ class AdsFragment : Fragment(), AdsAdapter.Listener {
             viewmodel.getAds()
 
         }
+    }
+
+    override fun openAd(adId: String) {
+        TODO("Not yet implemented")
     }
 
 

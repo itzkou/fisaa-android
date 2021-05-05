@@ -60,6 +60,7 @@
     <!-- Adapter Flights -->
     <string name="fullname">%s %s</string>
 
+
     <!-- Camera -->
     <string name="rqCameraPerms">Veuillez autoriser les permissions</string>
 

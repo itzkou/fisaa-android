@@ -34,7 +34,7 @@ class FisaaRepository @Inject constructor(
             val response = remote.login(loginQuery)
             emit(response)
 
-        }.flowOn(ioDispatcher)// TODO viewmodel calls dispatcher
+        }.flowOn(ioDispatcher)
     }
 
     override suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?> {
@@ -80,7 +80,7 @@ class FisaaRepository @Inject constructor(
 
     override suspend fun getTopFlights(): Flow<Resource<FlightsResponse>?> {
         return flow {
-            // emit(getTopFlightsCached())  //TODO null exception Room _id not exist in sortBycount API
+            // emit(getTopFlightsCached())  //TODO null exception Room _id not exist  because of   sortByCount mongo
             emit(Resource.loading())
             val response = remote.getTopFlights()
             /* if (response.status == Resource.Status.SUCCESS) {

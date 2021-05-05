@@ -6,7 +6,6 @@ import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.kou.fisaa.R
-//TODO when user clicks many times many instances of this class is opened
 class BuilderDatePicker {
     companion object {
         var pickedDate: String = ""
@@ -17,7 +16,7 @@ class BuilderDatePicker {
             val builder = AlertDialog.Builder(context)
             val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
             builder.setView(dialogView)
-            builder.setPositiveButton("confirm") { dialog, which ->
+            builder.setPositiveButton("confirm") { dialog, _ ->
 
 
                 val day = datePicker.dayOfMonth
@@ -32,7 +31,7 @@ class BuilderDatePicker {
 
             builder.setNegativeButton(
                 "Cancel"
-            ) { dialog, which ->
+            ) { dialog, _ ->
                 dialog?.dismiss()
             }
             val dialog = builder.create()

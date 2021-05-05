@@ -11,9 +11,11 @@ import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
 import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
+import javax.inject.Inject
 
 
-class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
+class AdsAdapter @Inject constructor(private val adapterListener: AdAdapterListener) :
+    RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
 
     interface Listener {
         fun openUser(adId: String)
@@ -57,7 +59,7 @@ class AdsAdapter(private val listener: Listener) : RecyclerView.Adapter<AdsAdapt
             }
             if (ad.parcel != null) {
                 dimension.text = ad.parcel.dimension
-                weight.text = ad.parcel.weight  //TODO add a string template
+                weight.text = ad.parcel.weight
             }
             if (ad.departureDate != null)
                 date.setDate(stringToDate(ad.departureDate))

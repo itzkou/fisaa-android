@@ -24,7 +24,6 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
 
     //TODO check requireActivity to viewlifecyclescope
     //TODO swipeToRefresh WIFI connectivity
-    //TODO Tap to update
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)

@@ -10,7 +10,6 @@ import android.widget.TextView
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
 
-//TODO Injectable
 class MaterialAdapter(mContext: Context, private val mData: ArrayList<Material>) : BaseAdapter() {
     private val mInflate: LayoutInflater = LayoutInflater.from(mContext)
 

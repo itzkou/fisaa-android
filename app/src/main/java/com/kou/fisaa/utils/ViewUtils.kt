@@ -80,8 +80,7 @@ fun ImageView.loadCircle(photoUrl: String?) =    //TODO inject coil if injectabl
         transformations(CircleCropTransformation())
     }
 
-fun ImageView.loadPlace(place: String) =
-    this.load("https://api.teleport.org/api/urban_areas/slug:tunis/images/")
+
 
 fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
     DateUtils.getRelativeTimeSpanString(
@@ -104,7 +103,7 @@ fun TextView.setDate(date: Date? = null) {
 
 fun stringToDate(string: String): Date {
     val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-    val date: Date = formatter.parse(string)
+    val date: Date = formatter.parse(string) ?: Date()
     return Date(date.time)
 }
 

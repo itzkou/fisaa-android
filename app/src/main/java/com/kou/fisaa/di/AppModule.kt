@@ -104,7 +104,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePrefsStoreAbstraction(@ApplicationContext appContext: Context) =
-        PrefsStore(appContext)  //TODO ask : when I inject using predsStoreImpl hilt generates errors
+        PrefsStore(appContext)  //Todo when I use interface abstraction the appcontext genrates an error
 
 
     /**** FireStore ******/
