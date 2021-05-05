@@ -1,6 +1,7 @@
 package com.kou.fisaa.data.entities
 
 data class Parcel(
+    val _id: String,
     val bonus: Int,
     val description: String,
     val dimension: String,

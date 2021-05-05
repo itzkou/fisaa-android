@@ -57,6 +57,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private lateinit var dimension: String
     private lateinit var parcelType: String
     private lateinit var parcelWeight: String
+    private lateinit var adType: String
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -126,8 +127,19 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        /* if (parcel != null)
-                          viewModel.postAd(AdsQuery("", userId, binding.departure.text.toString(),, dest, "transport", null))*/
+                        if (parcel != null) {
+                            viewModel.postAd(
+                                AdsQuery(
+                                    createdBy = userId,
+                                    departure = binding.departure.text.toString(),
+                                    destination = binding.destination.text.toString(),
+                                    departureDate = binding.edDate.text.toString(),
+                                    parcel = parcel._id,
+                                    type = adType
+                                )
+                            )
+
+                        }
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -225,6 +237,52 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         return compressedImageFile
     }
 
+    private fun postFlights() {
+        binding.publish.isEnabled = false
+        binding.consToHide.visibility = View.GONE
+        coordinateBtnAndInputs(
+            binding.publish,
+            binding.departure,
+            binding.destination
+        )
+
+        binding.publish.setOnClickListener {
+            val date = binding.edDate.text.toString()
+            val dep = binding.departure.text.toString()
+            val dest = binding.destination.text.toString()
+            viewModel.postAd(AdsQuery("", userId, dep, date, dest, "travel", null))
+        }
+
+    }
+
+    private fun prepareAndPostParcel() {
+        binding.publish.isEnabled = false
+        binding.consToHide.visibility = View.VISIBLE
+        coordinateBtnAndInputs(
+            binding.publish,
+            binding.departure,
+            binding.destination,
+            binding.txBonus,
+            binding.description
+        )
+
+        binding.publish.setOnClickListener {
+            imageUri?.let { imageUri ->
+
+                viewModel.prepareParcel(
+                    compressImage(imageUri),
+                    binding.txBonus.text.toString(),
+                    binding.description.text.toString(),
+                    dimension,
+                    parcelType,
+                    parcelWeight
+                )
+
+            }
+
+        }
+    }
+
 
     override fun onClick(view: View?) {
         if (view is RadioButton) {
@@ -235,59 +293,22 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (view.getId()) {
                 binding.rdParcel.id -> {
                     if (checked) {
-                        binding.publish.isEnabled = false
-                        binding.consToHide.visibility = View.VISIBLE
-                        coordinateBtnAndInputs(
-                            binding.publish,
-                            binding.departure,
-                            binding.destination,
-                            binding.txBonus,
-                            binding.description
-                        )
-
-                        binding.publish.setOnClickListener {
-                            imageUri?.let { imageUri ->
-
-                                viewModel.prepareParcel(
-                                    compressImage(imageUri),
-                                    binding.txBonus.text.toString(),
-                                    binding.description.text.toString(),
-                                    dimension,
-                                    parcelType,
-                                    parcelWeight
-                                )
-
-                            }
-
-                        }
+                        adType = "transport"
+                        prepareAndPostParcel()
                     }
 
                 }
 
                 binding.rdTravel.id -> {
                     if (checked) {
-                        binding.publish.isEnabled = false
-                        binding.consToHide.visibility = View.GONE
-                        coordinateBtnAndInputs(
-                            binding.publish,
-                            binding.departure,
-                            binding.destination
-                        )
-
-                        binding.publish.setOnClickListener {
-                            val date = binding.edDate.text.toString()
-                            val dep = binding.departure.text.toString()
-                            val dest = binding.destination.text.toString()
-                            viewModel.postAd(AdsQuery("", userId, dep, date, dest, "travel", null))
-                        }
-
+                        postFlights()
                     }
                 }
 
                 binding.rdTransport.id -> {
                     if (checked) {
-                        binding.publish.isEnabled = false
-                        binding.consToHide.visibility = View.VISIBLE
+                        adType = "purchase"
+                        prepareAndPostParcel()
 
                     }
                 }
