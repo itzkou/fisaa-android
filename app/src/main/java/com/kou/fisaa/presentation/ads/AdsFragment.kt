@@ -66,8 +66,7 @@ class AdsFragment : Fragment(), AdAdapterListener {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = adsAdapter
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
+
         }
     }
 

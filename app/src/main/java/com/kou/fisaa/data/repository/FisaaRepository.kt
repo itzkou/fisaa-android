@@ -27,7 +27,7 @@ class FisaaRepository @Inject constructor(
     private val firestore: FirestoreRemote,
     private val ioDispatcher: CoroutineDispatcher
 ) : FisaaRepositoryAbstraction {
-
+    /*****   Firestore ***/
     override suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
         return flow {
             emit(Resource.loading())
@@ -44,6 +44,29 @@ class FisaaRepository @Inject constructor(
             emit(response)
         }.flowOn(ioDispatcher)
     }
+
+    override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = firestore.signInWithGoogle(acct)
+            emit(Resource.success(response))
+        }.catch {
+            // If exception is thrown, emit failed state along with message.
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = firestore.signInWithFacebook(token)
+            emit(Resource.success(response))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
+    /*****   fisaa online & offline  ***/
 
     override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<TripsResponse>?> {
         return flow {
@@ -140,26 +163,6 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
-        return flow {
-            emit(Resource.loading())
-            val response = firestore.signInWithGoogle(acct)
-            emit(Resource.success(response))
-        }.catch {
-            // If exception is thrown, emit failed state along with message.
-            emit(Resource.error(it.message.toString()))
-        }.flowOn(ioDispatcher)
-    }
-
-    override suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?> {
-        return flow {
-            emit(Resource.loading())
-            val response = firestore.signInWithFacebook(token)
-            emit(Resource.success(response))
-        }.catch {
-            emit(Resource.error(it.message.toString()))
-        }.flowOn(ioDispatcher)
-    }
 
     /****  Local fetching ***/
     private fun getUpcomingFlightsCached(): Resource<FlightsResponse>? =

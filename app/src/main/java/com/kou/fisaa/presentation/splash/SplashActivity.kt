@@ -17,24 +17,37 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
+
     private val activityScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.userId.observe(this, { userId ->
-            if (userId != null)
-                startActivity(Intent(this, HostActivity::class.java))
-            else
-                activityScope.launch {
-                    delay(2000)
-                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                    finish()
 
-                }
+        viewModel.checkSession()
+        viewModel.authResult.observe(this, { result ->
+            if (result)
+                grantAccess()
+            else
+                goToLogin()
 
         })
 
 
+    }
+
+
+    private fun goToLogin() {
+        activityScope.launch {
+            delay(2000)
+            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            finish()
+
+        }
+    }
+
+    private fun grantAccess() {
+        startActivity(Intent(this, HostActivity::class.java))
     }
 }

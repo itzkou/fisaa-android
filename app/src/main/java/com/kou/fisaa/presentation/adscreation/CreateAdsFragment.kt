@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
+//TODO frontend validation
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null

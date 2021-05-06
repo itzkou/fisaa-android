@@ -28,9 +28,16 @@ class LoginViewModel @Inject constructor(
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
 
+
     fun setId(id: String) {
         viewModelScope.launch {
             prefsStore.setId(id)
+        }
+    }
+
+    fun setFireToken(uid: String) {
+        viewModelScope.launch {
+            prefsStore.setFireToken(uid)
         }
     }
 

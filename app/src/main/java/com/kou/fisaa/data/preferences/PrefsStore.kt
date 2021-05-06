@@ -33,6 +33,14 @@ class PrefsStore @Inject constructor(appContext: Context) : PrefsStoreAbstractio
         }
     }.map { it[PreferencesKeys.USER_ID] }
 
+    override fun getFireToken() = dataStore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { it[PreferencesKeys.USER_FIRE_TOKEN] }
+
     override suspend fun setNightMode() {
         dataStore.edit {
             it[PreferencesKeys.NIGHT_MODE_KEY] = !(it[PreferencesKeys.NIGHT_MODE_KEY] ?: false)
@@ -45,8 +53,15 @@ class PrefsStore @Inject constructor(appContext: Context) : PrefsStoreAbstractio
         }
     }
 
+    override suspend fun setFireToken(id: String) {
+        dataStore.edit {
+            it[PreferencesKeys.USER_FIRE_TOKEN] = id
+        }
+    }
+
     private object PreferencesKeys {
         val NIGHT_MODE_KEY = booleanPreferencesKey("dark_theme_enabled")
         val USER_ID = stringPreferencesKey("id")
+        val USER_FIRE_TOKEN = stringPreferencesKey("token")
     }
 }

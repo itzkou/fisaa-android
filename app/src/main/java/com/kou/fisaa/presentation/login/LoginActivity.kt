@@ -11,6 +11,7 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
 import com.kou.fisaa.presentation.host.HostActivity
@@ -26,6 +27,9 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var auth: FirebaseAuth
 
 
     /******* SOCIAL AUTH *******/
@@ -43,28 +47,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*** UI Validation ***/
-        coordinateBtnAndInputs(binding.login, binding.username, binding.password)
-
-        /*** Events ***/
-        binding.login.setOnClickListener {
-            viewModel.fetchLoginResponse(
-                LoginQuery(
-                    binding.username.text.toString(),
-                    binding.password.text.toString()
-                )
-            )
-
-        }
-        binding.imGoogle.setOnClickListener {
-            signInWithGoogle()
-        }
-        binding.imFacebook.setOnClickListener {
-            signInWithFacebook()
-        }
-        binding.createAcc.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
+        setupUi()
 
         /*** Observables ***/
         viewModel.loginResponse.observe(this, { resource ->
@@ -73,6 +56,12 @@ class LoginActivity : AppCompatActivity() {
                     resource.data?.let { loginResponse ->
                         if (resource.data.success) {
                             viewModel.setId(loginResponse.data._id)
+                            val fireToken = auth.currentUser?.uid
+
+                            fireToken?.let { uid ->
+                                viewModel.setFireToken(uid)
+
+                            }
                             startActivity(Intent(this, HostActivity::class.java))
                         } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
@@ -173,6 +162,31 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun setupUi() {
+        /*** UI Validation ***/
+        coordinateBtnAndInputs(binding.login, binding.username, binding.password)
+
+        /*** Events ***/
+        binding.login.setOnClickListener {
+            viewModel.fetchLoginResponse(
+                LoginQuery(
+                    binding.username.text.toString(),
+                    binding.password.text.toString()
+                )
+            )
+
+        }
+        binding.imGoogle.setOnClickListener {
+            signInWithGoogle()
+        }
+        binding.imFacebook.setOnClickListener {
+            signInWithFacebook()
+        }
+        binding.createAcc.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+        }
     }
 
     private fun signInWithGoogle() {

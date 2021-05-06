@@ -18,8 +18,8 @@ data class User(
     val dateOfBirth: String? = null,
     val description: String? = null,
     val email: String,
-    val firstName: String?,
-    val lastName: String?,
+    val firstName: String,
+    val lastName: String,
     val image: String? = null,
     //val myTransactions: List<null>,  // type converter needed
     val password: String,

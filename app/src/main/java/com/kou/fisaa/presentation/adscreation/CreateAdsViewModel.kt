@@ -18,6 +18,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
+import kotlin.collections.HashMap
+import kotlin.collections.Map
+import kotlin.collections.set
 
 @HiltViewModel
 class CreateAdsViewModel @Inject constructor(
@@ -50,6 +53,7 @@ class CreateAdsViewModel @Inject constructor(
                     _parcelCreationResponse.value = response
                 }
             }
+
         }
     }
 

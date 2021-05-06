@@ -10,6 +10,13 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 interface FisaaRepositoryAbstraction {
+
+
+    /** Firestore **/
+    suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>
+    suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
+
+
     /*** Remote ***/
     suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?>
     suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?>
@@ -24,11 +31,6 @@ interface FisaaRepositoryAbstraction {
         partMap: Map<String, RequestBody>,
         file: MultipartBody.Part
     ): Flow<Resource<Parcel>?>
-
-
-    /** Social **/
-    suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>
-    suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
 
 
 }

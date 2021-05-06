@@ -8,6 +8,8 @@ interface FirestoreAbstraction {
 
     suspend fun signInWithGoogle(acct: GoogleSignInAccount): AuthResult
     suspend fun signInWithFacebook(token: AccessToken): AuthResult
-    suspend fun login(email: String, password: String): AuthResult
-    suspend fun register(email: String, password: String): AuthResult
+    suspend fun login(email: String, password: String): AuthResult  //TODO
+    suspend fun register(email: String, password: String): AuthResult //TODO
+
+
 }
