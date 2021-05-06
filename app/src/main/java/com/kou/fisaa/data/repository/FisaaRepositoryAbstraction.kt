@@ -15,6 +15,8 @@ interface FisaaRepositoryAbstraction {
     /** Firestore **/
     suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>
     suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
+    suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?>
+    suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?>
 
 
     /*** Remote ***/

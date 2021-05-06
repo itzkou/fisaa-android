@@ -28,22 +28,30 @@ class FisaaRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : FisaaRepositoryAbstraction {
     /*****   Firestore ***/
-    override suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
+
+    override suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?> {
         return flow {
             emit(Resource.loading())
-            val response = remote.login(loginQuery)
-            emit(response)
+            val response = firestore.login(email, password)
+            emit(Resource.success(response))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
 
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?> {
+
+    override suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?> {
         return flow {
             emit(Resource.loading())
-            val response = remote.signUp(signUpQuery)
-            emit(response)
+            val response = firestore.register(email, password)
+            emit(Resource.success(response))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+
         }.flowOn(ioDispatcher)
     }
+
 
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?> {
         return flow {
@@ -66,7 +74,24 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    /*****   fisaa online & offline  ***/
+
+    /*****   Remote X Room ***/
+    override suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.signUp(signUpQuery)
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun login(loginQuery: LoginQuery): Flow<Resource<LoginResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.login(loginQuery)
+            emit(response)
+
+        }.flowOn(ioDispatcher)
+    }
 
     override suspend fun searchFlights(searchQuery: FlightSearchQuery): Flow<Resource<TripsResponse>?> {
         return flow {
