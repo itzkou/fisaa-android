@@ -16,7 +16,12 @@ interface FisaaRepositoryAbstraction {
     suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>
     suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
     suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?>
-    suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?>
+    suspend fun register(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String
+    ): Flow<Resource<AuthResult>?>
 
 
     /*** Remote ***/
