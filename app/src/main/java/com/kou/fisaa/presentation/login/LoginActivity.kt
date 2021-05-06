@@ -6,12 +6,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.facebook.*
+import com.facebook.AccessToken
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
 import com.kou.fisaa.presentation.host.HostActivity
@@ -19,7 +20,6 @@ import com.kou.fisaa.presentation.signup.SignUpActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -28,18 +28,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
-    @Inject
-    lateinit var auth: FirebaseAuth
-
 
     /******* SOCIAL AUTH *******/
     private val GOOGLE_SIGN = 1
-
-    @Inject
-    lateinit var googleSignInClient: GoogleSignInClient
-
-    @Inject
-    lateinit var callbackManager: CallbackManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,12 +47,7 @@ class LoginActivity : AppCompatActivity() {
                     resource.data?.let { loginResponse ->
                         if (resource.data.success) {
                             viewModel.setId(loginResponse.data._id)
-                            val fireToken = auth.currentUser?.uid
-
-                            fireToken?.let { uid ->
-                                viewModel.setFireToken(uid)
-
-                            }
+                            viewModel.setFireToken()
                             startActivity(Intent(this, HostActivity::class.java))
                         } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
@@ -161,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }
-        callbackManager.onActivityResult(requestCode, resultCode, data)
+        viewModel.getCallBackMg().onActivityResult(requestCode, resultCode, data)
     }
 
     private fun setupUi() {
@@ -191,7 +177,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun signInWithGoogle() {
 
-        val signInIntent: Intent = googleSignInClient.signInIntent
+        val signInIntent: Intent = viewModel.getGoogleClient().signInIntent
 
         startActivityForResult(signInIntent, GOOGLE_SIGN)
 
@@ -200,7 +186,7 @@ class LoginActivity : AppCompatActivity() {
     private fun signInWithFacebook() {
         binding.btnFb.performClick()
         binding.btnFb.setReadPermissions(listOf("email", "public_profile"))
-        binding.btnFb.registerCallback(callbackManager, object :
+        binding.btnFb.registerCallback(viewModel.getCallBackMg(), object :
             FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {

@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.search
+package com.kou.fisaa.presentation.search.flights
 
 import android.os.Bundle
 import android.view.LayoutInflater

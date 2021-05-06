@@ -66,7 +66,7 @@
         android:label="CreateAdsFragment" />
     <fragment
         android:id="@+id/searchFlightsFragment"
-        android:name="com.kou.fisaa.presentation.search.SearchFlightsFragment"
+        android:name="com.kou.fisaa.presentation.search.flights.SearchFlightsFragment"
         android:label="SearchFlightsFragment">
         <action
             android:id="@+id/action_searchFlightsFragment_to_flightsFragment4"

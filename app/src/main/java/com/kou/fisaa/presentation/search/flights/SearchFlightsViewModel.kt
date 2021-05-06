@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.search
+package com.kou.fisaa.presentation.search.flights
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

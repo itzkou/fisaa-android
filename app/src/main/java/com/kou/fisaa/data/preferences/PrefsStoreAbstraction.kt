@@ -7,6 +7,7 @@ interface PrefsStoreAbstraction {
     fun isNightMode(): Flow<Boolean>
     fun getId(): Flow<String?>
     fun getFireToken(): Flow<String?>
+    suspend fun clearDataStore()
 
 
     suspend fun setNightMode()

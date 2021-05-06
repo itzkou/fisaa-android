@@ -41,6 +41,12 @@ class PrefsStore @Inject constructor(appContext: Context) : PrefsStoreAbstractio
         }
     }.map { it[PreferencesKeys.USER_FIRE_TOKEN] }
 
+    override suspend fun clearDataStore() {
+        dataStore.edit {
+            it.clear()
+        }
+    }
+
     override suspend fun setNightMode() {
         dataStore.edit {
             it[PreferencesKeys.NIGHT_MODE_KEY] = !(it[PreferencesKeys.NIGHT_MODE_KEY] ?: false)

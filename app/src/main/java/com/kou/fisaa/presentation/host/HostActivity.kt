@@ -4,17 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
-import com.kou.fisaa.presentation.login.LoginActivity
+import com.kou.fisaa.presentation.splash.SplashActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
@@ -38,35 +33,37 @@ class HostActivity : AppCompatActivity() {
             navController.navigate(R.id.action_create_ads)
 
         }
-        binding.darko.setOnClickListener {
-            binding.darko.playAnimation()
-            val activityScope = CoroutineScope(Dispatchers.Main)
-            activityScope.launch {
-                delay(2000)
-                viewModel.toggleNightMode()
-            }
 
-
+        binding.logout.setOnClickListener {
+            viewModel.logout()
+            startActivity(Intent(this, SplashActivity::class.java))
+            finish()
         }
-
-        viewModel.darkThemeEnabled.observe(this, { nightModeActive ->
-
-            val defaultMode = if (nightModeActive) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-
-            AppCompatDelegate.setDefaultNightMode(defaultMode)
+        /*binding.darko.setOnClickListener {
+            binding.darko.playAnimation()
+            //viewModel.toggleNightMode()
 
 
-        })
-        viewModel.userId.observe(this, { userId ->
-            if (userId == null) {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
-        })
+        }*/
+
+        /* viewModel.darkThemeEnabled.observe(this, { nightModeActive ->
+
+             val defaultMode = if (nightModeActive) {
+                 AppCompatDelegate.MODE_NIGHT_YES
+             } else {
+                 AppCompatDelegate.MODE_NIGHT_NO
+             }
+
+             AppCompatDelegate.setDefaultNightMode(defaultMode)
+
+
+         })
+         viewModel.userId.observe(this, { userId ->
+             if (userId == null) {
+                 startActivity(Intent(this, LoginActivity::class.java))
+                 finish()
+             }
+         })*/
 
 
         /* val bomBg = binding.bottomAppBar.background as MaterialShapeDrawable
