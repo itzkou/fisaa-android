@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.createPartFromString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,9 +44,38 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun signUp(signUpQuery: SignUpQuery) {
+    fun signUp(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+        birthdate: String?,
+        cin: String?,
+        description: String?,
+        phoneNumber: String?,
+        adress: String?,
+        city: String?,
+        country: String?,
+        zipcode: String?
+    ) {
+
+        val map: HashMap<String, RequestBody> = HashMap()
+
+        map["email"] = createPartFromString(email)
+        map["password"] = createPartFromString(password)
+        map["firstName"] = createPartFromString(firstName)
+        map["lastName"] = createPartFromString(lastName)
+        map["dateOfBirth"] = createPartFromString(birthdate ?: "")
+        map["cin"] = createPartFromString(cin ?: "0")
+        map["description"] = createPartFromString(description ?: "")
+        map["phoneNumber"] = createPartFromString(phoneNumber ?: "0")
+        map["adress"] = createPartFromString(adress ?: "")
+        map["city"] = createPartFromString(city ?: "")
+        map["country"] = createPartFromString(country ?: "")
+        map["zipCode"] = createPartFromString(zipcode ?: "0")
+
         viewModelScope.launch {
-            repository.signUp(signUpQuery).collect {
+            repository.signUp(map).collect {
                 it?.let {
                     _signUpResponse.value = it
                 }

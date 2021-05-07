@@ -17,8 +17,9 @@ interface FisaaApi {
     suspend fun login(@Body loginQuery: LoginQuery): Response<LoginResponse>
 
     /** Sign Up **/
+    @Multipart
     @POST("users/")
-    suspend fun signUp(@Body signUpQuery: SignUpQuery): Response<User>
+    suspend fun signUp(@PartMap() partMap: Map<String, RequestBody>): Response<User>
 
 
     /** ads **/

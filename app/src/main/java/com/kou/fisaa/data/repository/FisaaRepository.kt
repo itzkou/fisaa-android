@@ -76,7 +76,7 @@ class FisaaRepository @Inject constructor(
 
 
     /*****   Remote X Room ***/
-    override suspend fun signUp(signUpQuery: SignUpQuery): Flow<Resource<User>?> {
+    override suspend fun signUp(signUpQuery: Map<String, RequestBody>): Flow<Resource<User>?> {
         return flow {
             emit(Resource.loading())
             val response = remote.signUp(signUpQuery)

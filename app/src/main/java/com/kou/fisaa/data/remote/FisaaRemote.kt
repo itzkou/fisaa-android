@@ -1,6 +1,9 @@
 package com.kou.fisaa.data.remote
 
-import com.kou.fisaa.data.entities.*
+import com.kou.fisaa.data.entities.AdsQuery
+import com.kou.fisaa.data.entities.FlightSearchDatesQuery
+import com.kou.fisaa.data.entities.FlightSearchQuery
+import com.kou.fisaa.data.entities.LoginQuery
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -15,7 +18,7 @@ class FisaaRemote @Inject constructor(
     suspend fun getUser(id: Int) =
         getResource { fisaaApi.getUser(id) }
 
-    suspend fun signUp(signUpQuery: SignUpQuery) =
+    suspend fun signUp(signUpQuery: Map<String, RequestBody>) =
         getResource { fisaaApi.signUp(signUpQuery) }
 
     suspend fun searchFlights(searchQuery: FlightSearchQuery) =

@@ -1,13 +1,10 @@
 package com.kou.fisaa.presentation.signup
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.kou.fisaa.data.entities.SignUpQuery
 import com.kou.fisaa.databinding.ActivitySignUpBinding
-import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import com.kou.fisaa.utils.coordinatePwd
@@ -18,7 +15,6 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private val viewmodel: SignUpViewModel by viewModels()
-    private lateinit var signUpQuery: SignUpQuery
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +26,6 @@ class SignUpActivity : AppCompatActivity() {
         setupUi()
 
 
-
         /*** Observables ***/
         viewmodel.signupResponse.observe(this, { resource ->
             when (resource.status) {
@@ -39,7 +34,7 @@ class SignUpActivity : AppCompatActivity() {
                         val user = resource.data!!
                         viewmodel.setId(user._id)
                         Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
-                        viewmodel.signUpFirebase(signUpQuery.email, signUpQuery.password)
+                        viewmodel.signUpFirebase(user.email, user.password)
                     }
                 }
 
@@ -60,8 +55,10 @@ class SignUpActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        viewmodel.setFireToken()
-                        startActivity(Intent(this, HostActivity::class.java))
+                        val user = resource.data?.user
+                        if (user != null)
+                            viewmodel.setFireToken()
+                        // startActivity(Intent(this, HostActivity::class.java))
                     }
                 }
 
@@ -86,24 +83,35 @@ class SignUpActivity : AppCompatActivity() {
         coordinateBtnAndInputs(binding.signUp, binding.fname, binding.lname, binding.username)
         coordinatePwd(binding.signUp, binding.password, binding.passInput)
 
-        signUpQuery = SignUpQuery(
-            binding.username.text.toString(),
-            binding.fname.text.toString(),
-            binding.lname.text.toString(),
-            binding.password.text.toString(),
-            if (!binding.address.text.isNullOrBlank()) binding.address.text.toString() else null,
-            if (!binding.cin.text.isNullOrBlank()) binding.cin.text.toString().toInt() else 0,
-            if (!binding.city.text.isNullOrBlank()) binding.city.text.toString() else null,
-            if (!binding.pays.text.isNullOrBlank()) binding.pays.text.toString() else null,
-            if (!binding.birthdate.text.isNullOrBlank()) binding.birthdate.text.toString() else null,
-            if (!binding.desc.text.isNullOrBlank()) binding.desc.text.toString() else null,
-            if (!binding.phone.text.isNullOrBlank()) binding.phone.text.toString()
-                .toInt() else null,
-            if (!binding.zip.text.isNullOrBlank()) binding.zip.text.toString().toInt() else null
-        )
+
 
         binding.signUp.setOnClickListener {
-            viewmodel.signUp(signUpQuery)
+            val email = binding.username.text.toString()
+            val fname = binding.fname.text.toString()
+            val lname = binding.lname.text.toString()
+            val pass = binding.password.text.toString()
+            val address = binding.address.text.toString()
+            val cin = binding.cin.text.toString()
+            val city = binding.city.text.toString()
+            val country = binding.pays.text.toString()
+            val birthdate = binding.birthdate.text.toString()
+            val description = binding.desc.text.toString()
+            val phone = binding.phone.text.toString()
+            val zip = binding.zip.text.toString()
+            viewmodel.signUp(
+                email,
+                pass,
+                fname,
+                lname,
+                birthdate,
+                cin,
+                description,
+                phone,
+                address,
+                city,
+                country,
+                zip
+            )
 
         }
     }
