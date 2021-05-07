@@ -11,6 +11,6 @@ data class SignUpQuery(
     val country: String? = null,
     val dateOfBirth: String? = null,
     val description: String? = null,
-    val phoneNumber: Long? = null,
+    val phoneNumber: Int? = null,
     val zipCode: Int? = null
 )

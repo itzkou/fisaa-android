@@ -27,10 +27,12 @@ class LoginViewModel @Inject constructor(
 ) :
     ViewModel() {
     private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
+    private val _fireLoginResponse = MutableLiveData<Resource<AuthResult>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
     private val fireToken = auth.currentUser?.uid
     val loginResponse = _loginResponse
+    val fireLoginResponse = _fireLoginResponse
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
 
@@ -56,8 +58,19 @@ class LoginViewModel @Inject constructor(
                 response?.let {
                     _loginResponse.value = response
 
+
                 }
 
+            }
+        }
+    }
+
+    fun loginWithFirebase(email: String, password: String) {
+        viewModelScope.launch {
+            repository.login(email, password).collect {
+                it?.let {
+                    _fireLoginResponse.value = it
+                }
             }
         }
     }

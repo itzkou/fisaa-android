@@ -67,6 +67,18 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+        viewModel.fireLoginResponse.observe(this, { resource ->
+            if (resource.status == Resource.Status.SUCCESS) {
+                resource?.let {
+                    viewModel.setFireToken()
+
+                }
+            } else if (resource.status == Resource.Status.ERROR) {
+                resource?.let {
+                    Log.d("FireLoginEmailAndPass", it.message.toString())
+                }
+            }
+        })
         viewModel.googleResponse.observe(this, { resource ->
             if (resource.status == Resource.Status.SUCCESS) {
                 resource?.let {
@@ -156,12 +168,17 @@ class LoginActivity : AppCompatActivity() {
 
         /*** Events ***/
         binding.login.setOnClickListener {
+            val email = binding.username.text.toString()
+            val pass = binding.password.text.toString()
             viewModel.fetchLoginResponse(
                 LoginQuery(
-                    binding.username.text.toString(),
-                    binding.password.text.toString()
+                    email,
+                    pass
                 )
             )
+
+            viewModel.loginWithFirebase(email, pass)
+
 
         }
         binding.imGoogle.setOnClickListener {
