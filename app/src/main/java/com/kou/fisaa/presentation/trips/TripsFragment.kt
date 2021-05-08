@@ -28,8 +28,6 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val tripsArgs: TripsFragmentArgs by navArgs()
-
-
     @Inject
     lateinit var tripsAdapter: TripAdapter
 
@@ -134,6 +132,8 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         }
     }
 
-    override fun openFlight(flightId: String) {
+    override fun openFlight(userId: String) {
+        val action = TripsFragmentDirections.actionFlightsFragmentToTrans(userId = userId)
+        findNavController().navigate(action)
     }
 }

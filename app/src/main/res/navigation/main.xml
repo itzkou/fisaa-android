@@ -25,7 +25,12 @@
         android:id="@+id/trans"
         android:name="com.kou.fisaa.presentation.transactions.TransactionFragment"
         android:label="fragment_transaction"
-        tools:layout="@layout/fragment_transaction" />
+        tools:layout="@layout/fragment_transaction">
+        <argument
+            android:name="userId"
+            android:defaultValue='"none"'
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/profile"
         android:name="com.kou.fisaa.presentation.profile.ProfileFragment"
@@ -59,6 +64,9 @@
             android:name="source"
             android:defaultValue="none"
             app:argType="string" />
+        <action
+            android:id="@+id/action_flightsFragment_to_trans"
+            app:destination="@id/trans" />
     </fragment>
     <fragment
         android:id="@+id/createAdsFragment"

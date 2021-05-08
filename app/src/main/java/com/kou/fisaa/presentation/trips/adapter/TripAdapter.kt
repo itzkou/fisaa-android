@@ -45,6 +45,9 @@ class TripAdapter @Inject constructor(private val tripItemListener: TripAdapterI
             )
             departure.text = trip.departure
             arrival.text = trip.destination
+            chat.setOnClickListener {
+                tripItemListener.openFlight(trip.createdBy._id)
+            }
         }
     }
 

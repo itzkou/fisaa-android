@@ -35,7 +35,7 @@ object AppUtilsModule {
         return FlightsAdapter(flightAdapterItemListener)
     }
 
-    @Provides        //adding singleton = crash
+    @Provides
     fun provideTripsAdapterItemListener(): TripAdapterItemListener {
         return TripsFragment()  //always refrence the interface (listener) in fragment
     }
@@ -45,7 +45,7 @@ object AppUtilsModule {
         return TripAdapter(tripAdapterItemListener)
     }
 
-    @Provides        //adding singleton = crash
+    @Provides
     fun provideAdsAdapterItemListener(): AdAdapterListener {
         return AdsFragment()
     }

@@ -47,14 +47,13 @@ class LoginActivity : AppCompatActivity() {
                     resource.data?.let { loginResponse ->
                         if (resource.data.success) {
                             val user = loginResponse.data
-
-
                             viewModel.setId(user._id)
                             viewModel.setFireToken()
                             startActivity(Intent(this, HostActivity::class.java))
 
 
-                        } else Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
+                        } else
+                            Toast.makeText(this, "Unauthorized", Toast.LENGTH_SHORT).show()
 
                     }
                 }
