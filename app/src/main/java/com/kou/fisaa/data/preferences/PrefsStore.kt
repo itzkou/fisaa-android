@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-
+//TODO why prefs take time to be set ? I  am relating to scopes
 private val Context.dataStore by preferencesDataStore("user_prefs")
 
 class PrefsStore @Inject constructor(appContext: Context) : PrefsStoreAbstraction {

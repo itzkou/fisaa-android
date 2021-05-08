@@ -1,10 +1,12 @@
 package com.kou.fisaa.presentation.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kou.fisaa.databinding.ActivitySignUpBinding
+import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import com.kou.fisaa.utils.coordinatePwd
@@ -31,10 +33,13 @@ class SignUpActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        val user = resource.data!!
-                        viewmodel.setId(user._id)
-                        Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
-                        viewmodel.signUpFirebase(user.email, user.password)
+                        val user = resource.data
+                        user?.let {
+                            viewmodel.setId(user._id)
+                            Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
+                            viewmodel.signUpFirebase(user.email, user.password)
+                        }
+
                     }
                 }
 
@@ -56,9 +61,10 @@ class SignUpActivity : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
                         val user = resource.data?.user
-                        if (user != null)
+                        if (user != null) {
                             viewmodel.setFireToken()
-                        // startActivity(Intent(this, HostActivity::class.java))
+                            startActivity(Intent(this, HostActivity::class.java))
+                        }
                     }
                 }
 
