@@ -133,7 +133,10 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     }
 
     override fun openFlight(userId: String) {
+
         val action = TripsFragmentDirections.actionFlightsFragmentToTrans(userId = userId)
         findNavController().navigate(action)
+
+
     }
 }

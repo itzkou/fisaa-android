@@ -38,6 +38,9 @@ object AppUtilsModule {
     @Provides
     fun provideTripsAdapterItemListener(): TripAdapterItemListener {
         return TripsFragment()  //always refrence the interface (listener) in fragment
+        // Instead, you need to pass in your current fragment instance: return TripsFragment(this@TripsFragment)
+
+
     }
 
     @Provides
@@ -54,6 +57,7 @@ object AppUtilsModule {
     fun provideAdsAdapter(adAdapterListener: AdAdapterListener): AdsAdapter {
         return AdsAdapter(adAdapterListener)
     }
+
 
     @Provides
     fun provideMaterials(): ArrayList<Material> = arrayListOf(

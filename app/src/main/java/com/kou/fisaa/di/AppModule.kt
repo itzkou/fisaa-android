@@ -104,18 +104,16 @@ object AppModule {
     @Provides
     @Singleton
     fun providePrefsStoreAbstraction(@ApplicationContext appContext: Context) =
-        PrefsStore(appContext)  //Todo when I use interface abstraction the appcontext genrates an error
+        PrefsStore(appContext)
 
 
     /**** FireStore ******/
     @Provides
-    @Singleton
     fun provideFireBaseAuth(): FirebaseAuth {
         return Firebase.auth
     }
 
     @Provides
-    @Singleton
     fun provideFirestore() = Firebase.firestore
 
     @Singleton

@@ -111,8 +111,7 @@ class AdsFragment : Fragment(), AdAdapterListener {
     }
 
     override fun openAd(adId: String) {
-        TODO("Not yet implemented")
-    }
+     }
 
 
 }

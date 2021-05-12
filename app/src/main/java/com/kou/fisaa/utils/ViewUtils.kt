@@ -73,7 +73,7 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 }
 
 
-fun ImageView.loadCircle(photoUrl: String?) =    //TODO inject coil if injectable
+fun ImageView.loadCircle(photoUrl: String?) =
     this.load(photoUrl) {
         crossfade(true)
         placeholder(R.drawable.ic_launcher_background)

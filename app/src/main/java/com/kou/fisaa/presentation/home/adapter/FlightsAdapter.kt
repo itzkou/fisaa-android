@@ -12,16 +12,15 @@ import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
 import javax.inject.Inject
 
-//TODO search why viewtype is only usable when we have different items (objects) not layouts
-class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
+     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object {
-        const val TYPE_UPCOMING = 0
-        const val TYPE_TOP = 1
-    }
+     companion object {
+         const val TYPE_UPCOMING = 0
+         const val TYPE_TOP = 1
+     }
 
-    private var flights = listOf<Flight>()
+     private var flights = listOf<Flight>()
 
      class UpcomingViewHolder(val binding: ItemUpcomingFlightsBinding) :
          RecyclerView.ViewHolder(binding.root)
