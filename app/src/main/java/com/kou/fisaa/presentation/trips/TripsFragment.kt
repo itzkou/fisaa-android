@@ -15,21 +15,18 @@ import com.kou.fisaa.data.entities.FlightSearchDatesQuery
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.databinding.FragmentTripsBinding
 import com.kou.fisaa.presentation.trips.adapter.TripAdapter
-import com.kou.fisaa.presentation.trips.adapter.TripAdapterItemListener
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class TripsFragment : Fragment(), TripAdapterItemListener {
+class TripsFragment : Fragment(), TripAdapter.Listener {
 
     private var _binding: FragmentTripsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val tripsArgs: TripsFragmentArgs by navArgs()
-    @Inject
-    lateinit var tripsAdapter: TripAdapter
+    private lateinit var tripsAdapter: TripAdapter
 
 
     override fun onCreateView(
@@ -86,6 +83,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
     }
 
     private fun setupUi() {
+        tripsAdapter = TripAdapter(this)
         binding.rvTrips.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -132,11 +130,11 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         }
     }
 
-    override fun openFlight(userId: String) {
 
-        val action = TripsFragmentDirections.actionFlightsFragmentToTrans(userId = userId)
+    override fun openChat(userId: String) {
+        val action = TripsFragmentDirections.actionFlightsFragmentToTrans(userId)
         findNavController().navigate(action)
-
-
     }
+
+
 }

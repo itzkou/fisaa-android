@@ -30,7 +30,7 @@ class ChatAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return if (viewType == FROM) {
+        return if (viewType == TO) {
             ToViewHolder(
                 ChatToBinding.inflate(
                     LayoutInflater.from(parent.context),

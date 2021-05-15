@@ -11,13 +11,16 @@ import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
 import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
-import javax.inject.Inject
 
-
-class TripAdapter @Inject constructor(private val tripItemListener: TripAdapterItemListener) :
+//TODO clear a bug when user creates a new flight
+class TripAdapter constructor(private val tripItemListener: Listener) :
     RecyclerView.Adapter<TripAdapter.ViewHolder>() {
     private var trips = listOf<Trip>()
 
+    interface Listener {
+        fun openChat(userId: String)
+
+    }
 
     class ViewHolder(val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -46,7 +49,7 @@ class TripAdapter @Inject constructor(private val tripItemListener: TripAdapterI
             departure.text = trip.departure
             arrival.text = trip.destination
             chat.setOnClickListener {
-                tripItemListener.openFlight(trip.createdBy._id)
+                tripItemListener.openChat(trip.createdBy._id)
             }
         }
     }

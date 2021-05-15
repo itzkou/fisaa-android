@@ -53,13 +53,16 @@ class TransactionFragment : Fragment() {
     }
 
     private fun sendMsg() {
-        val text = binding.edSendMsg.toString()
-        val msgs = arrayListOf(
-            Message("1", text, Firebase.auth.uid!!, "xx", 1620838815),
-            Message("2", "  Hi kou", "xx", Firebase.auth.uid!!, 1620838815)
-        )
 
-        chatAdapter.updateMsgs(msgs)
+        binding.btnSend.setOnClickListener {
+            val text = binding.edSendMsg.toString()
+            val msgs = arrayListOf(
+                Message("1", text, Firebase.auth.uid!!, "xx", 1620838815),
+                Message("2", "  Hi kou", "xx", Firebase.auth.uid!!, 1620838815)
+            )
+
+            chatAdapter.updateMsgs(msgs)
+        }
 
 
 /*
