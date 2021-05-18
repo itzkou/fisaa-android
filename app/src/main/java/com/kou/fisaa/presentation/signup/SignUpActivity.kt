@@ -40,7 +40,7 @@ class SignUpActivity : AppCompatActivity() {
                         user?.let { user ->
                             viewmodel.setId(user._id)
                             Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
-                            viewmodel.signUpFirebase(user.email, user.password)
+
                         }
 
                     }
@@ -103,11 +103,7 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
 
-                Resource.Status.LOADING -> {
-                    resource?.let {
-                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
-                    }
-                }
+
             }
         })
 

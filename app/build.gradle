@@ -90,9 +90,11 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // FireStore
-    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+
 
     /* coroutines support for firebase operations */
     def couroutine_firestore_support ="1.1.1"
@@ -127,6 +129,8 @@ dependencies {
     // Image Compression
     def img_compressor ="3.0.1"
     implementation  "id.zelory:compressor:$img_compressor"
+
+
 
 
 

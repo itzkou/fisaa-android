@@ -1,9 +1,11 @@
 package com.kou.fisaa.data.repository
 
+import android.net.Uri
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
@@ -77,9 +79,18 @@ class FisaaRepository @Inject constructor(
     /*****   Firestore ***/
     override suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?> {
         return flow {
-            emit(Resource.loading())
             val userRef = firestore.registerFirestore(user)
             emit(Resource.success(userRef))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
+    /*** Storage ***/
+    override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
+        return flow {
+            val snapshot = firestore.uploadParcelImage(imageUri)
+            emit(Resource.success(snapshot))
         }.catch {
             emit(Resource.error(it.message.toString()))
         }.flowOn(ioDispatcher)

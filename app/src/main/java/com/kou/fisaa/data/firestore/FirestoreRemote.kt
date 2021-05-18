@@ -1,5 +1,6 @@
 package com.kou.fisaa.data.firestore
 
+import android.net.Uri
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
@@ -8,6 +9,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import com.kou.fisaa.data.entities.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -15,7 +19,9 @@ import javax.inject.Inject
 class FirestoreRemote @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
+
 ) : FirestoreAbstraction {
+    val storage = Firebase.storage.reference
     val usersCollectionReference = firestore.collection("users")
     val chatsCollectionReference = firestore.collection("chat")
 
@@ -37,6 +43,10 @@ class FirestoreRemote @Inject constructor(
 
     override suspend fun registerFirestore(user: User): DocumentReference {
         return usersCollectionReference.add(user).await()
+    }
+
+    override suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot {
+        return storage.child("parcels").child(imageUri.lastPathSegment!!).putFile(imageUri).await()
     }
 
 

@@ -1,9 +1,11 @@
 package com.kou.fisaa.data.repository
 
+import android.net.Uri
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +23,9 @@ interface FisaaRepositoryAbstraction {
 
     /** Firestore **/
     suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?>
+
+    /*** Storage **/
+    suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?>
 
 
     /*** Remote ***/

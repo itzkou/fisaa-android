@@ -22,10 +22,7 @@ import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Parcel
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
-import com.kou.fisaa.utils.BuilderDatePicker
-import com.kou.fisaa.utils.MaterialAdapter
-import com.kou.fisaa.utils.Resource
-import com.kou.fisaa.utils.coordinateBtnAndInputs
+import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
@@ -160,6 +157,12 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             }
         })
 
+        viewModel.imageOnStore.observe(viewLifecycleOwner, {
+            it?.let { url ->
+                requireActivity().toast(url)
+            }
+        })
+
     }
 
     override fun onDestroyView() {
@@ -270,14 +273,16 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         binding.publish.setOnClickListener {
             imageUri?.let { imageUri ->
 
-                viewModel.prepareParcel(
+                viewModel.postParcelImage(imageUri)
+
+                /*viewModel.prepareParcel(
                     compressImage(imageUri),
                     binding.txBonus.text.toString(),
                     binding.description.text.toString(),
                     dimension,
                     parcelType,
                     parcelWeight
-                )
+                )*/
 
             }
 
