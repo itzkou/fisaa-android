@@ -86,6 +86,16 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun getUsers(): Flow<Resource<List<User>>?> {
+        return flow {
+            val snapshot = firestore.getUsers()
+            val users = snapshot.toObjects(User::class.java)
+            emit(Resource.success(users))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
         return flow {

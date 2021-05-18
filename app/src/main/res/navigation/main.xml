@@ -30,6 +30,9 @@
             android:name="userId"
             android:defaultValue='"none"'
             app:argType="string" />
+        <action
+            android:id="@+id/action_trans_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/profile"
@@ -84,5 +87,14 @@
         android:id="@+id/chatRoomFragment"
         android:name="com.kou.fisaa.ChatRoomFragment"
         android:label="fragment_chat_room"
-        tools:layout="@layout/fragment_chat_room" />
+        tools:layout="@layout/fragment_chat_room">
+        <argument
+            android:name="toId"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="fromId"
+            android:defaultValue="none"
+            app:argType="string" />
+    </fragment>
 </navigation>

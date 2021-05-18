@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
@@ -43,6 +44,10 @@ class FirestoreRemote @Inject constructor(
 
     override suspend fun registerFirestore(user: User): DocumentReference {
         return usersCollectionReference.add(user).await()
+    }
+
+    override suspend fun getUsers(): QuerySnapshot {
+        return usersCollectionReference.get().await()
     }
 
     override suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot {

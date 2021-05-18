@@ -53,7 +53,6 @@ object AppUtilsModule {
         return AdsAdapter(adAdapterListener)
     }
 
-
     @Provides
     fun provideMaterials(): ArrayList<Material> = arrayListOf(
         Material("clothing", R.drawable.box_blue),

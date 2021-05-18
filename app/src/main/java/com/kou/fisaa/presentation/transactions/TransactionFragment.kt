@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentTransactionBinding
 import com.kou.fisaa.presentation.transactions.adapter.UsersAdapter
+import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,11 +29,23 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
     ): View? {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         val view = binding.root
-        sendMsg()
+        getUsers()
         setupUi()
 
         return view
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.users.observe(viewLifecycleOwner, { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                }
+                Resource.Status.ERROR -> {
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -50,8 +63,8 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
         }
     }
 
-    private fun sendMsg() {
-
+    private fun getUsers() {
+        viewModel.getUsers()
 
 /*
         val fromId = FirebaseAuth.getInstance().uid
