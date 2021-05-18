@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.databinding.ActivitySignUpBinding
 import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import com.kou.fisaa.utils.coordinatePwd
+import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +19,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private val viewmodel: SignUpViewModel by viewModels()
+    private var user: User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +36,8 @@ class SignUpActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        val user = resource.data
-                        user?.let {
+                        user = resource.data
+                        user?.let { user ->
                             viewmodel.setId(user._id)
                             Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
                             viewmodel.signUpFirebase(user.email, user.password)
@@ -60,11 +63,37 @@ class SignUpActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        val user = resource.data?.user
-                        if (user != null) {
+                        val firebaseUser = resource.data?.user
+                        firebaseUser?.let {
                             viewmodel.setFireToken()
-                            startActivity(Intent(this, HostActivity::class.java))
+                            user?.let { user ->
+                                viewmodel.signUpFirestore(user = user)
+
+                            }
+
                         }
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    resource?.let {
+                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                Resource.Status.LOADING -> {
+                    resource?.let {
+                        Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+        viewmodel.firestoreSignUpResponse.observe(this, { resource ->
+            when (resource.status) {
+                Resource.Status.SUCCESS -> {
+                    resource.data?.let { fireStoreUser ->
+                        this.toast(fireStoreUser.id)
+                        startActivity(Intent(this, HostActivity::class.java))
                     }
                 }
 

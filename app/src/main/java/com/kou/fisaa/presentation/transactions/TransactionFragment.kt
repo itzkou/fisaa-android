@@ -8,21 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.kou.fisaa.R
-import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.FragmentTransactionBinding
-import com.kou.fisaa.presentation.transactions.adapter.ChatAdapter
+import com.kou.fisaa.presentation.transactions.adapter.UsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TransactionFragment : Fragment() {
+class TransactionFragment : Fragment(), UsersAdapter.Listener {
     private var _binding: FragmentTransactionBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TransactionViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val transArgs: TransactionFragmentArgs by navArgs()
-    private val chatAdapter = ChatAdapter()
+    private lateinit var usersAdapter: UsersAdapter
 
 
     override fun onCreateView(
@@ -45,24 +42,15 @@ class TransactionFragment : Fragment() {
 
 
     private fun setupUi() {
-        binding.rvChat.apply {
-            adapter = chatAdapter
+        usersAdapter = UsersAdapter(this)
+        binding.rvUsers.apply {
+            adapter = usersAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         }
     }
 
     private fun sendMsg() {
-
-        binding.btnSend.setOnClickListener {
-            val text = binding.edSendMsg.toString()
-            val msgs = arrayListOf(
-                Message("1", text, Firebase.auth.uid!!, "xx", 1620838815),
-                Message("2", "  Hi kou", "xx", Firebase.auth.uid!!, 1620838815)
-            )
-
-            chatAdapter.updateMsgs(msgs)
-        }
 
 
 /*
@@ -86,5 +74,8 @@ class TransactionFragment : Fragment() {
 
         toReference.setValue(chatMessage)*/
 
+    }
+
+    override fun talkToUser(userId: String) {
     }
 }

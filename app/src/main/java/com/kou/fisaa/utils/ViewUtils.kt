@@ -1,5 +1,6 @@
 package com.kou.fisaa.utils
 
+import android.content.Context
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
@@ -106,6 +107,9 @@ fun stringToDate(string: String): Date {
     val date: Date = formatter.parse(string) ?: Date()
     return Date(date.time)
 }
+
+fun Context.toast(message: CharSequence) =
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 
 

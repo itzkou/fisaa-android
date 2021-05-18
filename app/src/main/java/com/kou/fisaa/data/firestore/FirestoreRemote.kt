@@ -6,7 +6,9 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kou.fisaa.data.entities.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -14,6 +16,9 @@ class FirestoreRemote @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) : FirestoreAbstraction {
+    val usersCollectionReference = firestore.collection("users")
+    val chatsCollectionReference = firestore.collection("chat")
+
 
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): AuthResult =
         firebaseAuth.signInWithCredential(
@@ -29,6 +34,10 @@ class FirestoreRemote @Inject constructor(
 
     override suspend fun register(email: String, password: String): AuthResult =
         firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+
+    override suspend fun registerFirestore(user: User): DocumentReference {
+        return usersCollectionReference.add(user).await()
+    }
 
 
 }

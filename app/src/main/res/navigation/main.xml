@@ -80,4 +80,9 @@
             android:id="@+id/action_searchFlightsFragment_to_flightsFragment4"
             app:destination="@id/flightsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.kou.fisaa.ChatRoomFragment"
+        android:label="fragment_chat_room"
+        tools:layout="@layout/fragment_chat_room" />
 </navigation>

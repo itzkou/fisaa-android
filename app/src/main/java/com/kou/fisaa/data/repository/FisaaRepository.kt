@@ -3,6 +3,7 @@ package com.kou.fisaa.data.repository
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
@@ -27,7 +28,7 @@ class FisaaRepository @Inject constructor(
     private val firestore: FirestoreRemote,
     private val ioDispatcher: CoroutineDispatcher
 ) : FisaaRepositoryAbstraction {
-    /*****   Firestore ***/
+    /*****   Firebase ***/
 
     override suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?> {
         return flow {
@@ -39,7 +40,6 @@ class FisaaRepository @Inject constructor(
 
         }.flowOn(ioDispatcher)
     }
-
 
     override suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?> {
         return flow {
@@ -74,8 +74,18 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    /*****   Firestore ***/
+    override suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?> {
+        return flow {
+            emit(Resource.loading())
+            val userRef = firestore.registerFirestore(user)
+            emit(Resource.success(userRef))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
 
-    /*****   Remote X Room ***/
+    /*****   Remote  ***/
     override suspend fun signUp(signUpQuery: Map<String, RequestBody>): Flow<Resource<User>?> {
         return flow {
             emit(Resource.loading())
@@ -166,9 +176,7 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    override suspend fun postAd(
-        advertisement: AdsQuery
-    ): Flow<Resource<AdsQuery>?> {
+    override suspend fun postAd(advertisement: AdsQuery): Flow<Resource<AdsQuery>?> {
         return flow {
             emit(Resource.loading())
             val response = remote.postAd(
@@ -179,7 +187,8 @@ class FisaaRepository @Inject constructor(
     }
 
     override suspend fun postParcel(
-        partMap: Map<String, RequestBody>, file: MultipartBody.Part
+        partMap: Map<String, RequestBody>,
+        file: MultipartBody.Part
     ): Flow<Resource<Parcel>?> {
         return flow {
             emit(Resource.loading())
@@ -189,7 +198,7 @@ class FisaaRepository @Inject constructor(
     }
 
 
-    /****  Local fetching ***/
+    /****  Room ***/
     private fun getUpcomingFlightsCached(): Resource<FlightsResponse>? =
         flightLocalManager.getAll()?.let { flights ->
             Resource.success(FlightsResponse(flights))

@@ -3,6 +3,7 @@ package com.kou.fisaa.data.repository
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -12,11 +13,14 @@ import okhttp3.RequestBody
 interface FisaaRepositoryAbstraction {
 
 
-    /** Firestore **/
+    /** Firebase **/
     suspend fun signInWithGoogle(acct: GoogleSignInAccount): Flow<Resource<AuthResult>?>
     suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
     suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?>
     suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?>
+
+    /** Firestore **/
+    suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?>
 
 
     /*** Remote ***/
