@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class User(
     @NonNull
     @PrimaryKey
-    val _id: String = "0",
+    val _id: String,
     val adress: String? = null,
     val cin: Int? = null,
     val city: String? = null,

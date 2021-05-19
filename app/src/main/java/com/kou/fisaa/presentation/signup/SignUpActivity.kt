@@ -35,13 +35,14 @@ class SignUpActivity : AppCompatActivity() {
         viewmodel.signupResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        user?.let { user ->
-                            this.toast(user._id)
-                            viewmodel.setId(user._id)
-                            viewmodel.signUpFirebase(user.email, user.password)
-
+                    resource?.data.let { fisaaUser ->
+                        fisaaUser?.let {
+                            user = fisaaUser
+                            this.toast(fisaaUser._id)
+                            viewmodel.setId(fisaaUser._id)
+                            viewmodel.signUpFirebase(fisaaUser.email, fisaaUser.password)
                         }
+
 
                     }
                 }
@@ -125,6 +126,7 @@ class SignUpActivity : AppCompatActivity() {
             val phone = binding.phone.text.toString()
             val zip = binding.zip.text.toString()
             user = User(
+                _id = "N/A",
                 email = email,
                 firstName = fname,
                 lastName = lname,

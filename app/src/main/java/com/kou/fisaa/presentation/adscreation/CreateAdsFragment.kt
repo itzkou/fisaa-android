@@ -22,12 +22,16 @@ import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Parcel
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
-import com.kou.fisaa.utils.*
+import com.kou.fisaa.utils.BuilderDatePicker
+import com.kou.fisaa.utils.MaterialAdapter
+import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -38,17 +42,8 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CreateAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
-
-
     private lateinit var userId: String
     private var imageUri: Uri? = null
-
-
-    @Inject
-    lateinit var materialAdapter: MaterialAdapter
-
-    @Inject
-    lateinit var weightAdapter: ArrayAdapter<String>
     private val parcelTypes =
         arrayListOf("clothing", "electronic", "books", "documents", "food", "other")
     private val parcelWeights = arrayListOf("1K-2K", "3K-8K", "9K-20K", "20K+")
@@ -56,6 +51,12 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private lateinit var parcelType: String
     private lateinit var parcelWeight: String
     private lateinit var adType: String
+
+    @Inject
+    lateinit var materialAdapter: MaterialAdapter
+
+    @Inject
+    lateinit var weightAdapter: ArrayAdapter<String>
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -89,7 +90,6 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-
                         Toast.makeText(
                             requireActivity(),
                             " Ad created by ${it.data?.createdBy}",
@@ -142,7 +142,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 }
                 Resource.Status.ERROR -> {
                     resource?.let {
-                        Log.d("pur", resource.message.toString())
+
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -157,11 +157,6 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        viewModel.imageOnStore.observe(viewLifecycleOwner, {
-            it?.let { url ->
-                requireActivity().toast(url)
-            }
-        })
 
     }
 
@@ -236,6 +231,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                     resolution(1280, 720)
                     quality(80)
                     format(Bitmap.CompressFormat.JPEG)
+                    size(2_097_152)
                 }
         }
         return Uri.fromFile(compressedImageFile)
@@ -270,20 +266,19 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             binding.description
         )
 
+
         binding.publish.setOnClickListener {
+            val bonus = binding.txBonus.text.toString()
+            val description = binding.description.text.toString()
             imageUri?.let { imageUri ->
-
-
-                viewModel.postParcelImage(compressImage(imageUri))
-
-                /*viewModel.prepareParcel(
+                viewModel.postParcelImage(
                     compressImage(imageUri),
-                    binding.txBonus.text.toString(),
-                    binding.description.text.toString(),
+                    bonus,
+                    description,
                     dimension,
                     parcelType,
                     parcelWeight
-                )*/
+                )
 
             }
 

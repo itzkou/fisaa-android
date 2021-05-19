@@ -31,8 +31,6 @@ class CreateAdsViewModel @Inject constructor(
     val adCreationResponse = _adCreationResponse
     private val _parcelCreationResponse = MutableLiveData<Resource<Parcel>>()
     val parcelCreationResponse = _parcelCreationResponse
-    private val _imageOnStore = MutableLiveData<String?>()
-    val imageOnStore = _imageOnStore
     val userId = prefsStore.getId().asLiveData()
     val storage = Firebase.storage.reference
 
@@ -48,7 +46,13 @@ class CreateAdsViewModel @Inject constructor(
         }
     }
 
-    fun postParcelImage(imageUri: Uri) {
+    fun postParcelImage(
+        imageUri: Uri, bonus: String,
+        description: String,
+        dimension: String,
+        parcelType: String,
+        weight: String
+    ) {
 
         viewModelScope.launch {
             repository.uploadParcelImage(imageUri).collect { resource ->
@@ -56,7 +60,14 @@ class CreateAdsViewModel @Inject constructor(
                     taskSnapshot.task.addOnSuccessListener {
                         storage.child("parcels")
                             .child(imageUri.lastPathSegment!!).downloadUrl.addOnSuccessListener { url ->
-                                imageOnStore.value = url.toString()
+                                prepareAndPostParcel(
+                                    url.toString(),
+                                    bonus,
+                                    description,
+                                    dimension,
+                                    parcelType,
+                                    weight
+                                )
                             }
                     }
                 }
@@ -64,18 +75,8 @@ class CreateAdsViewModel @Inject constructor(
         }
     }
 
-    fun postParcel(partMap: Map<String, RequestBody>) {
-        viewModelScope.launch {
-            repository.postParcel(partMap).collect { response ->
-                response?.let {
-                    _parcelCreationResponse.value = response
-                }
-            }
 
-        }
-    }
-
-    fun prepareParcel(
+    fun prepareAndPostParcel(
         imageURL: String,
         bonus: String,
         description: String,
@@ -92,7 +93,14 @@ class CreateAdsViewModel @Inject constructor(
         map["weight"] = createPartFromString(weight)
         map["photo"] = createPartFromString(imageURL)
 
-        postParcel(map)
+        viewModelScope.launch {
+            repository.postParcel(map).collect { response ->
+                response?.let {
+                    _parcelCreationResponse.value = response
+                }
+            }
+
+        }
 
 
     }
