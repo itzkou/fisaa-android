@@ -8,7 +8,6 @@ import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -21,8 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: FisaaRepositoryAbstraction, private val prefsStore: PrefsStore,
-    private val auth: FirebaseAuth, private val googleSignInClient: GoogleSignInClient,
+    private val repository: FisaaRepositoryAbstraction,
+    private val prefsStore: PrefsStore,
+    private val googleSignInClient: GoogleSignInClient,
     private val callbackManager: CallbackManager
 ) :
     ViewModel() {
@@ -30,7 +30,6 @@ class LoginViewModel @Inject constructor(
     private val _fireLoginResponse = MutableLiveData<Resource<AuthResult>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
-    private val fireToken = auth.currentUser?.uid
     val loginResponse = _loginResponse
     val fireLoginResponse = _fireLoginResponse
     val googleResponse = _googleResponse
@@ -43,11 +42,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun setFireToken() {
+    fun setFireToken(id: String) {
         viewModelScope.launch {
-            fireToken?.let {
-                prefsStore.setFireToken(fireToken)
-            }
+
+            prefsStore.setFireToken(id)
 
         }
     }

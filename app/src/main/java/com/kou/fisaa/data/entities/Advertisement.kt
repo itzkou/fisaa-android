@@ -11,7 +11,6 @@ data class Advertisement(
     @PrimaryKey
     val _id: String,
     val arivalDate: String? = null,
-    val createdAt: String,
     @Embedded(prefix = "user")
     val createdBy: AdCreator,
     val departure: String,

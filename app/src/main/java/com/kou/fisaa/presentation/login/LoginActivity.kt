@@ -48,8 +48,7 @@ class LoginActivity : AppCompatActivity() {
                         if (resource.data.success) {
                             val user = loginResponse.data
                             viewModel.setId(user._id)
-                            viewModel.setFireToken()
-                            startActivity(Intent(this, HostActivity::class.java))
+                            viewModel.loginWithFirebase(user.email, user.password)
 
 
                         } else
@@ -73,8 +72,9 @@ class LoginActivity : AppCompatActivity() {
         })
         viewModel.fireLoginResponse.observe(this, { resource ->
             if (resource.status == Resource.Status.SUCCESS) {
-                resource?.let {
-                    viewModel.setFireToken()
+                resource?.data?.user?.let { firebaseUser ->
+                    viewModel.setFireToken(firebaseUser.uid)
+                    startActivity(Intent(this, HostActivity::class.java))
 
                 }
             } else if (resource.status == Resource.Status.ERROR) {
@@ -180,8 +180,6 @@ class LoginActivity : AppCompatActivity() {
                     pass
                 )
             )
-
-            viewModel.loginWithFirebase(email, pass)
 
 
         }
