@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -21,9 +20,9 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore,
-    private val auth: FirebaseAuth,
+
 ) : ViewModel() {
-    private val fireToken = auth.currentUser?.uid
+
     private val _signUpResponse = MutableLiveData<Resource<User>>()
     val signupResponse = _signUpResponse
     private val _fireSignUpResponse = MutableLiveData<Resource<AuthResult>>()
@@ -38,10 +37,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun setFireToken() {
+    fun setFireToken(id: String?) {
         viewModelScope.launch {
-            fireToken?.let {
-                prefsStore.setFireToken(fireToken)
+            id?.let {
+                prefsStore.setFireToken(id)
             }
 
         }
@@ -100,7 +99,6 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             repository.registerFirestore(user).collect {
                 it?.let {
-
                     firestoreSignUpResponse.value = it
                 }
             }

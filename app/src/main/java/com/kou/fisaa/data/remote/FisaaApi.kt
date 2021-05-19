@@ -1,10 +1,10 @@
 package com.kou.fisaa.data.remote
 
 import com.kou.fisaa.data.entities.*
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+
 @JvmSuppressWildcards
 interface FisaaApi {
 
@@ -48,7 +48,6 @@ interface FisaaApi {
     @Multipart
     @POST("parcels/")
     suspend fun postParcel(
-        @PartMap() partMap: Map<String, RequestBody>,
-        @Part file: @JvmSuppressWildcards MultipartBody.Part
+        @PartMap() partMap: Map<String, RequestBody>
     ): Response<Parcel>
 }

@@ -9,12 +9,11 @@ import androidx.room.PrimaryKey
 data class User(
     @NonNull
     @PrimaryKey
-    val _id: String,
+    val _id: String = "0",
     val adress: String? = null,
     val cin: Int? = null,
     val city: String? = null,
     val country: String? = null,
-    val createdAt: String? = null,
     val dateOfBirth: String? = null,
     val description: String? = null,
     val email: String,
@@ -25,6 +24,5 @@ data class User(
     val password: String,
     val phoneNumber: Long? = null,
     //val publishedAdverts: List<null>,
-    val updatedAt: String? = null,
     val zipCode: Int? = null
 )

@@ -9,7 +9,6 @@ import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.utils.Resource
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 interface FisaaRepositoryAbstraction {
@@ -39,10 +38,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun getAds(): Flow<Resource<AdsResponse>?>
     suspend fun searchFlights(searchDatesQuery: FlightSearchDatesQuery): Flow<Resource<TripsResponse>?>
     suspend fun postAd(advertisement: AdsQuery): Flow<Resource<AdsQuery>?>
-    suspend fun postParcel(
-        partMap: Map<String, RequestBody>,
-        file: MultipartBody.Part
-    ): Flow<Resource<Parcel>?>
+    suspend fun postParcel(partMap: Map<String, RequestBody>): Flow<Resource<Parcel>?>
 
 
 }

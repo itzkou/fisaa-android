@@ -13,13 +13,10 @@ import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.createPartFromString
-import com.kou.fisaa.utils.prepareImageFilePart
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -67,9 +64,9 @@ class CreateAdsViewModel @Inject constructor(
         }
     }
 
-    fun postParcel(partMap: Map<String, RequestBody>, file: MultipartBody.Part) {
+    fun postParcel(partMap: Map<String, RequestBody>) {
         viewModelScope.launch {
-            repository.postParcel(partMap, file).collect { response ->
+            repository.postParcel(partMap).collect { response ->
                 response?.let {
                     _parcelCreationResponse.value = response
                 }
@@ -79,14 +76,13 @@ class CreateAdsViewModel @Inject constructor(
     }
 
     fun prepareParcel(
-        file: File,
+        imageURL: String,
         bonus: String,
         description: String,
         dimension: String,
         parcelType: String,
         weight: String
     ) {
-        val image = prepareImageFilePart("photo", file)
         val map: HashMap<String, RequestBody> = HashMap()
 
         map["bonus"] = createPartFromString(bonus)
@@ -94,10 +90,12 @@ class CreateAdsViewModel @Inject constructor(
         map["dimension"] = createPartFromString(dimension)
         map["parcelType"] = createPartFromString(parcelType)
         map["weight"] = createPartFromString(weight)
+        map["photo"] = createPartFromString(imageURL)
 
-        postParcel(map, image)
+        postParcel(map)
 
 
     }
+
 
 }

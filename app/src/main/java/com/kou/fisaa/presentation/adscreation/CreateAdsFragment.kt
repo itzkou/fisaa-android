@@ -225,7 +225,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
     }
 
-    private fun compressImage(uri: Uri): File {
+    private fun compressImage(uri: Uri): Uri {
         var compressedImageFile = File(uri.path ?: "")
         viewLifecycleOwner.lifecycleScope.launch {
             compressedImageFile =
@@ -238,7 +238,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                     format(Bitmap.CompressFormat.JPEG)
                 }
         }
-        return compressedImageFile
+        return Uri.fromFile(compressedImageFile)
     }
 
     private fun postFlights() {
@@ -273,7 +273,8 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         binding.publish.setOnClickListener {
             imageUri?.let { imageUri ->
 
-                viewModel.postParcelImage(imageUri)
+
+                viewModel.postParcelImage(compressImage(imageUri))
 
                 /*viewModel.prepareParcel(
                     compressImage(imageUri),

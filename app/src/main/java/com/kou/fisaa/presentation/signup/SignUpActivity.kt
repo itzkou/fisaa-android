@@ -36,10 +36,10 @@ class SignUpActivity : AppCompatActivity() {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        user = resource.data
                         user?.let { user ->
+                            this.toast(user._id)
                             viewmodel.setId(user._id)
-                            Toast.makeText(this, user._id, Toast.LENGTH_SHORT).show()
+                            viewmodel.signUpFirebase(user.email, user.password)
 
                         }
 
@@ -65,7 +65,7 @@ class SignUpActivity : AppCompatActivity() {
                     resource?.let {
                         val firebaseUser = resource.data?.user
                         firebaseUser?.let {
-                            viewmodel.setFireToken()
+                            viewmodel.setFireToken(firebaseUser.uid)
                             user?.let { user ->
                                 viewmodel.signUpFirestore(user = user)
 
@@ -89,21 +89,16 @@ class SignUpActivity : AppCompatActivity() {
             }
         })
         viewmodel.firestoreSignUpResponse.observe(this, { resource ->
-            when (resource.status) {
-                Resource.Status.SUCCESS -> {
-                    resource.data?.let { fireStoreUser ->
-                        this.toast(fireStoreUser.id)
-                        startActivity(Intent(this, HostActivity::class.java))
-                    }
+            if (resource.status == Resource.Status.SUCCESS) {
+                val fireStoreUser = resource.data
+                fireStoreUser?.let { _ ->
+                    startActivity(Intent(this, HostActivity::class.java))
+
                 }
-
-                Resource.Status.ERROR -> {
-                    resource?.let {
-                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                    }
+            } else if (resource.status == Resource.Status.ERROR) {
+                resource?.let {
+                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                 }
-
-
             }
         })
 
@@ -129,6 +124,21 @@ class SignUpActivity : AppCompatActivity() {
             val description = binding.desc.text.toString()
             val phone = binding.phone.text.toString()
             val zip = binding.zip.text.toString()
+            user = User(
+                email = email,
+                firstName = fname,
+                lastName = lname,
+                password = pass,
+                adress = if (address.isEmpty()) "N/A" else address,
+                cin = if (cin.isEmpty()) 0 else cin.toInt(),
+                city = if (city.isEmpty()) "N/A" else city,
+                country = if (country.isEmpty()) "N/A" else country,
+                dateOfBirth = if (birthdate.isEmpty()) "N/A" else birthdate,
+                description = if (description.isEmpty()) "N/A" else description,
+                phoneNumber = if (phone.isEmpty()) 0 else phone.toLong(),
+                zipCode = if (zip.isEmpty()) 0 else zip.toInt()
+            )
+
             viewmodel.signUp(
                 email,
                 pass,
