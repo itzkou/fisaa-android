@@ -23,6 +23,9 @@ interface FisaaRepositoryAbstraction {
     /** Firestore **/
     suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?>
     suspend fun getUsers(): Flow<Resource<List<User>>?>
+    suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?>
+    suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?>
+
 
     /*** Storage **/
     suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?>

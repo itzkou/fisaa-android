@@ -4,14 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
 import com.kou.fisaa.utils.SimpleCallback
 
-class ChatAdapter :
+class ChatAdapter(private val fromId: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -55,14 +53,14 @@ class ChatAdapter :
         when (holder.itemViewType) {
             TO -> {
                 with((holder as ToViewHolder).binding) {
-                    tvTo.text = "waaaa3"
+                    tvTo.text = message.text
 
                 }
             }
 
             FROM -> {
                 with((holder as FromViewHolder).binding) {
-                    tvFrom.text = "hiiii"
+                    tvFrom.text = message.text
 
                 }
             }
@@ -75,7 +73,7 @@ class ChatAdapter :
 
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
-        return if (message.fromId == Firebase.auth.currentUser!!.uid)
+        return if (message.fromId == fromId)
             FROM
         else
             TO
@@ -83,7 +81,7 @@ class ChatAdapter :
 
     fun updateMsgs(newMsgs: List<Message>) {
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.id })
+            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
         this.messages = newMsgs
         diffResult.dispatchUpdatesTo(this)
     }

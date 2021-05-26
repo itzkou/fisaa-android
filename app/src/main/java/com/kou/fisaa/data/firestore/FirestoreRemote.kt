@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -22,6 +23,7 @@ class FirestoreRemote @Inject constructor(
     private val firestore: FirebaseFirestore
 
 ) : FirestoreAbstraction {
+    val currentUser = firebaseAuth.currentUser
     val storage = Firebase.storage.reference
     val usersCollectionReference = firestore.collection("users")
     val chatsCollectionReference = firestore.collection("chat")
@@ -49,6 +51,16 @@ class FirestoreRemote @Inject constructor(
     override suspend fun getUsers(): QuerySnapshot {
         return usersCollectionReference.get().await()
     }
+
+    override suspend fun sendMsg(msg: Message): DocumentReference {
+        return chatsCollectionReference.add(msg).await()
+    }
+
+    override suspend fun listenMsgs(fromId: String, toId: String): QuerySnapshot {
+        return chatsCollectionReference.whereEqualTo("fromId", fromId).whereEqualTo("toId", toId)
+            .get().await()
+    }
+
 
     override suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot {
         return storage.child("parcels").child(imageUri.lastPathSegment!!).putFile(imageUri).await()

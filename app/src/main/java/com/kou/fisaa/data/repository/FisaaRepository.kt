@@ -95,6 +95,25 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?> {
+        return flow {
+            val msgRef = firestore.sendMsg(msg)
+            emit(Resource.success(msgRef))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?> {
+        return flow {
+            emit(Resource.loading())
+            val snapshot = firestore.listenMsgs(fromId, toId)
+            val messages = snapshot.toObjects(Message::class.java)
+            emit(Resource.success(messages))
+        }.catch { emit(Resource.error(it.message.toString())) }
+            .flowOn(ioDispatcher)
+    }
+
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
         return flow {

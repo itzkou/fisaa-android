@@ -26,7 +26,7 @@ class TripsFragment : Fragment(), TripAdapter.Listener {
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val tripsArgs: TripsFragmentArgs by navArgs()
-    private lateinit var tripsAdapter: TripAdapter
+    private lateinit var tripsAdapter: TripAdapter  //TODO inject
 
 
     override fun onCreateView(
@@ -132,7 +132,7 @@ class TripsFragment : Fragment(), TripAdapter.Listener {
 
 
     override fun openChat(userId: String) {
-        val action = TripsFragmentDirections.actionFlightsFragmentToTrans(userId)
+        val action = TripsFragmentDirections.actionFlightsFragmentToChatRoomFragment(userId)
         findNavController().navigate(action)
     }
 

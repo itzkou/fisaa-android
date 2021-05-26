@@ -7,6 +7,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.UploadTask
+import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 
 interface FirestoreAbstraction {
@@ -20,6 +21,8 @@ interface FirestoreAbstraction {
     /*** Firestore ***/
     suspend fun registerFirestore(user: User): DocumentReference
     suspend fun getUsers(): QuerySnapshot
+    suspend fun sendMsg(msg: Message): DocumentReference
+    suspend fun listenMsgs(fromId: String, toId: String): QuerySnapshot
 
     /*** Storage ***/
     suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot

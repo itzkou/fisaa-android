@@ -27,7 +27,7 @@
         android:label="fragment_transaction"
         tools:layout="@layout/fragment_transaction">
         <argument
-            android:name="userId"
+            android:name="toId"
             android:defaultValue='"none"'
             app:argType="string" />
         <action
@@ -68,8 +68,8 @@
             android:defaultValue="none"
             app:argType="string" />
         <action
-            android:id="@+id/action_flightsFragment_to_trans"
-            app:destination="@id/trans" />
+            android:id="@+id/action_flightsFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/createAdsFragment"
@@ -85,16 +85,15 @@
     </fragment>
     <fragment
         android:id="@+id/chatRoomFragment"
-        android:name="com.kou.fisaa.ChatRoomFragment"
+        android:name="com.kou.fisaa.presentation.chat.ChatRoomFragment"
         android:label="fragment_chat_room"
         tools:layout="@layout/fragment_chat_room">
         <argument
             android:name="toId"
             android:defaultValue="none"
             app:argType="string" />
-        <argument
-            android:name="fromId"
-            android:defaultValue="none"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_trans"
+            app:destination="@id/trans" />
     </fragment>
 </navigation>

@@ -2,6 +2,7 @@ package com.kou.fisaa.presentation.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -92,7 +93,8 @@ class SignUpActivity : AppCompatActivity() {
         viewmodel.firestoreSignUpResponse.observe(this, { resource ->
             if (resource.status == Resource.Status.SUCCESS) {
                 val fireStoreUser = resource.data
-                fireStoreUser?.let { _ ->
+                fireStoreUser?.let { response ->
+                    Log.d("firo", response.toString())
                     startActivity(Intent(this, HostActivity::class.java))
 
                 }

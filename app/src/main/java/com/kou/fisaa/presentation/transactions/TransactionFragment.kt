@@ -12,6 +12,7 @@ import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentTransactionBinding
 import com.kou.fisaa.presentation.transactions.adapter.UsersAdapter
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,9 +42,17 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
         viewModel.users.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
+                    resource?.let {
+                        val users = resource.data
+                        if (!users.isNullOrEmpty())
+                            usersAdapter.updateMsgs(users)
+
+                    }
                 }
-                Resource.Status.ERROR -> {
+                Resource.Status.ERROR -> resource?.let {
+                    requireActivity().toast(resource.message.toString())
                 }
+                Resource.Status.LOADING -> requireActivity().toast("loading")
             }
         })
     }
@@ -66,26 +75,6 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
     private fun getUsers() {
         viewModel.getUsers()
 
-/*
-        val fromId = FirebaseAuth.getInstance().uid
-        val user = intent.getParcelableExtra<UserFire>(USER_KEY)
-        val toId = user.uid
-
-        if (fromId == null) return
-
-        val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
-
-        val toReference = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
-
-        val chatMessage = Message(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
-
-        reference.setValue(chatMessage)
-            .addOnSuccessListener {
-                edMsg.text.clear()
-                rvChat.scrollToPosition(adapter.itemCount - 1)
-            }
-
-        toReference.setValue(chatMessage)*/
 
     }
 

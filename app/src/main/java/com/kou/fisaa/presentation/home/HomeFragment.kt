@@ -181,16 +181,13 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = upcomingAdapter
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
+
 
         }
         binding.rvTop.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = topAdapter
-            isNestedScrollingEnabled = false
-            setHasFixedSize(true)
 
 
         }

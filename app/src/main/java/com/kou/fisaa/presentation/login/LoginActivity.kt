@@ -21,12 +21,13 @@ import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import dagger.hilt.android.AndroidEntryPoint
 
-
+//Todo firebaselogin social
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
+    private var loginQuery: LoginQuery? = null
 
 
     /******* SOCIAL AUTH *******/
@@ -48,7 +49,12 @@ class LoginActivity : AppCompatActivity() {
                         if (resource.data.success) {
                             val user = loginResponse.data
                             viewModel.setId(user._id)
-                            viewModel.loginWithFirebase(user.email, user.password)
+                            loginQuery?.let {
+                                if (!it.social)
+                                    viewModel.loginWithFirebase(user.email, user.password)
+                                else
+                                    startActivity(Intent(this, HostActivity::class.java))
+                            }
 
 
                         } else
@@ -84,21 +90,21 @@ class LoginActivity : AppCompatActivity() {
             }
         })
         viewModel.googleResponse.observe(this, { resource ->
-            if (resource.status == Resource.Status.SUCCESS) {
+            if (resource.status == Resource.Status.SUCCESS) {    //firebase sign-in is successful
                 resource?.let {
                     val user = resource.data!!.user!!
                     val fullName = user.displayName!!
                     val firstName: String = fullName.split(" ").first()
                     val lastName: String = fullName.split(" ").last()
-                    viewModel.fetchLoginResponse(
-                        LoginQuery(
-                            user.email!!,
-                            social = true,
-                            image = user.photoUrl!!.toString(),
-                            firstName = firstName,
-                            lastName = lastName
-                        )
+                    loginQuery = LoginQuery(
+                        user.email!!,
+                        social = true,
+                        image = user.photoUrl!!.toString(),
+                        firstName = firstName,
+                        lastName = lastName
                     )
+                    loginQuery?.let { viewModel.fetchLoginResponse(it) }
+                    viewModel.setFireToken(user.uid)
 
 
                 }
@@ -116,17 +122,18 @@ class LoginActivity : AppCompatActivity() {
                         val fullName = user.displayName!!
                         val firstName: String = fullName.split(" ").first()
                         val lastName: String = fullName.split(" ").last()
-
-                        viewModel.fetchLoginResponse(
-                            LoginQuery(
-                                user.email!!,
-                                social = true,
-                                image = user.photoUrl!!.toString(),
-                                firstName = firstName,
-                                lastName = lastName
-                            )
+                        loginQuery = LoginQuery(
+                            user.email!!,
+                            social = true,
+                            image = user.photoUrl!!.toString(),
+                            firstName = firstName,
+                            lastName = lastName
                         )
+                        loginQuery?.let {
+                            viewModel.fetchLoginResponse(it)
 
+                        }
+                        viewModel.setFireToken(user.uid)
 
                     }
                 }
@@ -174,12 +181,10 @@ class LoginActivity : AppCompatActivity() {
         binding.login.setOnClickListener {
             val email = binding.username.text.toString()
             val pass = binding.password.text.toString()
-            viewModel.fetchLoginResponse(
-                LoginQuery(
-                    email,
-                    pass
-                )
-            )
+            loginQuery = LoginQuery(email, pass)
+            loginQuery?.let {
+                viewModel.fetchLoginResponse(it)
+            }
 
 
         }
