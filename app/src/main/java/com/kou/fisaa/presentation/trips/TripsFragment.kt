@@ -15,18 +15,21 @@ import com.kou.fisaa.data.entities.FlightSearchDatesQuery
 import com.kou.fisaa.data.entities.FlightSearchQuery
 import com.kou.fisaa.databinding.FragmentTripsBinding
 import com.kou.fisaa.presentation.trips.adapter.TripAdapter
+import com.kou.fisaa.presentation.trips.adapter.TripAdapterItemListener
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class TripsFragment : Fragment(), TripAdapter.Listener {
+class TripsFragment : Fragment(), TripAdapterItemListener {
 
     private var _binding: FragmentTripsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val tripsArgs: TripsFragmentArgs by navArgs()
-    private lateinit var tripsAdapter: TripAdapter  //TODO inject
+
+
+    private lateinit var tripsAdapter: TripAdapter
 
 
     override fun onCreateView(
@@ -66,7 +69,7 @@ class TripsFragment : Fragment(), TripAdapter.Listener {
 
                 Resource.Status.LOADING -> {
                     resource?.let {
-                        //Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

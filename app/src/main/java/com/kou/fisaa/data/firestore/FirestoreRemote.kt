@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
@@ -56,9 +57,8 @@ class FirestoreRemote @Inject constructor(
         return chatsCollectionReference.add(msg).await()
     }
 
-    override suspend fun listenMsgs(fromId: String, toId: String): QuerySnapshot {
+    override suspend fun listenMsgs(fromId: String, toId: String): Query {
         return chatsCollectionReference.whereEqualTo("fromId", fromId).whereEqualTo("toId", toId)
-            .get().await()
     }
 
 

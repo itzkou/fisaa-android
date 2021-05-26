@@ -14,10 +14,9 @@ import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.utils.Resource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -104,14 +103,25 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    @ExperimentalCoroutinesApi
     override suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?> {
-        return flow {
-            emit(Resource.loading())
-            val snapshot = firestore.listenMsgs(fromId, toId)
-            val messages = snapshot.toObjects(Message::class.java)
-            emit(Resource.success(messages))
-        }.catch { emit(Resource.error(it.message.toString())) }
-            .flowOn(ioDispatcher)
+        return channelFlow {
+            val subscription =
+                firestore.listenMsgs(fromId, toId).addSnapshotListener { snapshot, error ->
+                    if (error != null)
+                        channel.offer(Resource.error(error.toString()))
+                    else if (snapshot != null) {
+                        val msgs = snapshot.toObjects(Message::class.java)
+                        channel.offer(Resource.success(msgs))
+                    }
+
+                }
+
+            // 3) Don't close the stream of data, keep it open until the consumer
+            // stops listening or the API calls onCompleted or onError.
+            // When that happens, cancel the subscription to the 3P library
+            awaitClose { subscription.remove() }
+        }
     }
 
     /*** Storage ***/

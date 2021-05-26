@@ -13,14 +13,10 @@ import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
 
 //TODO clear a bug when user creates a new flight
-class TripAdapter constructor(private val tripItemListener: Listener) :
+class TripAdapter constructor(private val tripItemListener: TripAdapterItemListener) :
     RecyclerView.Adapter<TripAdapter.ViewHolder>() {
     private var trips = listOf<Trip>()
 
-    interface Listener {
-        fun openChat(userId: String)
-
-    }
 
     class ViewHolder(val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root)
 

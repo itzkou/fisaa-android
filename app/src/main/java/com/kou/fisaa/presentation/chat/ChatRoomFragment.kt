@@ -73,7 +73,7 @@ class ChatRoomFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     requireActivity().toast("Sent")
                     binding.edChat.text.clear()
-                    binding.rvChats.scrollToPosition(mAdapter.itemCount - 1)
+
                 }
 
                 Resource.Status.ERROR -> hasBeenSent?.let { requireActivity().toast(hasBeenSent.message.toString()) }
