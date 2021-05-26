@@ -2,19 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/dashboard"
         android:icon="@drawable/ic_dashboard"
         android:menuCategory="secondary"
         android:title="@string/txtDashboard" />
 
     <item
-        android:id="@+id/transactions"
         android:icon="@drawable/ic_transmauve"
         android:menuCategory="secondary"
         android:title="@string/trans_bom" />
 
     <item
-        android:id="@+id/nxtFlights"
         android:icon="@drawable/ic_sendo"
         android:menuCategory="secondary"
         android:title="@string/txtNextFlights" />

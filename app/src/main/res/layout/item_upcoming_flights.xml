@@ -87,7 +87,6 @@
             tools:text="Arrival" />
 
         <ImageView
-            android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

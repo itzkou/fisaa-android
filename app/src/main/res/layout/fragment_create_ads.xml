@@ -40,9 +40,8 @@
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/colis"
-                android:textColor="@color/bluewey"
 
-                />
+                android:textColor="@color/bluewey" />
 
             <RadioButton
                 android:id="@+id/rdTravel"
@@ -154,7 +153,6 @@
             app:layout_constraintTop_toTopOf="@id/imageView14" />
 
         <TextView
-            android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Destination"
@@ -325,7 +323,6 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView19" />
 
             <TextView
-                android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -423,7 +420,6 @@
                 app:layout_constraintTop_toTopOf="@+id/imageToUpload" />
 
             <ImageView
-                android:id="@+id/imageView23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -433,7 +429,6 @@
                 app:srcCompat="@drawable/ic_minus" />
 
             <ImageView
-                android:id="@+id/imageView24"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -452,7 +447,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/btn_login"
             android:text="Publier !"
             app:layout_constraintEnd_toEndOf="parent"

@@ -2,14 +2,9 @@
     <string name="app_name">Fisaa</string>
     <string name="splash_intro">Transport de colis\nentre particuliers</string>
     <string name="signUpIntro">Inscription</string>
-    <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="label_auth">CONNEXION</string>
     <string name="social_auth">OU SE CONNECTER AVEC </string>
     <string name="signup_action"><u>Créer un compte</u></string>
@@ -21,7 +16,6 @@
     <!-- Hints -->
     <string name="hintfname">Nom</string>
     <string name="hintlname">Prénom</string>
-    <string name="hintemail">Email</string>
     <string name="hintBDay">Date de naissance</string>
     <string name="hintCIN">CIN</string>
     <string name="hintPhone">N° de téléphone</string>
@@ -78,6 +72,8 @@
     <string name="Purchase">Je veux acheter et recevoir un produit</string>
     <string name="dates">Dates</string>
     <string name="no_date">Pas de date particulière</string>
+    <string name="tx_deconnexion">déconnexion</string>
+    <string name="small_arrow">small_arrow</string>
 
 
 </resources>

@@ -104,7 +104,10 @@ class FisaaRepository @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?> {
+    override suspend fun listenMsgs(
+        fromId: String,
+        toId: String
+    ): Flow<Resource<List<Message>>?> {
         return channelFlow {
             val subscription =
                 firestore.listenMsgs(fromId, toId).addSnapshotListener { snapshot, error ->
@@ -114,15 +117,14 @@ class FisaaRepository @Inject constructor(
                         val msgs = snapshot.toObjects(Message::class.java)
                         channel.offer(Resource.success(msgs))
                     }
-
                 }
-
             // 3) Don't close the stream of data, keep it open until the consumer
             // stops listening or the API calls onCompleted or onError.
             // When that happens, cancel the subscription to the 3P library
             awaitClose { subscription.remove() }
         }
     }
+
 
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {

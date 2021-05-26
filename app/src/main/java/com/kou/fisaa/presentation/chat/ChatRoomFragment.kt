@@ -68,6 +68,7 @@ class ChatRoomFragment : Fragment() {
             }
 
         })
+
         viewModel.hasBeenSent.observe(viewLifecycleOwner, { hasBeenSent ->
             when (hasBeenSent.status) {
                 Resource.Status.SUCCESS -> {
@@ -113,6 +114,7 @@ class ChatRoomFragment : Fragment() {
 
     private fun listenMsgs() {
         viewModel.listenMsgs(userId, chatArgs.toId)
+        viewModel.listenMsgs(chatArgs.toId, userId)
     }
 
 

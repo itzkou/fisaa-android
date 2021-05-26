@@ -37,7 +37,7 @@ class UsersAdapter constructor(private val listener: Listener) :
         val user = users[position]
 
         with(holder.binding) {
-            txUsername.text = user._id
+            tvUsername.text = user._id
         }
 
 

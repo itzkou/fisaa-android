@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryPurple">
@@ -17,7 +15,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
@@ -48,10 +45,9 @@
             style="@style/auth_inputs"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
-            android:selectAllOnFocus="true"
 
 
-            />
+            android:selectAllOnFocus="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,9 +71,8 @@
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:selectAllOnFocus="true"
 
-            />
+            android:selectAllOnFocus="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,27 +126,29 @@
 
 
     <com.facebook.login.widget.LoginButton
-        android:visibility="gone"
         android:id="@+id/btnFb"
-        android:enabled="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/imFacebook"
+        android:enabled="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/imFacebook"
+        app:layout_constraintEnd_toEndOf="@id/imFacebook"
         app:layout_constraintStart_toStartOf="@id/imFacebook"
-        app:layout_constraintEnd_toEndOf="@id/imFacebook"/>
+        app:layout_constraintTop_toTopOf="@id/imFacebook" />
 
     <TextView
         android:id="@+id/createAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="28dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/signup_action"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imGoogle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

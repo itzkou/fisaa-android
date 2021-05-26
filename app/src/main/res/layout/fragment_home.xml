@@ -44,11 +44,12 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/spinner_bg"
-                android:fontFamily="@font/poppins_regular"
+                android:fontFamily="@font/poppins_semi_bold"
                 android:hint="@string/hintDeparture"
                 android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textColorHint="@color/greyTextLight"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -62,30 +63,33 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/spinner_two"
-                android:fontFamily="@font/poppins_regular"
+                android:fontFamily="@font/poppins_semi_bold"
                 android:hint="@string/hintDestination"
                 android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textSize="14sp"
+                android:textAlignment="center"
+                android:textColorHint="@color/lightGrey"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/edDate"
                 app:layout_constraintStart_toEndOf="@+id/edDeparture"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <EditText
                 android:id="@+id/edDate"
-                android:layout_height="40dp"
                 android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="16dp"
-                android:drawableEnd="@drawable/ic_calendar"
                 android:background="@drawable/spinner_bg_three"
-                android:fontFamily="@font/poppins_regular"
+                android:drawableEnd="@drawable/ic_calendar"
                 android:ems="10"
                 android:focusable="false"
+                android:fontFamily="@font/poppins_semi_bold"
                 android:hint="@string/date"
                 android:inputType="date"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textColorHint="@color/greyTextLight"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -142,7 +146,6 @@
                 app:layout_constraintTop_toTopOf="@+id/textView6" />
 
             <TextView
-                android:id="@+id/allFlights3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
@@ -159,9 +162,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/rvUpcoming"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rvUpcoming"
 
-                >
+                app:layout_constraintTop_toTopOf="@+id/rvUpcoming">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -194,9 +196,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/rvTop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rvTop"
 
-                >
+                app:layout_constraintTop_toTopOf="@+id/rvTop">
 
                 <LinearLayout
                     android:layout_width="match_parent"
