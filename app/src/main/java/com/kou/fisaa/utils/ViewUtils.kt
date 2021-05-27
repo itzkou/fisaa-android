@@ -6,6 +6,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.format.DateUtils
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -110,6 +112,12 @@ fun stringToDate(string: String): Date {
 
 fun Context.toast(message: CharSequence) =
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+
+fun View.hideKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(windowToken, 0)
+}
 
 
 

@@ -31,20 +31,21 @@ class HostActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
         binding.fab.setOnClickListener {
             navController.navigate(R.id.action_create_ads)
-
         }
+
 
         binding.logout.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this, SplashActivity::class.java))
             finish()
         }
+
         /*binding.darko.setOnClickListener {
-            binding.darko.playAnimation()
-            //viewModel.toggleNightMode()
+           binding.darko.playAnimation()
+           //viewModel.toggleNightMode()
 
 
-        }*/
+       }*/
 
         /* viewModel.darkThemeEnabled.observe(this, { nightModeActive ->
 

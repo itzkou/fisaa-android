@@ -3,6 +3,7 @@ package com.kou.fisaa.presentation.host
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.kou.fisaa.data.preferences.PrefsStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class HostViewModel @Inject constructor(
 
     fun logout() {
         auth.signOut()
+        LoginManager.getInstance().logOut()
         viewModelScope.launch {
             prefsStore.clearDataStore()
 

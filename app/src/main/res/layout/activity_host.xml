@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/drawer"
+    android:layout_gravity="start"
     tools:context=".presentation.host.HostActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -56,6 +58,7 @@
 
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -64,7 +67,6 @@
         app:itemTextAppearance="@style/drawer"
         app:itemTextColor="@color/white"
         app:headerLayout="@layout/header_layout"
-
         app:menu="@menu/drawer"
 
         >
@@ -86,7 +88,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
