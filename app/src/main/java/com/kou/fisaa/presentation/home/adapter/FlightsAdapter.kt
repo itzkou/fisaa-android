@@ -2,9 +2,11 @@ package com.kou.fisaa.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.databinding.ItemTopFlightsBinding
@@ -13,18 +15,18 @@ import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
 import javax.inject.Inject
 
- class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
-     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-     companion object {
-         const val TYPE_UPCOMING = 0
-         const val TYPE_TOP = 1
-     }
+    companion object {
+        const val TYPE_UPCOMING = 0
+        const val TYPE_TOP = 1
+    }
 
-     private var flights = listOf<Flight>()
+    private var flights = listOf<Flight>()
 
-     class UpcomingViewHolder(val binding: ItemUpcomingFlightsBinding) :
-         RecyclerView.ViewHolder(binding.root)
+    class UpcomingViewHolder(val binding: ItemUpcomingFlightsBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     class TopViewHolder(val binding: ItemTopFlightsBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -59,7 +61,16 @@ import javax.inject.Inject
                 with((holder as TopViewHolder).binding) {
                     tvArrival.text = flight.departure
                     tvDeparture.text = flight.destination
-                    image.load(flight.place)
+
+                    image.load(flight.place) {
+                        crossfade(true)
+                        placeholder(
+                            ContextCompat.getDrawable(
+                                image.context,
+                                R.drawable.ic_gallery_placeholder
+                            )
+                        )
+                    }
 
                 }
             }
@@ -74,7 +85,17 @@ import javax.inject.Inject
                     )
                     departure.text = flight.departure
                     arrival.text = flight.destination
-                    picture.loadCircle(flight.createdBy?.image)
+                    if (flight.createdBy?.image != null)
+                        picture.loadCircle(flight.createdBy.image)
+                    else picture.load(
+                        ContextCompat.getDrawable(
+                            picture.context,
+                            R.drawable.ic_face
+                        )
+                    ) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
 
 
                 }

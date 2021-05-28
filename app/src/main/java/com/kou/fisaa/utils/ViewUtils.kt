@@ -12,7 +12,6 @@ import android.widget.*
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
-import com.kou.fisaa.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,10 +78,8 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 fun ImageView.loadCircle(photoUrl: String?) =
     this.load(photoUrl) {
         crossfade(true)
-        placeholder(R.drawable.ic_launcher_background)
         transformations(CircleCropTransformation())
     }
-
 
 
 fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
