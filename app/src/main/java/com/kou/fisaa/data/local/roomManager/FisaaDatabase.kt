@@ -13,7 +13,7 @@ import com.kou.fisaa.data.local.flightLocalManager.FlightDao
 
 @Database(
     entities = [User::class, Flight::class, Advertisement::class],
-    version = 15,
+    version = 17,
     exportSchema = false
 )
 abstract class FisaaDatabase : RoomDatabase() {

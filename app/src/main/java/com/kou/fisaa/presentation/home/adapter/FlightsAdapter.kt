@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.databinding.ItemTopFlightsBinding
@@ -58,6 +59,8 @@ import javax.inject.Inject
                 with((holder as TopViewHolder).binding) {
                     tvArrival.text = flight.departure
                     tvDeparture.text = flight.destination
+                    image.load(flight.place)
+
                 }
             }
 

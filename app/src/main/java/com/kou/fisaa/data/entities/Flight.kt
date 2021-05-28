@@ -20,5 +20,6 @@ data class Flight(
     val updatedAt: String? = null,
     @Embedded(prefix = "user")
     val createdBy: FlightCreator?,
-    val count: Int? = null
+    val count: Int? = null,
+    val place: String? = null
 )
