@@ -61,7 +61,6 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
                 with((holder as TopViewHolder).binding) {
                     tvArrival.text = flight.departure
                     tvDeparture.text = flight.destination
-
                     image.load(flight.place) {
                         crossfade(true)
                         placeholder(
@@ -85,8 +84,8 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
                     )
                     departure.text = flight.departure
                     arrival.text = flight.destination
-                    if (flight.createdBy?.image != null)
-                        picture.loadCircle(flight.createdBy.image)
+                    if (!flight.createdBy?.image.isNullOrEmpty())
+                        picture.loadCircle(flight.createdBy?.image)
                     else picture.load(
                         ContextCompat.getDrawable(
                             picture.context,

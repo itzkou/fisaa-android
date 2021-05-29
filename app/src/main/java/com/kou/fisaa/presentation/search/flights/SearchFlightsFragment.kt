@@ -79,5 +79,8 @@ class SearchFlightsFragment : Fragment() {
         binding.edArrivalDate.setOnClickListener {
             BuilderDatePicker.showDialog(requireActivity(), binding.edArrivalDate)
         }
+        binding.goBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

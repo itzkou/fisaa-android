@@ -63,5 +63,16 @@
 
     </style>
 
+    <style name="searchFilterTrips">
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:background">@drawable/wormy</item>
+
+    </style>
+
 
 </resources>

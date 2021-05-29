@@ -62,6 +62,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                 Resource.Status.ERROR -> {
                     resource?.let {
                         tripsAdapter.updateTrips(listOf())
+                        stopRefresh()
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -90,6 +91,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         binding.rvTrips.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+
             adapter = tripsAdapter
 
         }

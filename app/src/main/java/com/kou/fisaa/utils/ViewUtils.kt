@@ -88,7 +88,7 @@ fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =
         DateUtils.FORMAT_ABBREV_RELATIVE
     ).replace(Regex("\\. ago$"), "")
 
-fun TextView.setDate(date: Date? = null) {
+fun TextView.setDate(date: Date?) {
     val dateSpannable = date?.let {
         val dateText = formatRelativeTimestamp(date, Date())
         val spannableString = SpannableString(dateText)
@@ -103,7 +103,8 @@ fun TextView.setDate(date: Date? = null) {
 
 fun stringToDate(string: String): Date {
     val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-    val date: Date = formatter.parse(string) ?: Date()
+
+    val date: Date = formatter.parse(string)
     return Date(date.time)
 }
 

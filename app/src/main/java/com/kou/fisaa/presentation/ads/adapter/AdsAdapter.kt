@@ -2,13 +2,14 @@ package com.kou.fisaa.presentation.ads.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.databinding.ItemAdsBinding
 import com.kou.fisaa.utils.SimpleCallback
-import com.kou.fisaa.utils.loadCircle
 import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
 import javax.inject.Inject
@@ -43,8 +44,10 @@ class AdsAdapter @Inject constructor(private val adapterListener: AdAdapterListe
 
 
         with(holder.binding) {
-
-            picture.loadCircle(ad.createdBy.image)
+            if (ad.createdBy.image.isNullOrEmpty())
+                picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
+            else
+                picture.load(ad.createdBy.image)
             name.text = holder.itemView.context.getString(
                 R.string.fullname,
                 ad.createdBy.firstName,

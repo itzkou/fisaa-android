@@ -2,13 +2,14 @@ package com.kou.fisaa.presentation.trips.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Trip
 import com.kou.fisaa.databinding.ItemTripBinding
 import com.kou.fisaa.utils.SimpleCallback
-import com.kou.fisaa.utils.loadCircle
 import com.kou.fisaa.utils.setDate
 import com.kou.fisaa.utils.stringToDate
 
@@ -33,21 +34,24 @@ class TripAdapter constructor(private val tripItemListener: TripAdapterItemListe
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val trip = trips[position]
-
-        with(holder.binding) {
-            date.setDate(stringToDate(trip.departureDate))
-            picture.loadCircle(trip.createdBy.image)
-            name.text = holder.itemView.context.getString(
-                R.string.fullname,
-                trip.createdBy.firstName,
-                trip.createdBy.lastName
-            )
-            departure.text = trip.departure
-            arrival.text = trip.destination
-            chat.setOnClickListener {
-                tripItemListener.openChat(trip.createdBy._id)
+        if (trip.createdBy != null)
+            with(holder.binding) {
+                if (!trip.departureDate.isNullOrEmpty())
+                    date.setDate(stringToDate(trip.departureDate))
+                if (trip.createdBy.image.isNullOrEmpty())
+                    picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
+                else picture.load(trip.createdBy.image)
+                name.text = holder.itemView.context.getString(
+                    R.string.fullname,
+                    trip.createdBy.firstName,
+                    trip.createdBy.lastName
+                )
+                departure.text = trip.departure
+                arrival.text = trip.destination
+                chat.setOnClickListener {
+                    tripItemListener.openChat(trip.createdBy._id)
+                }
             }
-        }
     }
 
     override fun getItemCount(): Int {
