@@ -53,7 +53,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                     resource.data?.let { tripsResponse ->
                         if (tripsResponse.flights.isNotEmpty()) {
                             stopRefresh()
-                            tripsAdapter.updateTrips(tripsResponse.flights)
+                            tripsAdapter.updateTrips(tripsResponse.flights.asReversed())
                         }
 
                     }
@@ -91,7 +91,6 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
         binding.rvTrips.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-
             adapter = tripsAdapter
 
         }
