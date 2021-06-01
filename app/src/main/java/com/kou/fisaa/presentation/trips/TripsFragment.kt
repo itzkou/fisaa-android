@@ -53,7 +53,7 @@ class TripsFragment : Fragment(), TripAdapterItemListener {
                     resource.data?.let { tripsResponse ->
                         if (tripsResponse.flights.isNotEmpty()) {
                             stopRefresh()
-                            tripsAdapter.updateTrips(tripsResponse.flights.asReversed())
+                            tripsAdapter.updateTrips(tripsResponse.flights.sortedByDescending { it.departureDate })
                         }
 
                     }

@@ -20,7 +20,11 @@
         android:id="@+id/ads"
         android:name="com.kou.fisaa.presentation.ads.AdsFragment"
         android:label="fragment_ads"
-        tools:layout="@layout/fragment_ads" />
+        tools:layout="@layout/fragment_ads">
+        <action
+            android:id="@+id/action_ads_to_searchAdsFragment"
+            app:destination="@id/searchAdsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/trans"
         android:name="com.kou.fisaa.presentation.transactions.TransactionFragment"
@@ -95,5 +99,13 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_trans"
             app:destination="@id/trans" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchAdsFragment"
+        android:name="com.kou.fisaa.presentation.search.ads.SearchAdsFragment"
+        android:label="SearchAdsFragment">
+        <action
+            android:id="@+id/action_searchAdsFragment_to_ads"
+            app:destination="@id/ads" />
     </fragment>
 </navigation>

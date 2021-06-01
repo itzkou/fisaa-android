@@ -15,13 +15,15 @@ import com.kou.fisaa.utils.SimpleCallback
 import com.kou.fisaa.utils.loadCircle
 import javax.inject.Inject
 
-class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: FlightAdapterItemListener) :
+class FlightsAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_UPCOMING = 0
         const val TYPE_TOP = 1
     }
+
+    private var flightAdapterItemListener: ((String) -> Unit)? = null
 
     private var flights = listOf<Flight>()
 
@@ -31,6 +33,10 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
     class TopViewHolder(val binding: ItemTopFlightsBinding) :
         RecyclerView.ViewHolder(binding.root)
 
+
+    fun setOnFlightItemClickListener(callback: ((String) -> Unit)) {
+        this.flightAdapterItemListener = callback
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -76,7 +82,6 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
 
             TYPE_UPCOMING -> {
                 with((holder as UpcomingViewHolder).binding) {
-
                     name.text = holder.itemView.context.getString(
                         R.string.fullname,
                         flight.createdBy?.firstName,
@@ -94,6 +99,12 @@ class FlightsAdapter @Inject constructor(private val flightAdapterItemListener: 
                     ) {
                         crossfade(true)
                         transformations(CircleCropTransformation())
+                    }
+
+                    picture.setOnClickListener {
+                        flightAdapterItemListener?.let { callback ->
+                            callback(flight._id)
+                        }
                     }
 
 

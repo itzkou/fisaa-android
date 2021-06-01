@@ -13,17 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentHomeBinding
-import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
 import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
-import com.kou.fisaa.utils.BuilderDatePicker
-import com.kou.fisaa.utils.Resource
-import com.kou.fisaa.utils.coordinateBtnAndInputs
-import com.kou.fisaa.utils.hideKeyboard
+import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), FlightAdapterItemListener {
+class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -153,8 +149,7 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
     }
 
 
-    override fun openFlight(flightId: String) {
-    }
+
 
     private fun searchFlights() {
         binding.edDate.setOnClickListener {
@@ -185,6 +180,10 @@ class HomeFragment : Fragment(), FlightAdapterItemListener {
         binding.rvUpcoming.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            upcomingAdapter.setOnFlightItemClickListener {
+
+                requireActivity().toast(it)
+            }
             adapter = upcomingAdapter
         }
         binding.rvTop.apply {

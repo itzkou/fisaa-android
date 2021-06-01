@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentAdsBinding
@@ -67,6 +68,10 @@ class AdsFragment : Fragment(), AdAdapterListener {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = adsAdapter
 
+        }
+        binding.search.setOnClickListener {
+            val action = AdsFragmentDirections.actionAdsToSearchAdsFragment()
+            findNavController().navigate(action)
         }
     }
 

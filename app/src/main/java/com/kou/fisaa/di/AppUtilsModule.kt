@@ -7,9 +7,6 @@ import com.kou.fisaa.data.entities.Material
 import com.kou.fisaa.presentation.ads.AdsFragment
 import com.kou.fisaa.presentation.ads.adapter.AdAdapterListener
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
-import com.kou.fisaa.presentation.home.HomeFragment
-import com.kou.fisaa.presentation.home.adapter.FlightAdapterItemListener
-import com.kou.fisaa.presentation.home.adapter.FlightsAdapter
 import com.kou.fisaa.utils.MaterialAdapter
 import dagger.Module
 import dagger.Provides
@@ -21,16 +18,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 @Module
 @InstallIn(FragmentComponent::class)
 object AppUtilsModule {
-
-    @Provides        //adding singleton = crash
-    fun provideFlightAdapterItemListener(): FlightAdapterItemListener {
-        return HomeFragment()
-    }
-
-    @Provides
-    fun provideFlightsAdapter(flightAdapterItemListener: FlightAdapterItemListener): FlightsAdapter {
-        return FlightsAdapter(flightAdapterItemListener)
-    }
 
 
     @Provides
