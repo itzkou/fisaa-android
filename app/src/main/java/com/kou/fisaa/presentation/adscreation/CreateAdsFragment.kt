@@ -37,6 +37,7 @@ import java.io.File
 import javax.inject.Inject
 
 //TODO frontend validation
+//TODO my ad creation takes time to be created
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCreateAdsBinding? = null

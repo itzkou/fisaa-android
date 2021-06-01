@@ -136,7 +136,7 @@ dependencies {
 
 
     //Canary Leaks
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
 
 

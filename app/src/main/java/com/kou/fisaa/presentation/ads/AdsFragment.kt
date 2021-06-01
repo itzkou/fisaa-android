@@ -17,6 +17,7 @@ import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class AdsFragment : Fragment(), AdAdapterListener {
 
