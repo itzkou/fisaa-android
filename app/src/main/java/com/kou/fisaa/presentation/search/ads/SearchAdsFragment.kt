@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.slider.RangeSlider
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Star
 import com.kou.fisaa.databinding.FragmentSearchAdBinding
+import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
@@ -63,18 +65,26 @@ class SearchAdsFragment : Fragment() {
                 // Responds to when slider's touch event is being stopped
             }
         })
-
         binding.rangeSlider.addOnChangeListener { rangeSlider, value, fromUser ->
             requireActivity().toast(value.toString())
         }
-
         binding.two.setBackgroundResource(R.drawable.round_star_d)
         binding.three.setBackgroundResource(R.drawable.round_star_d)
         binding.four.setBackgroundResource(R.drawable.round_star_d)
         binding.five.setBackgroundResource(R.drawable.round_star_d)
         binding.fiveAndFour.setBackgroundResource(R.drawable.round_star_d)
         binding.none.setBackgroundResource(R.drawable.round_star_d)
+        binding.goBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
+        binding.edArrivalDate.setOnClickListener {
+            BuilderDatePicker.showDialog(requireActivity(), binding.edArrivalDate)
+        }
+        binding.edDepDate.setOnClickListener {
+            BuilderDatePicker.showDialog(requireActivity(), binding.edDepDate)
+
+        }
 
 
         cards(binding.two, startTwo)
@@ -83,6 +93,8 @@ class SearchAdsFragment : Fragment() {
         cards(binding.five, starFive)
         cards(binding.none, notRated)
         cards(binding.fiveAndFour, fourAndFive)
+
+
     }
 
     private fun cards(card: CardView, star: Star) {
