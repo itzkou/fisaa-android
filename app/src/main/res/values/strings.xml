@@ -74,6 +74,12 @@
     <string name="no_date">Pas de date particulière</string>
     <string name="tx_deconnexion">déconnexion</string>
     <string name="small_arrow">small_arrow</string>
+    <string name="lbl1">2 étoiles</string>
+    <string name="lbl2">3 étoiles</string>
+    <string name="lbl3">5 étoiles</string>
+    <string name="lbl4">Non noté</string>
+    <string name="lbl5">4 étoiles</string>
+    <string name="lbl6">4 et 5 étoiles</string>
 
 
 </resources>

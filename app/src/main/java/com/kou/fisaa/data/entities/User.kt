@@ -25,4 +25,6 @@ data class User(
     val phoneNumber: Long? = null,
     //val publishedAdverts: List<null>,
     val zipCode: Int? = null
-)
+) {
+    constructor() : this("", "", 0, "", "", "", "", "", "", "", "", "", 0L, 0)
+}

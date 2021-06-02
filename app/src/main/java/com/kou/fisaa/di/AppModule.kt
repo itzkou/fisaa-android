@@ -56,7 +56,7 @@ object AppModule {
     /**** Google Sign-In ******/
 
     @Provides
-    @Singleton
+
     fun provideGso(@ApplicationContext context: Context) =
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -64,7 +64,7 @@ object AppModule {
             .build()
 
     @Provides
-    @Singleton
+
     fun provideGoogleClient(
         @ApplicationContext context: Context,
         gso: GoogleSignInOptions
@@ -73,7 +73,7 @@ object AppModule {
 
     /**** Facebook Sign-In ****/
     @Provides
-    @Singleton
+
     fun provideFacebookManager(): CallbackManager = CallbackManager.Factory.create()
 
 
