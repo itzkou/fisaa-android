@@ -13,12 +13,10 @@ class BuilderDatePicker {
         fun showDialog(context: Context, editText: EditText) {
             val dialogView =
                 LayoutInflater.from(context).inflate(R.layout.builder_date_picker, null)
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
             val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
             builder.setView(dialogView)
             builder.setPositiveButton("confirm") { dialog, _ ->
-
-
                 val day = datePicker.dayOfMonth
                 val month = datePicker.month + 1
                 val year = datePicker.year

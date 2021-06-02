@@ -89,5 +89,12 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:windowBackground">@drawable/radius_dropdown</item>
+
+    </style>
+
 
 </resources>
