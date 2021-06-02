@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
@@ -58,6 +59,9 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
     @Inject
     lateinit var weightAdapter: ArrayAdapter<String>
+
+    @Inject
+    lateinit var places: List<String>
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -119,6 +123,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
+                        stopLoading()
                         val parcel: Parcel? = resource.data
                         Toast.makeText(
                             requireActivity(),
@@ -143,7 +148,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 }
                 Resource.Status.ERROR -> {
                     resource?.let {
-
+                        stopLoading()
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -167,6 +172,8 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setupUi() {
+
+        //binding.loader.visibility=View.INVISIBLE
         binding.publish.isEnabled = false
         binding.rdParcel.setOnClickListener(this)
         binding.rdTransport.setOnClickListener(this)
@@ -215,6 +222,49 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
             }
 
+        binding.plus.setOnClickListener {
+            val value: String = binding.txBonus.text.toString()
+
+            if (!value.isNullOrEmpty()) {
+                var result = value.toInt()
+                result += 1
+                binding.txBonus.setText(result.toString())
+            }
+
+
+        }
+
+        binding.minus.setOnClickListener {
+            val value: String = binding.txBonus.text.toString()
+
+            if (!value.isNullOrEmpty()) {
+                var result = value.toInt()
+                if (result > 0) {
+                    result -= 1
+                    binding.txBonus.setText(result.toString())
+                }
+
+
+            }
+
+        }
+        val placeAdapter =
+            ArrayAdapter(binding.departure.context, R.layout.item_spinner_places, places)
+        binding.departure.setDropDownBackgroundDrawable(
+            ContextCompat.getDrawable(
+                requireActivity(),
+                R.drawable.radius_dropdown
+            )
+        )
+        binding.destination.setDropDownBackgroundDrawable(
+            ContextCompat.getDrawable(
+                requireActivity(),
+                R.drawable.radius_dropdown
+            )
+        )
+        binding.departure.setAdapter(placeAdapter)
+        binding.destination.setAdapter(placeAdapter)
+
     }
 
     private fun openCamera() {
@@ -248,10 +298,12 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         )
 
         binding.publish.setOnClickListener {
+            load()
             val date = binding.edDate.text.toString()
             val dep = binding.departure.text.toString()
             val dest = binding.destination.text.toString()
             viewModel.postAd(AdsQuery("", userId, dep, date, dest, "travel", null))
+
         }
 
     }
@@ -269,6 +321,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
 
         binding.publish.setOnClickListener {
+            load()
             val bonus = binding.txBonus.text.toString()
             val description = binding.description.text.toString()
             imageUri?.let { imageUri ->
@@ -284,6 +337,17 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             }
 
         }
+    }
+
+    private fun load() {
+        binding.loader.visibility = View.VISIBLE
+        binding.loader.playAnimation()
+    }
+
+    private fun stopLoading() {
+        binding.loader.pauseAnimation()
+        binding.loader.visibility = View.GONE
+
     }
 
 

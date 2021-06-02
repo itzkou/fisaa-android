@@ -252,10 +252,10 @@ class FisaaRepository @Inject constructor(
             Resource.success(FlightsResponse(flights))
         }
 
-    private fun getTopFlightsCached(): Resource<FlightsResponse>? =
+   /* private fun getTopFlightsCached(): Resource<FlightsResponse>? =
         flightLocalManager.getAll()?.let { flights ->
             Resource.success(FlightsResponse(flights))
-        }
+        }*/
 
     private fun getAdsCached(): Resource<AdsResponse>? =
         adLocalManager.getAll()?.let { ads ->
