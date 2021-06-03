@@ -18,6 +18,8 @@ class SearchFlightsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
+    lateinit var places: List<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

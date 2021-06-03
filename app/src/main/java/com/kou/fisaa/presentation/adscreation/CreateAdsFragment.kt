@@ -2,7 +2,6 @@ package com.kou.fisaa.presentation.adscreation
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -23,21 +22,14 @@ import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Parcel
 import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
-import com.kou.fisaa.utils.BuilderDatePicker
-import com.kou.fisaa.utils.MaterialAdapter
-import com.kou.fisaa.utils.Resource
-import com.kou.fisaa.utils.coordinateBtnAndInputs
+import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.format
-import id.zelory.compressor.constraint.quality
-import id.zelory.compressor.constraint.resolution
-import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
-//TODO frontend validation
+//TODO other generates 503
 //TODO my ad creation takes time to be created
 @AndroidEntryPoint
 class CreateAdsFragment : Fragment(), View.OnClickListener {
@@ -53,6 +45,8 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private var parcelType = ""
     private var parcelWeight = ""
     private var adType = ""
+    private lateinit var builderLoading: BuilderLoading
+
 
     @Inject
     lateinit var materialAdapter: MaterialAdapter
@@ -95,16 +89,15 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        Toast.makeText(
-                            requireActivity(),
-                            " Ad created by ${it.data?.createdBy}",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        builderLoading.showDialog("success")
+
+                        requireActivity().toast("Ad Created")
+                        Log.d("ado", " Ad created by ${it.data?.createdBy}")
                     }
                 }
                 Resource.Status.ERROR -> {
                     resource?.let {
+                        builderLoading.dialog.dismiss()
                         Log.d("MyParcel", resource.message!!)
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
@@ -112,7 +105,6 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 }
                 Resource.Status.LOADING -> {
                     resource?.let {
-
                         Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -123,7 +115,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        stopLoading()
+
                         val parcel: Parcel? = resource.data
                         Toast.makeText(
                             requireActivity(),
@@ -148,14 +140,13 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                 }
                 Resource.Status.ERROR -> {
                     resource?.let {
-                        stopLoading()
+                        builderLoading.dialog.dismiss()
                         Toast.makeText(requireActivity(), resource.message, Toast.LENGTH_SHORT)
                             .show()
                     }
                 }
                 Resource.Status.LOADING -> {
                     resource?.let {
-
                         Toast.makeText(requireActivity(), "Loading", Toast.LENGTH_LONG)
                             .show()
                     }
@@ -166,14 +157,19 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        builderLoading.dialog.dismiss()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        builderLoading.dialog.dismiss()
     }
 
     private fun setupUi() {
-
-        //binding.loader.visibility=View.INVISIBLE
+        builderLoading = BuilderLoading(requireContext())
         binding.publish.isEnabled = false
         binding.rdParcel.setOnClickListener(this)
         binding.rdTransport.setOnClickListener(this)
@@ -223,7 +219,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             }
 
         binding.plus.setOnClickListener {
-            val value: String = binding.txBonus.text.toString()
+            val value: String? = binding.txBonus.text.toString()
 
             if (!value.isNullOrEmpty()) {
                 var result = value.toInt()
@@ -235,7 +231,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         }
 
         binding.minus.setOnClickListener {
-            val value: String = binding.txBonus.text.toString()
+            val value: String? = binding.txBonus.text.toString()
 
             if (!value.isNullOrEmpty()) {
                 var result = value.toInt()
@@ -279,10 +275,10 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
                     requireActivity(),
                     compressedImageFile
                 ) {
-                    resolution(1280, 720)
+                    /*resolution(1280, 720)
                     quality(80)
-                    format(Bitmap.CompressFormat.JPEG)
-                    size(2_097_152)
+                    format(Bitmap.CompressFormat.WEBP)
+                    size(2_097_152)*/
                 }
         }
         return Uri.fromFile(compressedImageFile)
@@ -298,11 +294,12 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         )
 
         binding.publish.setOnClickListener {
-            load()
+            builderLoading.showDialog("loading")
             val date = binding.edDate.text.toString()
             val dep = binding.departure.text.toString()
             val dest = binding.destination.text.toString()
             viewModel.postAd(AdsQuery("", userId, dep, date, dest, "travel", null))
+
 
         }
 
@@ -321,12 +318,12 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
 
 
         binding.publish.setOnClickListener {
-            load()
+            builderLoading.showDialog("loading")
             val bonus = binding.txBonus.text.toString()
             val description = binding.description.text.toString()
             imageUri?.let { imageUri ->
                 viewModel.postParcelImage(
-                    compressImage(imageUri),
+                    imageUri,
                     bonus,
                     description,
                     dimension,
@@ -337,17 +334,6 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
             }
 
         }
-    }
-
-    private fun load() {
-        binding.loader.visibility = View.VISIBLE
-        binding.loader.playAnimation()
-    }
-
-    private fun stopLoading() {
-        binding.loader.pauseAnimation()
-        binding.loader.visibility = View.GONE
-
     }
 
 

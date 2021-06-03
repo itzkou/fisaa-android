@@ -84,7 +84,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="24dp"
-        android:background="@drawable/btn_login"
+        android:background="@drawable/btn_round"
         android:src="@drawable/ic_arrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

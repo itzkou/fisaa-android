@@ -1,6 +1,7 @@
 package com.kou.fisaa.presentation.adscreation
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -68,6 +69,8 @@ class CreateAdsViewModel @Inject constructor(
                                     parcelType,
                                     weight
                                 )
+                            }.addOnFailureListener {
+                                Log.d("fireStorage Exception", it.message.toString())
                             }
                     }
                 }
