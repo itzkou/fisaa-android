@@ -39,7 +39,7 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private lateinit var userId: String
     private var imageUri: Uri? = null
     private val parcelTypes =
-        arrayListOf("clothing", "electronic", "books", "documents", "food", "other")
+        arrayListOf("clothing", "electronic", "books", "documents", "food", "other...")
     private val parcelWeights = arrayListOf("1K-2K", "3K-8K", "9K-20K", "20K+")
     private var dimension = ""
     private var parcelType = ""
