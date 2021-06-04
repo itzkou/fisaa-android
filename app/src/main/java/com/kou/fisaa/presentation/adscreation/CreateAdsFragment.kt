@@ -41,10 +41,10 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
     private val parcelTypes =
         arrayListOf("clothing", "electronic", "books", "documents", "food", "other...")
     private val parcelWeights = arrayListOf("1K-2K", "3K-8K", "9K-20K", "20K+")
-    private var dimension = ""
-    private var parcelType = ""
-    private var parcelWeight = ""
-    private var adType = ""
+    private var dimension = "medium"
+    private var parcelType = "other..."
+    private var parcelWeight = "1K-2K"
+    private var adType = "travel"
     private lateinit var builderLoading: BuilderLoading
 
 

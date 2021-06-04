@@ -8,8 +8,10 @@ import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
+import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -30,6 +32,8 @@ class LoginViewModel @Inject constructor(
     private val _fireLoginResponse = MutableLiveData<Resource<AuthResult>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
+    private val _firestoreSignUpResponse = MutableLiveData<Resource<DocumentReference>>()
+    val firestoreSignUpResponse = _firestoreSignUpResponse
     val loginResponse = _loginResponse
     val fireLoginResponse = _fireLoginResponse
     val googleResponse = _googleResponse
@@ -63,6 +67,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    //TODO fix this
     fun loginWithFirebase(email: String, password: String) {
         viewModelScope.launch {
             repository.login(email, password).collect {
@@ -90,6 +95,16 @@ class LoginViewModel @Inject constructor(
             repository.signInWithFacebook(token).collect {
                 it?.let {
                     _facebookResponse.value = it
+                }
+            }
+        }
+    }
+
+    fun signUpFirestore(user: User) {
+        viewModelScope.launch {
+            repository.registerFirestore(user).collect {
+                it?.let {
+                    firestoreSignUpResponse.value = it
                 }
             }
         }

@@ -204,8 +204,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tvTwo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl1"
                     android:textSize="14sp" />
@@ -224,8 +226,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tvThree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl2"
                     android:textSize="14sp" />
@@ -244,8 +248,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/tvFour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl3"
                     android:textSize="14sp" />
@@ -266,8 +272,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/two">
 
                 <TextView
+                    android:id="@+id/tvFive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl4"
                     android:textSize="14sp" />
@@ -288,8 +296,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/three">
 
                 <TextView
+                    android:id="@+id/tvNone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl5"
                     android:textSize="14sp" />
@@ -310,8 +320,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/four">
 
                 <TextView
+                    android:id="@+id/tvFiveFour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:padding="10dp"
                     android:text="@string/lbl6"
                     android:textSize="14sp" />

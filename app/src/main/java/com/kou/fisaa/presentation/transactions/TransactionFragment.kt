@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentTransactionBinding
@@ -14,14 +15,17 @@ import com.kou.fisaa.presentation.transactions.adapter.UsersAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class TransactionFragment : Fragment(), UsersAdapter.Listener {
+class TransactionFragment : Fragment() {
     private var _binding: FragmentTransactionBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TransactionViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val transArgs: TransactionFragmentArgs by navArgs()
-    private lateinit var usersAdapter: UsersAdapter
+
+    @Inject
+    lateinit var usersAdapter: UsersAdapter
 
 
     override fun onCreateView(
@@ -64,11 +68,20 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
 
 
     private fun setupUi() {
-        usersAdapter = UsersAdapter(this)
+
         binding.rvUsers.apply {
+            usersAdapter.setOnUserClickListener {
+                requireActivity().toast(it)
+            }
             adapter = usersAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireActivity(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
         }
     }
 
@@ -78,6 +91,5 @@ class TransactionFragment : Fragment(), UsersAdapter.Listener {
 
     }
 
-    override fun talkToUser(userId: String) {
-    }
+
 }

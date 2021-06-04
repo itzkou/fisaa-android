@@ -60,6 +60,7 @@ class ChatRoomFragment : Fragment() {
                         val msgs = it.data
                         if (!msgs.isNullOrEmpty())
                             mAdapter.updateMsgs(msgs)
+
                     }
                 }
                 Resource.Status.ERROR -> requireActivity().toast(resource.message.toString())

@@ -4,9 +4,6 @@ import android.content.Context
 import android.widget.ArrayAdapter
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
-import com.kou.fisaa.presentation.ads.AdsFragment
-import com.kou.fisaa.presentation.ads.adapter.AdAdapterListener
-import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.utils.MaterialAdapter
 import dagger.Module
 import dagger.Provides
@@ -18,17 +15,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 @Module
 @InstallIn(FragmentComponent::class)
 object AppUtilsModule {
-
-
-    @Provides
-    fun provideAdsAdapterItemListener(): AdAdapterListener {
-    return AdsFragment()   // this genrates an erro with navcomponentt because it creates a new instance of a frgament
-}
-
-    @Provides
-    fun provideAdsAdapter(adAdapterListener: AdAdapterListener): AdsAdapter {
-        return AdsAdapter(adAdapterListener)
-    }
 
     @Provides
     fun provideMaterials(): ArrayList<Material> = arrayListOf(

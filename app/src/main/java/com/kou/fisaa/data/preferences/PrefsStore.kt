@@ -69,5 +69,6 @@ class PrefsStore @Inject constructor(appContext: Context) : PrefsStoreAbstractio
         val NIGHT_MODE_KEY = booleanPreferencesKey("dark_theme_enabled")
         val USER_ID = stringPreferencesKey("id")
         val USER_FIRE_TOKEN = stringPreferencesKey("token")
+
     }
 }

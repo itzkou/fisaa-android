@@ -50,9 +50,9 @@ class LoginActivity : AppCompatActivity() {
                             val user = loginResponse.data
                             viewModel.setId(user._id)
                             loginQuery?.let {
-                                if (!it.social)
+                                if (!it.social)   // if i am not using social networks
                                     viewModel.loginWithFirebase(user.email, user.password)
-                                else
+                                else   // TODO fetchSignINmethod Here and implement firestore
                                     startActivity(Intent(this, HostActivity::class.java))
                             }
 

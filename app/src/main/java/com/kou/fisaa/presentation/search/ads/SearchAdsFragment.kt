@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -87,25 +89,27 @@ class SearchAdsFragment : Fragment() {
         }
 
 
-        cards(binding.two, startTwo)
-        cards(binding.three, starThree)
-        cards(binding.four, starFour)
-        cards(binding.five, starFive)
-        cards(binding.none, notRated)
-        cards(binding.fiveAndFour, fourAndFive)
+        cards(binding.two, binding.tvTwo, startTwo)
+        cards(binding.three, binding.tvThree, starThree)
+        cards(binding.four, binding.tvFour, starFour)
+        cards(binding.five, binding.tvFive, starFive)
+        cards(binding.none, binding.tvNone, notRated)
+        cards(binding.fiveAndFour, binding.tvFiveFour, fourAndFive)
 
 
     }
 
-    private fun cards(card: CardView, star: Star) {
+    private fun cards(card: CardView, tx: TextView, star: Star) {
 
         card.setOnClickListener {
 
             star.isClicked = if (!star.isClicked) {
+                tx.setTextColor(ContextCompat.getColor(requireActivity(), R.color.white))
                 card.setBackgroundResource(R.drawable.round_star)
                 true
             } else {
                 card.setBackgroundResource(R.drawable.round_star_d)
+                tx.setTextColor(ContextCompat.getColor(requireActivity(), R.color.darkoGrey))
                 false
 
             }

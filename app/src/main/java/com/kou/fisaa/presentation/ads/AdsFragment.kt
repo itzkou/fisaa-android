@@ -11,22 +11,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentAdsBinding
-import com.kou.fisaa.presentation.ads.adapter.AdAdapterListener
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AdsFragment : Fragment(), AdAdapterListener {
+class AdsFragment : Fragment() {
 
     private var _binding: FragmentAdsBinding? = null
     private val binding get() = _binding!!
-
-
     private val viewmodel: AdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
-
 
     @Inject
     lateinit var adsAdapter: AdsAdapter
@@ -67,6 +64,9 @@ class AdsFragment : Fragment(), AdAdapterListener {
         binding.rvAds.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            adsAdapter.setOnAdListener {
+                requireActivity().toast(it)
+            }
             adapter = adsAdapter
 
         }
@@ -115,9 +115,5 @@ class AdsFragment : Fragment(), AdAdapterListener {
 
         }
     }
-
-    override fun openAd(adId: String) {
-     }
-
 
 }

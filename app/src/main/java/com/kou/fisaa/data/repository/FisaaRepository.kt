@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class FisaaRepository @Inject constructor(
     private val remote: FisaaRemote,
-    private val authLocalManager: AuthLocalManager,
+    private val usersLocalManager: AuthLocalManager,
     private val flightLocalManager: FlightLocalManager,
     private val adLocalManager: AdLocalManager,
     private val firestore: FirestoreRemote,

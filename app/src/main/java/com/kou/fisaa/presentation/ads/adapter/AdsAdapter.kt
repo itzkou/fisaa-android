@@ -15,14 +15,10 @@ import com.kou.fisaa.utils.stringToDate
 import javax.inject.Inject
 
 
-class AdsAdapter @Inject constructor(private val adapterListener: AdAdapterListener) :
+class AdsAdapter @Inject constructor() :
     RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
 
-    interface Listener {
-        fun openUser(adId: String)
-
-    }
-
+    private var adsItemClickListener: ((String) -> Unit)? = null
 
     private var ads = listOf<Advertisement>()
 
@@ -67,6 +63,12 @@ class AdsAdapter @Inject constructor(private val adapterListener: AdAdapterListe
             if (ad.departureDate != null)
                 date.setDate(stringToDate(ad.departureDate))
 
+            holder.binding.root.setOnClickListener {
+                adsItemClickListener?.let { callback ->
+                    callback(ad._id)
+                }
+            }
+
 
         }
 
@@ -79,6 +81,10 @@ class AdsAdapter @Inject constructor(private val adapterListener: AdAdapterListe
             DiffUtil.calculateDiff(SimpleCallback(this.ads, newAds) { it._id })
         this.ads = newAds
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun setOnAdListener(callback: ((String) -> Unit)) {
+        this.adsItemClickListener = callback
     }
 
 
