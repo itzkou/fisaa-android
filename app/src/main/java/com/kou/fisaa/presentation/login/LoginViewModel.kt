@@ -1,6 +1,7 @@
 package com.kou.fisaa.presentation.login
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.facebook.AccessToken
@@ -8,6 +9,7 @@ import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.FireUser
 import com.kou.fisaa.data.entities.LoginQuery
@@ -16,6 +18,7 @@ import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +28,7 @@ class LoginViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore,
     private val googleSignInClient: GoogleSignInClient,
-    private val callbackManager: CallbackManager
+    private val _callbackManager: CallbackManager
 ) :
     ViewModel() {
     private val _fisaaLoginResponse = MutableLiveData<Resource<LoginResponse>>()
@@ -38,6 +41,7 @@ class LoginViewModel @Inject constructor(
     val firebaseLoginResponse = _firebaseLoginResponse
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
+    val callbackManager = _callbackManager
 
 
     fun setId(id: String) {
@@ -60,8 +64,6 @@ class LoginViewModel @Inject constructor(
             repository.login(loginQuery).collect { response ->
                 response?.let {
                     _fisaaLoginResponse.value = response
-
-
                 }
 
             }
@@ -80,52 +82,94 @@ class LoginViewModel @Inject constructor(
 
     fun getGoogleClient() = googleSignInClient
 
+    fun syncGoogleFirestore(account: GoogleSignInAccount, exists: Boolean) {
+        viewModelScope.launch {
+
+            if (!exists) {
+                repository.signInWithGoogle(account).collect { resource ->
+                    resource?.let {
+                        val firebaseUser = it.data?.user
+                        firebaseUser?.let { user ->
+
+                            fisaaLogin(mkFisaaUser(user))
+                            Transformations.map(_fisaaLoginResponse) { fisaaLoginResource ->
+                                fisaaLoginResource?.let {
+                                    if (fisaaLoginResource.status == Resource.Status.SUCCESS) {
+                                        val fisaaUser = it.data?.data
+                                        fisaaUser?.let {
+                                            setId(fisaaUser._id)
+                                            saveToFirestore(
+                                                mkFirestoreUser(user, fisaaUser._id),
+                                                this
+                                            )
+                                        }
+
+                                    }
+
+                                }
+                            }/*
+                            repository.login(mkFisaaUser(user)).collect { loginResource ->
+                                loginResource?.let {
+                                    if (loginResource.status == Resource.Status.SUCCESS) {
+                                        val fisaaUser = it.data?.data
+                                        fisaaUser?.let {
+                                            setId(fisaaUser._id)
+                                            saveToFirestore(
+                                                mkFirestoreUser(user, fisaaUser._id),
+                                                this
+                                            )
+                                        }
+
+                                    }
+
+                                }
+
+                            }*/
+                        }
+                        _googleResponse.value = resource
+                    }
+                }
+            } else {
+                repository.signInWithGoogle(account).collect { resource ->
+                    resource?.let {
+                        val firebaseUser = it.data?.user
+                        firebaseUser?.let { user ->
+                            fisaaLogin(mkFisaaUser(user))
+                            Transformations.map(_fisaaLoginResponse) { fisaaLoginResource ->
+                                fisaaLoginResource?.let {
+                                    if (fisaaLoginResource.status == Resource.Status.SUCCESS) {
+                                        val fisaaUser = it.data?.data
+                                        fisaaUser?.let {
+                                            setId(fisaaUser._id)
+                                        }
+
+                                    }
+
+                                }
+                            }
+                        }
+                        _googleResponse.value = resource
+                    }
+                }
+            }
+        }
+    }
+
     fun signInWithGoogle(account: GoogleSignInAccount) {
         viewModelScope.launch {
             repository.isUserExistsForEmail(account.email!!).collect { resource ->
                 resource?.let {
                     val signInMethods = resource.data?.signInMethods ?: emptyList<String>()
                     val exists = signInMethods.isNotEmpty()
-
-                    if (!exists) {
-                        repository.signInWithGoogle(account).collect { resource ->
-                            resource?.let {
-                                val firebaseUser = it.data?.user
-                                firebaseUser?.let { user ->
-                                    val fireUser = FireUser()
-                                    val fullName = user.displayName!!
-                                    val firstName: String = fullName.split(" ").first()
-                                    val lastName: String = fullName.split(" ").last()
-                                    fireUser._id = user.uid
-                                    fireUser.email = user.email!!
-                                    fireUser.image = user.photoUrl.toString()
-                                    fireUser.firstName = firstName
-                                    fireUser.lastName = lastName
-
-                                    repository.registerFirestore(fireUser)
-                                        .collect { firestoreInstance ->
-                                            firestoreInstance?.let {
-                                                firestoreResponse.value = firestoreInstance
-                                            }
-                                        }
-                                }
-                                _googleResponse.value = resource
-                            }
-                        }
-                    } else {
-                        repository.signInWithGoogle(account).collect { resource ->
-                            resource?.let {
-                                _googleResponse.value = resource
-                            }
-                        }
-                    }
-
+                    syncGoogleFirestore(account, exists)
 
                 }
 
 
             }
         }
+
+
         //TODO replicate the same scenario of google here
         fun signInWithFacebook(token: AccessToken) {
             viewModelScope.launch {
@@ -140,7 +184,7 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun getCallBackMg() = callbackManager
+
     fun signInWithFacebook(token: AccessToken) {
         viewModelScope.launch {
             repository.signInWithFacebook(token).collect {
@@ -149,6 +193,46 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun saveToFirestore(fireUser: FireUser, scope: CoroutineScope) {
+        scope.launch {
+            repository.registerFirestore(fireUser)
+                .collect { firestoreInstance ->
+                    firestoreInstance?.let {
+                        firestoreResponse.value = firestoreInstance
+                    }
+                }
+        }
+    }
+
+    fun mkFirestoreUser(firebaseUser: FirebaseUser, fisaaUserId: String): FireUser {
+        val fireUser = FireUser()
+        val fullName = firebaseUser.displayName!!
+        val firstName: String = fullName.split(" ").first()
+        val lastName: String = fullName.split(" ").last()
+        fireUser._id = fisaaUserId
+        fireUser.email = firebaseUser.email!!
+        fireUser.image = firebaseUser.photoUrl.toString()
+        fireUser.firstName = firstName
+        fireUser.lastName = lastName
+
+        return fireUser
+    }
+
+    fun mkFisaaUser(firebaseUser: FirebaseUser): LoginQuery {
+        val fullName = firebaseUser.displayName!!
+        val firstName: String = fullName.split(" ").first()
+        val lastName: String = fullName.split(" ").last()
+        val loginQuery = LoginQuery(
+            firebaseUser.email!!,
+            social = true,
+            image = firebaseUser.photoUrl!!.toString(),
+            firstName = firstName,
+            lastName = lastName
+        )
+        return loginQuery
+
     }
 
 

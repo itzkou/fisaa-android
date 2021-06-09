@@ -13,7 +13,6 @@ import com.kou.fisaa.presentation.host.HostActivity
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 import com.kou.fisaa.utils.coordinatePwd
-import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +39,6 @@ class SignUpActivity : AppCompatActivity() {
                     resource?.data.let { fisaaUser ->
                         fisaaUser?.let {
                             user = fisaaUser
-                            this.toast(fisaaUser._id)
                             viewmodel.setId(fisaaUser._id)
                             viewmodel.signUpFirebase(fisaaUser.email, fisaaUser.password)
 

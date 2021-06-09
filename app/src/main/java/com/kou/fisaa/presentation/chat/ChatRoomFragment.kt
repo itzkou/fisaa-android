@@ -31,7 +31,7 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        /// if from == firebaseUserId bind
+
 
 
         viewModel.userId.observe(viewLifecycleOwner, {

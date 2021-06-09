@@ -36,7 +36,7 @@ class TripAdapter constructor(private val tripItemListener: TripAdapterItemListe
         val trip = trips[position]
         if (trip.createdBy != null)
             with(holder.binding) {
-                if (!trip.departureDate.isNullOrEmpty())
+                if (!trip.departureDate.isEmpty())
                     date.setDate(stringToDate(trip.departureDate))
                 if (trip.createdBy.image.isNullOrEmpty())
                     picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))

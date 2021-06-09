@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
@@ -75,7 +73,7 @@ class ChatAdapter(private val fromId: String) :
 
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
-        return if (message.fromId == Firebase.auth.uid)
+        return if (message.fromId == fromId)
             FROM
         else
             TO

@@ -12,7 +12,6 @@ import com.facebook.FacebookException
 import com.facebook.GraphRequest
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.databinding.ActivityLoginBinding
@@ -29,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
     private var loginQuery: LoginQuery? = null
-    private var googleAccount: GoogleSignInAccount? = null
 
 
     /******* SOCIAL AUTH *******/
@@ -40,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupUi()
         /*** Fisaa Api ***/
         viewModel.fisaaLoginResponse.observe(this, { resource ->
@@ -50,14 +47,7 @@ class LoginActivity : AppCompatActivity() {
                         if (resource.data.success) {
                             val user = loginResponse.data
                             viewModel.setId(user._id)
-                            loginQuery?.let { loginQuery ->
-                                if (!loginQuery.social)   // if i am not using social networks
-                                    viewModel.loginWithFirebase(user.email, user.password)
-                                else {
-                                    startActivity(Intent(this, HostActivity::class.java))
-                                    finish()
-                                }
-                            }
+                            viewModel.loginWithFirebase(user.email, user.password)
 
 
                         } else
@@ -98,21 +88,8 @@ class LoginActivity : AppCompatActivity() {
             if (resource.status == Resource.Status.SUCCESS) {    //firebase sign-in is successful
                 resource?.let {
                     val user = resource.data!!.user!!
-                    val fullName = user.displayName!!
-                    val firstName: String = fullName.split(" ").first()
-                    val lastName: String = fullName.split(" ").last()
-                    loginQuery = LoginQuery(
-                        user.email!!,
-                        social = true,
-                        image = user.photoUrl!!.toString(),
-                        firstName = firstName,
-                        lastName = lastName
-                    )
-                    loginQuery?.let {
-                        viewModel.fisaaLogin(it)
-                    }
-
                     viewModel.setFireToken(user.uid)
+                    startActivity(Intent(this, HostActivity::class.java))
 
 
                 }
@@ -172,16 +149,15 @@ class LoginActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                account?.let { account ->
-                    viewModel.signInWithGoogle(account)
-
+                account?.let { it ->
+                    viewModel.signInWithGoogle(it)
                 }
 
             } catch (e: ApiException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }
-        viewModel.getCallBackMg().onActivityResult(requestCode, resultCode, data)
+        viewModel.callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun setupUi() {
@@ -221,7 +197,7 @@ class LoginActivity : AppCompatActivity() {
     private fun signInWithFacebook() {
         binding.btnFb.performClick()
         binding.btnFb.setReadPermissions(listOf("email", "public_profile"))
-        binding.btnFb.registerCallback(viewModel.getCallBackMg(), object :
+        binding.btnFb.registerCallback(viewModel.callbackManager, object :
             FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
