@@ -43,6 +43,7 @@ class SignUpActivity : AppCompatActivity() {
                             this.toast(fisaaUser._id)
                             viewmodel.setId(fisaaUser._id)
                             viewmodel.signUpFirebase(fisaaUser.email, fisaaUser.password)
+
                         }
 
 
@@ -65,15 +66,19 @@ class SignUpActivity : AppCompatActivity() {
         viewmodel.fireSignUpResponse.observe(this, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        val firebaseUser = resource.data?.user
-                        firebaseUser?.let { user ->
-                            val fireUser = FireUser()
-                            fireUser._id = user.uid
-                            fireUser.email = user.email!!
-                            fireUser.image = user.photoUrl.toString()
+                    resource?.let { authResult ->
+                        val firebaseResult = authResult.data?.user
+                        firebaseResult?.let { firebaseUser ->
                             viewmodel.setFireToken(firebaseUser.uid)
-                            viewmodel.signUpFirestore(user = fireUser)
+                            this.user?.let { user ->
+                                val fireUser = FireUser()
+                                fireUser._id = user._id
+                                fireUser.firstName = user.firstName
+                                fireUser.lastName = user.lastName
+                                fireUser.email = user.email
+                                viewmodel.signUpFirestore(fireUser)
+                            }
+
 
                         }
                     }

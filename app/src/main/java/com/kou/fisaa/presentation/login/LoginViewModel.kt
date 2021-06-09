@@ -33,8 +33,6 @@ class LoginViewModel @Inject constructor(
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
     private val _firestoreResponse = MutableLiveData<Resource<DocumentReference>>()
-    private val _fireCheck = MutableLiveData<Boolean>()
-    val fireCheck = _fireCheck
     val firestoreResponse = _firestoreResponse
     val fisaaLoginResponse = _fisaaLoginResponse
     val firebaseLoginResponse = _firebaseLoginResponse
@@ -104,8 +102,6 @@ class LoginViewModel @Inject constructor(
                                     fireUser.firstName = firstName
                                     fireUser.lastName = lastName
 
-
-
                                     repository.registerFirestore(fireUser)
                                         .collect { firestoreInstance ->
                                             firestoreInstance?.let {
@@ -130,8 +126,7 @@ class LoginViewModel @Inject constructor(
 
             }
         }
-
-
+        //TODO replicate the same scenario of google here
         fun signInWithFacebook(token: AccessToken) {
             viewModelScope.launch {
                 repository.signInWithFacebook(token).collect {
