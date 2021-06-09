@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentReference
+import com.kou.fisaa.data.entities.FireUser
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
@@ -95,7 +96,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun signUpFirestore(user: User) {
+    fun signUpFirestore(user: FireUser) {
         viewModelScope.launch {
             repository.registerFirestore(user).collect {
                 it?.let {

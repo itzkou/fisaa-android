@@ -69,7 +69,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
+            android:ellipsize="end"
             android:fontFamily="@font/poppins_regular"
+            android:maxEms="6"
+            android:maxLines="2"
             android:textColor="@color/bluewey"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -80,12 +83,15 @@
             android:id="@+id/arrival"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:fontFamily="@font/poppins_regular"
+            android:maxEms="6"
+            android:maxLines="2"
             android:textColor="@color/bluewey"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="@+id/departure"
             app:layout_constraintTop_toBottomOf="@+id/departure"
-            tools:text="Arrival" />
+            tools:text="United Arab Emirates" />
 
         <ImageView
             android:layout_width="wrap_content"

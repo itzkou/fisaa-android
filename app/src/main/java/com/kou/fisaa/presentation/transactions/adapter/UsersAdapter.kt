@@ -47,6 +47,8 @@ class UsersAdapter @Inject constructor() :
                 picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
             else
                 picture.load(user.image)
+
+            latestMsg.text = "${user.firstName} wants to send xoxo"
         }
 
 

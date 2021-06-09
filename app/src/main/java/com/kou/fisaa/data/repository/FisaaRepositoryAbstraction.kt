@@ -4,6 +4,7 @@ import android.net.Uri
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.SignInMethodQueryResult
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
@@ -19,9 +20,11 @@ interface FisaaRepositoryAbstraction {
     suspend fun signInWithFacebook(token: AccessToken): Flow<Resource<AuthResult>?>
     suspend fun login(email: String, password: String): Flow<Resource<AuthResult>?>
     suspend fun register(email: String, password: String): Flow<Resource<AuthResult>?>
+    suspend fun isUserExistsForEmail(email: String): Flow<Resource<SignInMethodQueryResult>?>
+
 
     /** Firestore **/
-    suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?>
+    suspend fun registerFirestore(user: FireUser): Flow<Resource<DocumentReference>?>
     suspend fun getUsers(): Flow<Resource<List<User>>?>
     suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?>
     suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?>

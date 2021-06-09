@@ -4,6 +4,7 @@ import android.net.Uri
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.SignInMethodQueryResult
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
@@ -74,8 +75,17 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun isUserExistsForEmail(email: String): Flow<Resource<SignInMethodQueryResult>?> {
+        return flow {
+            val response = firestore.isUserExistsForEmail(email)
+            emit(Resource.success(response))
+        }.catch {
+            emit(Resource.error(it.message.toString()))
+        }.flowOn(ioDispatcher)
+    }
+
     /*****   Firestore ***/
-    override suspend fun registerFirestore(user: User): Flow<Resource<DocumentReference>?> {
+    override suspend fun registerFirestore(user: FireUser): Flow<Resource<DocumentReference>?> {
         return flow {
             val userRef = firestore.registerFirestore(user)
             emit(Resource.success(userRef))
@@ -252,10 +262,10 @@ class FisaaRepository @Inject constructor(
             Resource.success(FlightsResponse(flights))
         }
 
-   /* private fun getTopFlightsCached(): Resource<FlightsResponse>? =
-        flightLocalManager.getAll()?.let { flights ->
-            Resource.success(FlightsResponse(flights))
-        }*/
+    /* private fun getTopFlightsCached(): Resource<FlightsResponse>? =
+         flightLocalManager.getAll()?.let { flights ->
+             Resource.success(FlightsResponse(flights))
+         }*/
 
     private fun getAdsCached(): Resource<AdsResponse>? =
         adLocalManager.getAll()?.let { ads ->

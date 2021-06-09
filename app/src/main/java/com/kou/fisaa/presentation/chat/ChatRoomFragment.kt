@@ -1,6 +1,7 @@
 package com.kou.fisaa.presentation.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        /// if from == firebaseUserId bind
 
 
         viewModel.userId.observe(viewLifecycleOwner, {
@@ -63,7 +65,10 @@ class ChatRoomFragment : Fragment() {
 
                     }
                 }
-                Resource.Status.ERROR -> requireActivity().toast(resource.message.toString())
+                Resource.Status.ERROR -> {
+                    requireActivity().toast(resource.message.toString())
+                    Log.d("minakupenda", resource.message.toString())
+                }
 
                 Resource.Status.LOADING -> requireActivity().toast("loading")
             }
@@ -78,7 +83,9 @@ class ChatRoomFragment : Fragment() {
 
                 }
 
-                Resource.Status.ERROR -> hasBeenSent?.let { requireActivity().toast(hasBeenSent.message.toString()) }
+                Resource.Status.ERROR -> hasBeenSent?.let {
+                    requireActivity().toast(hasBeenSent.message.toString())
+                }
 
                 Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
 

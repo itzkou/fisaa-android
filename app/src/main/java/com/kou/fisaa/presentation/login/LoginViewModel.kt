@@ -9,9 +9,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.DocumentReference
+import com.kou.fisaa.data.entities.FireUser
 import com.kou.fisaa.data.entities.LoginQuery
 import com.kou.fisaa.data.entities.LoginResponse
-import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -28,14 +28,16 @@ class LoginViewModel @Inject constructor(
     private val callbackManager: CallbackManager
 ) :
     ViewModel() {
-    private val _loginResponse = MutableLiveData<Resource<LoginResponse>>()
-    private val _fireLoginResponse = MutableLiveData<Resource<AuthResult>>()
+    private val _fisaaLoginResponse = MutableLiveData<Resource<LoginResponse>>()
+    private val _firebaseLoginResponse = MutableLiveData<Resource<AuthResult>>()
     private val _googleResponse = MutableLiveData<Resource<AuthResult>>()
     private val _facebookResponse = MutableLiveData<Resource<AuthResult>>()
-    private val _firestoreSignUpResponse = MutableLiveData<Resource<DocumentReference>>()
-    val firestoreSignUpResponse = _firestoreSignUpResponse
-    val loginResponse = _loginResponse
-    val fireLoginResponse = _fireLoginResponse
+    private val _firestoreResponse = MutableLiveData<Resource<DocumentReference>>()
+    private val _fireCheck = MutableLiveData<Boolean>()
+    val fireCheck = _fireCheck
+    val firestoreResponse = _firestoreResponse
+    val fisaaLoginResponse = _fisaaLoginResponse
+    val firebaseLoginResponse = _firebaseLoginResponse
     val googleResponse = _googleResponse
     val facebookResponse = _facebookResponse
 
@@ -54,11 +56,12 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun fetchLoginResponse(loginQuery: LoginQuery) {
+
+    fun fisaaLogin(loginQuery: LoginQuery) {
         viewModelScope.launch {
             repository.login(loginQuery).collect { response ->
                 response?.let {
-                    _loginResponse.value = response
+                    _fisaaLoginResponse.value = response
 
 
                 }
@@ -67,26 +70,79 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    //TODO fix this
     fun loginWithFirebase(email: String, password: String) {
         viewModelScope.launch {
             repository.login(email, password).collect {
                 it?.let {
-                    _fireLoginResponse.value = it
+                    _firebaseLoginResponse.value = it
                 }
             }
         }
     }
 
     fun getGoogleClient() = googleSignInClient
-    fun signInWithGoogle(acct: GoogleSignInAccount) {
+
+    fun signInWithGoogle(account: GoogleSignInAccount) {
         viewModelScope.launch {
-            repository.signInWithGoogle(acct).collect {
-                it?.let {
-                    _googleResponse.value = it
+            repository.isUserExistsForEmail(account.email!!).collect { resource ->
+                resource?.let {
+                    val signInMethods = resource.data?.signInMethods ?: emptyList<String>()
+                    val exists = signInMethods.isNotEmpty()
+
+                    if (!exists) {
+                        repository.signInWithGoogle(account).collect { resource ->
+                            resource?.let {
+                                val firebaseUser = it.data?.user
+                                firebaseUser?.let { user ->
+                                    val fireUser = FireUser()
+                                    val fullName = user.displayName!!
+                                    val firstName: String = fullName.split(" ").first()
+                                    val lastName: String = fullName.split(" ").last()
+                                    fireUser._id = user.uid
+                                    fireUser.email = user.email!!
+                                    fireUser.image = user.photoUrl.toString()
+                                    fireUser.firstName = firstName
+                                    fireUser.lastName = lastName
+
+
+
+                                    repository.registerFirestore(fireUser)
+                                        .collect { firestoreInstance ->
+                                            firestoreInstance?.let {
+                                                firestoreResponse.value = firestoreInstance
+                                            }
+                                        }
+                                }
+                                _googleResponse.value = resource
+                            }
+                        }
+                    } else {
+                        repository.signInWithGoogle(account).collect { resource ->
+                            resource?.let {
+                                _googleResponse.value = resource
+                            }
+                        }
+                    }
+
+
+                }
+
+
+            }
+        }
+
+
+        fun signInWithFacebook(token: AccessToken) {
+            viewModelScope.launch {
+                repository.signInWithFacebook(token).collect {
+                    it?.let {
+                        _facebookResponse.value = it
+                    }
                 }
             }
         }
+
+
     }
 
     fun getCallBackMg() = callbackManager
@@ -100,14 +156,5 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun signUpFirestore(user: User) {
-        viewModelScope.launch {
-            repository.registerFirestore(user).collect {
-                it?.let {
-                    firestoreSignUpResponse.value = it
-                }
-            }
-        }
-    }
 
 }

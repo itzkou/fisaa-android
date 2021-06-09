@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.kou.fisaa.data.entities.FireUser
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.databinding.ActivitySignUpBinding
 import com.kou.fisaa.presentation.host.HostActivity
@@ -66,12 +67,13 @@ class SignUpActivity : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
                         val firebaseUser = resource.data?.user
-                        firebaseUser?.let {
+                        firebaseUser?.let { user ->
+                            val fireUser = FireUser()
+                            fireUser._id = user.uid
+                            fireUser.email = user.email!!
+                            fireUser.image = user.photoUrl.toString()
                             viewmodel.setFireToken(firebaseUser.uid)
-                            user?.let { user ->
-                                viewmodel.signUpFirestore(user = user)
-
-                            }
+                            viewmodel.signUpFirestore(user = fireUser)
 
                         }
                     }
