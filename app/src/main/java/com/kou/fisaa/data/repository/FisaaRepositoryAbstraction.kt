@@ -27,7 +27,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun registerFirestore(user: FireUser): Flow<Resource<DocumentReference>?>
     suspend fun getUsers(): Flow<Resource<List<User>>?>
     suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?>
-    suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<List<Message>>?>
+    suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<Message>?>
 
 
     /*** Storage **/
@@ -43,6 +43,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun getAllFLights(): Flow<Resource<TripsResponse>?>
     suspend fun getAds(): Flow<Resource<AdsResponse>?>
     suspend fun searchFlights(searchDatesQuery: FlightSearchDatesQuery): Flow<Resource<TripsResponse>?>
+    suspend fun searchAds(searchQuery: AdSearchQuery): Flow<Resource<AdsResponse>?>
     suspend fun postAd(advertisement: AdsQuery): Flow<Resource<AdsQuery>?>
     suspend fun postParcel(partMap: Map<String, RequestBody>): Flow<Resource<Parcel>?>
 

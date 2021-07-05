@@ -142,7 +142,6 @@ object AppModule {
     ): FisaaRepositoryAbstraction =
         FisaaRepository(
             remote,
-            authLocalManager,
             flightLocalManager,
             adLocalManager,
             firestore,

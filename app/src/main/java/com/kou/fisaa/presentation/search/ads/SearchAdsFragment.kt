@@ -8,24 +8,21 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.slider.RangeSlider
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Star
 import com.kou.fisaa.databinding.FragmentSearchAdBinding
 import com.kou.fisaa.utils.BuilderDatePicker
+import com.kou.fisaa.utils.coordinateBtnAndInputs
 import com.kou.fisaa.utils.toast
-import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.*
 
-@AndroidEntryPoint
 class SearchAdsFragment : Fragment() {
 
     private var _binding: FragmentSearchAdBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SearchAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
 
     override fun onCreateView(
@@ -37,6 +34,7 @@ class SearchAdsFragment : Fragment() {
         val view = binding.root
 
         setupUi()
+        searchAds()
         return view
     }
 
@@ -46,6 +44,13 @@ class SearchAdsFragment : Fragment() {
     }
 
     private fun setupUi() {
+        coordinateBtnAndInputs(
+            binding.btnSearchFilter,
+            binding.edArrivalDate,
+            binding.edDepDate,
+            binding.departureSearch,
+            binding.arrivalSearch
+        )
         val startTwo = Star()
         val starThree = Star()
         val starFour = Star()
@@ -115,6 +120,24 @@ class SearchAdsFragment : Fragment() {
             }
         }
 
+    }
+
+    //Todo add notation and tarif
+    private fun searchAds() {
+        binding.btnSearchFilter.setOnClickListener {
+            val arrivalDate = binding.edArrivalDate.text.toString()
+            val departureDate = binding.edDepDate.text.toString()
+            val departure = binding.departureSearch.text.toString()
+            val destination = binding.arrivalSearch.text.toString()
+            val action = SearchAdsFragmentDirections.actionSearchAdsFragmentToAds(
+                departureDate,
+                arrivalDate,
+                departure,
+                destination, source = "search"
+            )
+            findNavController().navigate(action)
+
+        }
     }
 
 

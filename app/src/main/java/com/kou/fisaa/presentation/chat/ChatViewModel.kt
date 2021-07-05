@@ -24,15 +24,16 @@ class ChatViewModel @Inject constructor(
     private val _hasBeenSent =
         MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
     val hasBeenSent = _hasBeenSent
-    private val _msgs = MutableLiveData<Resource<List<Message>>>()
-    val msgs = _msgs
+    private val _msg = MutableLiveData<Resource<Message>>()
+    val msg = _msg
+
 
     fun sendMsg(msg: Message) {
 
         viewModelScope.launch {
             repository.sendMsg(msg).collect { resource ->
                 resource?.let {
-                    hasBeenSent.value = it
+                    _hasBeenSent.value = it
 
                 }
             }
@@ -43,13 +44,17 @@ class ChatViewModel @Inject constructor(
 
     fun listenMsgs(fromId: String, toId: String) {
         viewModelScope.launch {
-            repository.listenMsgs(fromId, toId).collect {
-                it?.let {
-                    _msgs.value = it
+            repository.listenMsgs(fromId, toId).collect { resource ->
+                resource?.let {
+                    _msg.value = it
 
                 }
             }
+
+
         }
+
+
     }
 
 

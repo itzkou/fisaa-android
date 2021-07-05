@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.AdSearchQuery
 import com.kou.fisaa.databinding.FragmentAdsBinding
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.utils.Resource
@@ -24,6 +26,7 @@ class AdsFragment : Fragment() {
     private var _binding: FragmentAdsBinding? = null
     private val binding get() = _binding!!
     private val viewmodel: AdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private val adsFragmentArgs: AdsFragmentArgs by navArgs()
 
     @Inject
     lateinit var adsAdapter: AdsAdapter
@@ -39,7 +42,7 @@ class AdsFragment : Fragment() {
 
         setupUi()
         refresh()
-        viewmodel.getAds()
+        searchAndGetAds()
 
 
 
@@ -114,6 +117,22 @@ class AdsFragment : Fragment() {
             viewmodel.getAds()
 
         }
+    }
+
+    private fun searchAndGetAds() {
+
+        if (adsFragmentArgs.source == "all")
+            viewmodel.getAds()
+        else if (adsFragmentArgs.source == "search")
+            viewmodel.searchAds(
+                AdSearchQuery(
+                    adsFragmentArgs.departureDate,
+                    adsFragmentArgs.arivalDate,
+                    adsFragmentArgs.departure,
+                    adsFragmentArgs.destination
+                )
+            )
+
     }
 
 }

@@ -32,15 +32,14 @@ class ChatRoomFragment : Fragment() {
         val view = binding.root
 
 
-
-
         viewModel.userId.observe(viewLifecycleOwner, {
             it?.let {
                 userId = it
                 mAdapter = ChatAdapter(userId)
                 setupUi()
-                listenMsgs()
                 sendMsg()
+                listenMsgs()
+
 
             }
         })
@@ -54,14 +53,20 @@ class ChatRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.msgs.observe(viewLifecycleOwner, { resource ->
+        viewModel.msg.observe(viewLifecycleOwner, { resource ->
 
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        val msgs = it.data
-                        if (!msgs.isNullOrEmpty())
-                            mAdapter.updateMsgs(msgs)
+                    resource?.let { msgsResource ->
+
+                        msgsResource.data?.let { msg ->
+                            if (msg.fromId == userId)
+                                mAdapter.add(msg)
+                            else
+                                mAdapter.add(msg)
+                        }
+
+                        binding.rvChats.scrollToPosition(mAdapter.itemCount - 1)
 
                     }
                 }
@@ -75,23 +80,25 @@ class ChatRoomFragment : Fragment() {
 
         })
 
-        viewModel.hasBeenSent.observe(viewLifecycleOwner, { hasBeenSent ->
-            when (hasBeenSent.status) {
-                Resource.Status.SUCCESS -> {
-                    requireActivity().toast("Sent")
-                    binding.edChat.text.clear()
+
+        viewModel.hasBeenSent.observe(viewLifecycleOwner,
+            { hasBeenSent ->
+                when (hasBeenSent.status) {
+                    Resource.Status.SUCCESS -> {
+                        requireActivity().toast("Sent")
+                        binding.edChat.text.clear()
+
+                    }
+
+                    Resource.Status.ERROR -> hasBeenSent?.let {
+                        requireActivity().toast(hasBeenSent.message.toString())
+                    }
+
+                    Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
 
                 }
 
-                Resource.Status.ERROR -> hasBeenSent?.let {
-                    requireActivity().toast(hasBeenSent.message.toString())
-                }
-
-                Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
-
-            }
-
-        })
+            })
     }
 
 
@@ -122,7 +129,8 @@ class ChatRoomFragment : Fragment() {
 
     private fun listenMsgs() {
         viewModel.listenMsgs(userId, chatArgs.toId)
-        viewModel.listenMsgs(chatArgs.toId, userId)
+
+
     }
 
 

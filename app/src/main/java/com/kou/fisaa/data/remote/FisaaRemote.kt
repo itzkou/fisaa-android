@@ -1,9 +1,6 @@
 package com.kou.fisaa.data.remote
 
-import com.kou.fisaa.data.entities.AdsQuery
-import com.kou.fisaa.data.entities.FlightSearchDatesQuery
-import com.kou.fisaa.data.entities.FlightSearchQuery
-import com.kou.fisaa.data.entities.LoginQuery
+import com.kou.fisaa.data.entities.*
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -43,6 +40,9 @@ class FisaaRemote @Inject constructor(
 
     suspend fun postParcel(partMap: Map<String, RequestBody>) =
         getResource { fisaaApi.postParcel(partMap) }
+
+    suspend fun searchAds(searchQuery: AdSearchQuery) =
+        getResource { fisaaApi.searchAds(searchQuery) }
 
 
 }

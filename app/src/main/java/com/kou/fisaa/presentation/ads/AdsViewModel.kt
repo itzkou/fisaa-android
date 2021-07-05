@@ -3,6 +3,7 @@ package com.kou.fisaa.presentation.ads
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kou.fisaa.data.entities.AdSearchQuery
 import com.kou.fisaa.data.entities.AdsResponse
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -23,6 +24,19 @@ class AdsViewModel @Inject constructor(private val repository: FisaaRepositoryAb
         viewModelScope.launch {
             repository.getAds().collect { response ->
                 _adsResponse.value = response
+
+            }
+        }
+    }
+
+
+    fun searchAds(adSearchQuery: AdSearchQuery) {
+        viewModelScope.launch {
+            repository.searchAds(adSearchQuery).collect { resource ->
+
+                resource?.let {
+                    _adsResponse.value = it
+                }
 
             }
         }

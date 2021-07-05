@@ -1,16 +1,17 @@
 package com.kou.fisaa.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.SignInMethodQueryResult
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.storage.UploadTask
 import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
-import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
 import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.remote.FisaaRemote
 import com.kou.fisaa.utils.Resource
@@ -23,7 +24,6 @@ import javax.inject.Inject
 
 class FisaaRepository @Inject constructor(
     private val remote: FisaaRemote,
-    private val usersLocalManager: AuthLocalManager,
     private val flightLocalManager: FlightLocalManager,
     private val adLocalManager: AdLocalManager,
     private val firestore: FirestoreRemote,
@@ -117,21 +117,69 @@ class FisaaRepository @Inject constructor(
     override suspend fun listenMsgs(
         fromId: String,
         toId: String
-    ): Flow<Resource<List<Message>>?> {
+    ): Flow<Resource<Message>?> {
         return channelFlow {
-            val subscription =
+            val myMsgsSubscription =
                 firestore.listenMsgs(fromId, toId).addSnapshotListener { snapshot, error ->
-                    if (error != null)
+                    if (error != null) {
                         channel.offer(Resource.error(error.toString()))
-                    else if (snapshot != null) {
-                        val msgs = snapshot.toObjects(Message::class.java)
-                        channel.offer(Resource.success(msgs))
+                        Log.i("firestore.listenMsgs", "listenMsgs: $error")
+                    } else if (snapshot != null) {
+
+
+                        for (dc in snapshot.documentChanges) {
+                            when (dc.type) {
+                                DocumentChange.Type.ADDED -> {
+                                    val msg: Message = dc.document.toObject(Message::class.java)
+                                    channel.offer(Resource.success(msg))
+                                    Log.i("mesageti", msg.toString())
+                                }
+                                DocumentChange.Type.MODIFIED -> Log.i(
+                                    "mesageti",
+                                    " modified one msg "
+                                )
+                                DocumentChange.Type.REMOVED -> Log.i(
+                                    "mesageti",
+                                    " removed one msg "
+                                )
+                            }
+                        }
+
                     }
                 }
-            // 3) Don't close the stream of data, keep it open until the consumer
-            // stops listening or the API calls onCompleted or onError.
-            // When that happens, cancel the subscription to the 3P library
-            awaitClose { subscription.remove() }
+            val hisMsgsSubscription =
+                firestore.listenMsgs(toId, fromId).addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        channel.offer(Resource.error(error.toString()))
+                        Log.i("firestore.listenMsgs", "listenMsgs: $error")
+                    } else if (snapshot != null) {
+
+
+                        for (dc in snapshot.documentChanges) {
+                            when (dc.type) {
+                                DocumentChange.Type.ADDED -> {
+                                    val msg: Message = dc.document.toObject(Message::class.java)
+                                    channel.offer(Resource.success(msg))
+                                    Log.i("mesageti", msg.toString())
+                                }
+                                DocumentChange.Type.MODIFIED -> Log.i(
+                                    "mesageti",
+                                    " modified one msg "
+                                )
+                                DocumentChange.Type.REMOVED -> Log.i(
+                                    "mesageti",
+                                    " removed one msg "
+                                )
+                            }
+                        }
+
+                    }
+                }
+
+            awaitClose {
+                myMsgsSubscription.remove()
+                hisMsgsSubscription.remove()
+            }
         }
     }
 
@@ -234,6 +282,14 @@ class FisaaRepository @Inject constructor(
             }
             emit(response)
 
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun searchAds(searchQuery: AdSearchQuery): Flow<Resource<AdsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.searchAds(searchQuery)
+            emit(response)
         }.flowOn(ioDispatcher)
     }
 

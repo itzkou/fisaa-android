@@ -5,18 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import com.kou.fisaa.R
 import com.kou.fisaa.databinding.FragmentSearchFligthsBinding
-import com.kou.fisaa.presentation.trips.TripViewModel
 import com.kou.fisaa.utils.BuilderDatePicker
 import com.kou.fisaa.utils.coordinateBtnAndInputs
 
 class SearchFlightsFragment : Fragment() {
     private var _binding: FragmentSearchFligthsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: TripViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
     lateinit var places: List<String>
 
@@ -36,15 +32,8 @@ class SearchFlightsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnSearchFilter.setOnClickListener {
-            /* viewModel.searchFilter(
-                 FlightSearchDatesQuery(
-                     binding.edArrivalDate.text.toString(),
-                     binding.departureSearch.text.toString(),
-                     binding.edDepDate.text.toString(),
-                     binding.arrivalSearch.text.toString()
-                 )
-             )*/
-            val arrival = binding.arrivalSearch.text.toString()
+
+        val arrival = binding.arrivalSearch.text.toString()
             val departure = binding.departureSearch.text.toString()
             val depDate = binding.edDepDate.text.toString()
             val arrDate = binding.edArrivalDate.text.toString()

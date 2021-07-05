@@ -24,6 +24,26 @@
         <action
             android:id="@+id/action_ads_to_searchAdsFragment"
             app:destination="@id/searchAdsFragment" />
+        <argument
+            android:name="departureDate"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="arivalDate"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="departure"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="destination"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="source"
+            android:defaultValue="all"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/trans"

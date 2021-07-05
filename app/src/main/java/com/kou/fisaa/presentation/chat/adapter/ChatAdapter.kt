@@ -2,12 +2,10 @@ package com.kou.fisaa.presentation.transactions.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
-import com.kou.fisaa.utils.SimpleCallback
 
 class ChatAdapter(private val fromId: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -17,7 +15,7 @@ class ChatAdapter(private val fromId: String) :
         const val TO = 2
     }
 
-    private var messages = listOf<Message>()
+    private var messages = arrayListOf<Message>()
 
     class FromViewHolder(val binding: ChatFromBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -79,11 +77,16 @@ class ChatAdapter(private val fromId: String) :
             TO
     }
 
-    fun updateMsgs(newMsgs: List<Message>) {
-        val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
-        this.messages = newMsgs
-        diffResult.dispatchUpdatesTo(this)
+    /* fun updateMsgs(newMsgs: List<Message>) {
+         val diffResult =
+             DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
+         this.messages = newMsgs
+         diffResult.dispatchUpdatesTo(this)
+     }*/
+
+    fun add(chatMsg: Message) {
+        messages.add(chatMsg)
+        notifyItemInserted(messages.size)
     }
 
 
