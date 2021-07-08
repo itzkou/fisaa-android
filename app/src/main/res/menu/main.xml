@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+
         android:id="@+id/home"
         android:icon="@drawable/ic_home_selector"
         android:menuCategory="secondary"
@@ -12,6 +13,10 @@
         android:icon="@drawable/ic_ads_selector"
         android:menuCategory="secondary"
         android:title="@string/ads_bom" />
+
+    <item
+        android:menuCategory="secondary"
+        android:title="" />
 
     <item
         android:id="@+id/trans"

@@ -40,7 +40,15 @@ class ChatRoomFragment : Fragment() {
                 userId = it
                 setupUi()
                 sendMsg()
-                viewLifecycleOwner.lifecycleScope.launch { listenMsgs() }
+                /** if you call listenMsgs using viewModelScope and When you come back from Fragment X to ChatRoomFragment, then ChatRoomFragment gets reattached. As a result fragment's onViewCreated gets called second time and you observe the same instance of Flow second time.
+                 *  Other words, now you have one Flow with many observers,
+                 *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
+                 *  to the livedata when the old observer is still there in the same fragment
+                 **/
+                viewLifecycleOwner.lifecycleScope.launch {
+                    listenMsgs()
+                }
+
 
             }
         })
@@ -51,12 +59,12 @@ class ChatRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("ChatRoomFragment", "onViewCreated: ")
+
 
         viewModel.msg.observe(viewLifecycleOwner, { resource ->
-
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
+
                     resource?.let { msgsResource ->
 
                         msgsResource.data?.let { msg ->
@@ -69,7 +77,6 @@ class ChatRoomFragment : Fragment() {
                 }
                 Resource.Status.ERROR -> {
                     requireActivity().toast(resource.message.toString())
-                    Log.d("minakupenda", resource.message.toString())
                 }
 
                 Resource.Status.LOADING -> requireActivity().toast("loading")
