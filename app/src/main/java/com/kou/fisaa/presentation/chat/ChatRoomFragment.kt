@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
@@ -15,6 +16,7 @@ import com.kou.fisaa.databinding.FragmentChatRoomBinding
 import com.kou.fisaa.presentation.transactions.adapter.ChatAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.toast
+import kotlinx.coroutines.launch
 
 
 class ChatRoomFragment : Fragment() {
@@ -31,21 +33,17 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
         viewModel.userId.observe(viewLifecycleOwner, {
+
+            Log.i("ChatRoomFragment", "onCreateView: ")
             it?.let {
                 userId = it
-                mAdapter = ChatAdapter(userId)
                 setupUi()
                 sendMsg()
-                listenMsgs()
-
+                viewLifecycleOwner.lifecycleScope.launch { listenMsgs() }
 
             }
         })
-
-
-
 
 
         return view
@@ -53,6 +51,8 @@ class ChatRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i("ChatRoomFragment", "onViewCreated: ")
+
         viewModel.msg.observe(viewLifecycleOwner, { resource ->
 
             when (resource.status) {
@@ -60,10 +60,7 @@ class ChatRoomFragment : Fragment() {
                     resource?.let { msgsResource ->
 
                         msgsResource.data?.let { msg ->
-                            if (msg.fromId == userId)
-                                mAdapter.add(msg)
-                            else
-                                mAdapter.add(msg)
+                            mAdapter.add(msg)
                         }
 
                         binding.rvChats.scrollToPosition(mAdapter.itemCount - 1)
@@ -79,8 +76,6 @@ class ChatRoomFragment : Fragment() {
             }
 
         })
-
-
         viewModel.hasBeenSent.observe(viewLifecycleOwner,
             { hasBeenSent ->
                 when (hasBeenSent.status) {
@@ -107,7 +102,9 @@ class ChatRoomFragment : Fragment() {
         _binding = null
     }
 
+
     private fun setupUi() {
+        mAdapter = ChatAdapter(userId)
         binding.rvChats.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -127,9 +124,8 @@ class ChatRoomFragment : Fragment() {
 
     }
 
-    private fun listenMsgs() {
+    private suspend fun listenMsgs() {
         viewModel.listenMsgs(userId, chatArgs.toId)
-
 
     }
 

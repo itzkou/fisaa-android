@@ -12,6 +12,7 @@ import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +29,7 @@ class ChatViewModel @Inject constructor(
     val msg = _msg
 
 
+
     fun sendMsg(msg: Message) {
 
         viewModelScope.launch {
@@ -42,17 +44,17 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    fun listenMsgs(fromId: String, toId: String) {
-        viewModelScope.launch {
-            repository.listenMsgs(fromId, toId).collect { resource ->
-                resource?.let {
-                    _msg.value = it
+    suspend fun listenMsgs(fromId: String, toId: String) {
 
-                }
+        repository.listenMsgs(fromId, toId).collectLatest { resource ->
+            resource?.let {
+                _msg.value = it
+
             }
-
-
         }
+
+
+
 
 
     }
