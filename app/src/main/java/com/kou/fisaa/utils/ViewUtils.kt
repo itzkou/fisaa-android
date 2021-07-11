@@ -77,8 +77,10 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 
 fun ImageView.loadCircle(photoUrl: String?) =
     this.load(photoUrl) {
+
         crossfade(true)
         transformations(CircleCropTransformation())
+
     }
 
 

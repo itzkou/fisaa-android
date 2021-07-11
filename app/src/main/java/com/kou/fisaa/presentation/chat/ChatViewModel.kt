@@ -26,7 +26,7 @@ class ChatViewModel @Inject constructor(
     val hasBeenSent = _hasBeenSent
     private val _msg = MutableLiveData<Resource<Message>>()
     val msg = _msg
-
+    val userPhoto = MutableLiveData<String?>()
 
 
     fun sendMsg(msg: Message) {
@@ -52,6 +52,22 @@ class ChatViewModel @Inject constructor(
         }
 
 
+    }
+
+    fun getImage() {
+        viewModelScope.launch {
+            prefsStore.getId().collect { userIdRes ->
+                userIdRes?.let { id ->
+                    repository.getUser(id).collect { userRes ->
+                        userRes?.let {
+                            userPhoto.value = it.data?.image
+                        }
+                    }
+                }
+
+            }
+
+        }
     }
 
 

@@ -11,7 +11,7 @@ class FisaaRemote @Inject constructor(
     suspend fun login(loginQuery: LoginQuery) =
         getResource { fisaaApi.login(loginQuery) }
 
-    suspend fun getUser(id: Int) =
+    suspend fun getUser(id: String) =
         getResource { fisaaApi.getUser(id) }
 
     suspend fun signUp(signUpQuery: Map<String, RequestBody>) =

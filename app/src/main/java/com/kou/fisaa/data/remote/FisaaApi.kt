@@ -10,7 +10,7 @@ interface FisaaApi {
 
     /** Get User **/
     @GET("users/{id}")
-    suspend fun getUser(@Path("id") id: Int): Response<User>
+    suspend fun getUser(@Path("id") id: String): Response<User>
 
     /** Login **/
     @POST("users/login")

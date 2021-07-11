@@ -7,16 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.kou.fisaa.R
-import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ItemUserBinding
 import com.kou.fisaa.utils.SimpleCallback
 import javax.inject.Inject
 
-class UsersAdapter @Inject constructor() :
-    RecyclerView.Adapter<UsersAdapter.UserViewHolder>() {
+class TransactionAdapter @Inject constructor() :
+    RecyclerView.Adapter<TransactionAdapter.UserViewHolder>() {
 
-    private var users = listOf<User>()
-    private var usersItemClickListener: ((String) -> Unit)? = null
+    private var messages = listOf<Message>()
+    private var msgsItemListener: ((String) -> Unit)? = null
 
 
     class UserViewHolder(val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
@@ -35,37 +35,37 @@ class UsersAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = users[position]
+        val message = messages[position]
 
         with(holder.binding) {
             root.setOnClickListener {
-                usersItemClickListener?.let { callback ->
-                    callback(user._id)
+                msgsItemListener?.let { callback ->
+                    callback(message.fromId)
                 }
             }
-            if (user.image.isNullOrEmpty())
+            if (message.senderPhoto.isEmpty())
                 picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
             else
-                picture.load(user.image)
+                picture.load(message.senderPhoto)
 
-            latestMsg.text = "${user.firstName} wants to send xoxo"
+            latestMsg.text = " username wants to send xoxo"
         }
 
 
     }
 
-    override fun getItemCount() = users.size
+    override fun getItemCount() = messages.size
 
 
-    fun updateMsgs(newUsers: List<User>) {
+    fun updateMsgs(newMsgs: List<Message>) {
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.users, newUsers) { it._id })
-        this.users = newUsers
+            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { })
+        this.messages = newMsgs
         diffResult.dispatchUpdatesTo(this)
     }
 
     fun setOnUserClickListener(callback: ((String) -> Unit)) {
-        this.usersItemClickListener = callback
+        this.msgsItemListener = callback
     }
 
 

@@ -57,6 +57,10 @@
         <action
             android:id="@+id/action_trans_to_chatRoomFragment"
             app:destination="@id/chatRoomFragment" />
+        <argument
+            android:name="fromId"
+            android:defaultValue='"none"'
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profile"

@@ -183,6 +183,27 @@ class FisaaRepository @Inject constructor(
         }
     }
 
+    @ExperimentalCoroutinesApi
+    override suspend fun listenTransactions(
+        fromId: String
+    ): Flow<Resource<List<Message>>?> {
+        return channelFlow {
+            val hisMsgsSubscription =
+                firestore.listenTransactions(fromId).addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        channel.offer(Resource.error(error.toString()))
+                    } else if (snapshot != null) {
+                        val msgs = snapshot.toObjects(Message::class.java)
+                        channel.offer(Resource.success(msgs))
+                    }
+                }
+
+            awaitClose {
+                hisMsgsSubscription.remove()
+            }
+        }
+    }
+
 
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
@@ -200,6 +221,15 @@ class FisaaRepository @Inject constructor(
             emit(Resource.loading())
             val response = remote.signUp(signUpQuery)
             emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun getUser(id: String): Flow<Resource<User>?> {
+        return flow {
+
+            val response = remote.getUser(id)
+            emit(response)
+
         }.flowOn(ioDispatcher)
     }
 

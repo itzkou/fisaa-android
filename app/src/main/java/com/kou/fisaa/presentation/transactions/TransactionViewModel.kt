@@ -3,10 +3,11 @@ package com.kou.fisaa.presentation.transactions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.repository.FisaaRepository
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,14 +15,15 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionViewModel @Inject constructor(private val repository: FisaaRepository) :
     ViewModel() {
-    private val _users = MutableLiveData<Resource<List<User>>>()
-    val users = _users
+    private val _transactions = MutableLiveData<Resource<List<Message>>>()
+    val transactions = _transactions
 
-    fun getUsers() {
+    @ExperimentalCoroutinesApi
+    fun listenTransactions(fromId: String) {
         viewModelScope.launch {
-            repository.getUsers().collect {
+            repository.listenTransactions(fromId).collect {
                 it?.let {
-                    _users.value = it
+                    _transactions.value = it
                 }
             }
 

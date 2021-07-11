@@ -1,5 +1,6 @@
 package com.kou.fisaa.presentation.host
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +23,7 @@ class HostViewModel @Inject constructor(
 ) : ViewModel() {
     val darkThemeEnabled = prefsStore.isNightMode().asLiveData()
     val userId = prefsStore.getId().asLiveData()
+    val userPhoto = MutableLiveData<String?>()
 
     fun toggleNightMode() {
         viewModelScope.launch {
@@ -28,11 +31,6 @@ class HostViewModel @Inject constructor(
         }
     }
 
-    fun getUser() {
-        viewModelScope.launch {
-            repository.
-        }
-    }
 
     fun logout() {
         auth.signOut()
@@ -46,4 +44,21 @@ class HostViewModel @Inject constructor(
     }
 
 
+    fun getImage() {
+        viewModelScope.launch {
+            prefsStore.getId().collect { userIdRes ->
+                userIdRes?.let { id ->
+                    repository.getUser(id).collect { userRes ->
+                        userRes?.let {
+                            userPhoto.value = it.data?.image
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
 }
+
+

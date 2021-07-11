@@ -58,11 +58,16 @@ class FirestoreRemote @Inject constructor(
         return chatsCollectionReference.add(msg).await()
     }
 
-    //TODO combine from -> to and To from   parallel query
+
     override suspend fun listenMsgs(fromId: String, toId: String): Query {
         return chatsCollectionReference.whereEqualTo("fromId", fromId).whereEqualTo("toId", toId)
             .orderBy("timeStamp")
 
+    }
+
+    override suspend fun listenTransactions(fromId: String): Query {
+        return chatsCollectionReference.whereEqualTo("fromId", fromId)
+            .orderBy("timeStamp").limitToLast(1)
     }
 
 

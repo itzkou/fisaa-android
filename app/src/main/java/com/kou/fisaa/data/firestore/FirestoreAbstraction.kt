@@ -26,6 +26,7 @@ interface FirestoreAbstraction {
     suspend fun getUsers(): QuerySnapshot
     suspend fun sendMsg(msg: Message): DocumentReference
     suspend fun listenMsgs(fromId: String, toId: String): Query
+    suspend fun listenTransactions(fromId: String): Query
 
     /*** Storage ***/
     suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot
