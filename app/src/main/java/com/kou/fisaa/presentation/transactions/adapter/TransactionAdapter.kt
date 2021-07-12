@@ -10,6 +10,7 @@ import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ItemUserBinding
 import com.kou.fisaa.utils.SimpleCallback
+import com.kou.fisaa.utils.setDate
 import javax.inject.Inject
 
 class TransactionAdapter @Inject constructor() :
@@ -48,7 +49,11 @@ class TransactionAdapter @Inject constructor() :
             else
                 picture.load(message.senderPhoto)
 
-            latestMsg.text = " username wants to send xoxo"
+            date.setDate(message.timestampDate())
+
+            latestMsg.text = message.text
+
+            username.text = message.senderName
         }
 
 
@@ -59,7 +64,7 @@ class TransactionAdapter @Inject constructor() :
 
     fun updateMsgs(newMsgs: List<Message>) {
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { })
+            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
         this.messages = newMsgs
         diffResult.dispatchUpdatesTo(this)
     }

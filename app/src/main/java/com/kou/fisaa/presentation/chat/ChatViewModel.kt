@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentReference
 import com.kou.fisaa.data.entities.Message
+import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -26,7 +27,7 @@ class ChatViewModel @Inject constructor(
     val hasBeenSent = _hasBeenSent
     private val _msg = MutableLiveData<Resource<Message>>()
     val msg = _msg
-    val userPhoto = MutableLiveData<String?>()
+    val user = MutableLiveData<User?>()
 
 
     fun sendMsg(msg: Message) {
@@ -43,6 +44,7 @@ class ChatViewModel @Inject constructor(
 
     }
 
+
     suspend fun listenMsgs(fromId: String, toId: String) {
         repository.listenMsgs(fromId, toId).collect { resource ->
             resource?.let {
@@ -54,20 +56,16 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    fun getImage() {
-        viewModelScope.launch {
-            prefsStore.getId().collect { userIdRes ->
-                userIdRes?.let { id ->
-                    repository.getUser(id).collect { userRes ->
-                        userRes?.let {
-                            userPhoto.value = it.data?.image
-                        }
-                    }
-                }
-
+    // todo nested flow that rely on each other
+    suspend fun getUser(id: String) {
+        repository.getUser(id).collect { resUser ->
+            resUser?.let { me ->
+                user.value = me.data
             }
 
         }
+
+
     }
 
 

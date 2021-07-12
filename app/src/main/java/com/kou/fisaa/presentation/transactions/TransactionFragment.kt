@@ -29,28 +29,36 @@ class TransactionFragment : Fragment() {
     lateinit var transactionAdapter: TransactionAdapter
 
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentTransactionBinding.inflate(inflater, container, false)
         val view = binding.root
-        listenTransactions(transArgs.fromId)
+
+
         setupUi()
 
         return view
 
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.userId.observe(viewLifecycleOwner, { id ->
+            id?.let {
+                listenTransactions(it)
+            }
+        })
         viewModel.transactions.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     resource?.let {
-                        val users = resource.data
-                        if (!users.isNullOrEmpty())
-                            transactionAdapter.updateMsgs(users)
+                        val msgs = resource.data
+                        if (!msgs.isNullOrEmpty())
+                            transactionAdapter.updateMsgs(msgs)
 
                     }
                 }

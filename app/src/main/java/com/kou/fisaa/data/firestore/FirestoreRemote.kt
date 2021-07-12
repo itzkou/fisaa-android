@@ -65,8 +65,8 @@ class FirestoreRemote @Inject constructor(
 
     }
 
-    override suspend fun listenTransactions(fromId: String): Query {
-        return chatsCollectionReference.whereEqualTo("fromId", fromId)
+    override suspend fun listenTransactions(toId: String): Query {
+        return chatsCollectionReference.whereEqualTo("toId", toId)
             .orderBy("timeStamp").limitToLast(1)
     }
 

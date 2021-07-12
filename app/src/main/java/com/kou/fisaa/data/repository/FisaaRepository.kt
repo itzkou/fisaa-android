@@ -192,6 +192,7 @@ class FisaaRepository @Inject constructor(
                 firestore.listenTransactions(fromId).addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         channel.offer(Resource.error(error.toString()))
+                        Log.i("listenTransactions", error.toString())
                     } else if (snapshot != null) {
                         val msgs = snapshot.toObjects(Message::class.java)
                         channel.offer(Resource.success(msgs))

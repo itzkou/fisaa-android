@@ -1,7 +1,6 @@
 package com.kou.fisaa.presentation.chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +23,6 @@ class ChatRoomFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val chatArgs: ChatRoomFragmentArgs by navArgs()
-    private lateinit var userId: String
-    private var photo: String = ""
     private lateinit var mAdapter: ChatAdapter
 
     override fun onCreateView(
@@ -34,18 +31,44 @@ class ChatRoomFragment : Fragment() {
     ): View? {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
-
-
-        sessionValidation()
-        getUserImage()
+        validateSession()
 
         return view
+    }
+
+    private fun validateSession() {
+        viewModel.userId.observe(viewLifecycleOwner, { id ->
+
+            if (id != null) {
+                setupUi(id)
+                viewModel.getUser(id)
+
+            }
+
+        })
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
+        viewModel.user.observe(viewLifecycleOwner, { resUser ->
+
+            resUser?.let { from ->
+                sendMsg(from._id, from.firstName, from.image ?: "")
+                /** if you call listenMsgs using viewModelScope and When you come back from Fragment X to ChatRoomFragment, then ChatRoomFragment gets reattached. As a result fragment's onViewCreated gets called second time and you observe the same instance of Flow second time.
+                 *  Other words, now you have one Flow with many observers,
+                 *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
+                 *  to the livedata when the old observer is still there in the same fragment
+                 **/
+                viewLifecycleOwner.lifecycleScope.launch {
+                    listenMsgs(from._id)  //todo  check why  : If I move this inside onviewcreated and inside the user observer I get a duplicate msg
+                }
+
+
+            }
+        })
         viewModel.msg.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
@@ -94,30 +117,9 @@ class ChatRoomFragment : Fragment() {
         _binding = null
     }
 
-    private fun sessionValidation() {
-        viewModel.userId.observe(viewLifecycleOwner, {
 
-            Log.i("ChatRoomFragment", "onCreateView: ")
-            it?.let {
-                userId = it
-                setupUi()
-                sendMsg()
-                /** if you call listenMsgs using viewModelScope and When you come back from Fragment X to ChatRoomFragment, then ChatRoomFragment gets reattached. As a result fragment's onViewCreated gets called second time and you observe the same instance of Flow second time.
-                 *  Other words, now you have one Flow with many observers,
-                 *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
-                 *  to the livedata when the old observer is still there in the same fragment
-                 **/
-                viewLifecycleOwner.lifecycleScope.launch {
-                    listenMsgs()
-                }
-
-
-            }
-        })
-    }
-
-    private fun setupUi() {
-        mAdapter = ChatAdapter(userId)
+    private fun setupUi(fromId: String) {
+        mAdapter = ChatAdapter(fromId)
         binding.rvChats.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -125,31 +127,27 @@ class ChatRoomFragment : Fragment() {
         }
     }
 
-    private fun sendMsg() {
+    private fun sendMsg(fromId: String, senderName: String, senderPhoto: String) {
 
         binding.btnSend.setOnClickListener {
             val content = binding.edChat.text.toString()
             val chatMessage =
-                Message(userId, chatArgs.toId, content, photo, System.currentTimeMillis() / 1000)
+                Message(
+                    fromId,
+                    chatArgs.toId,
+                    content,
+                    senderPhoto,
+                    senderName,
+                    System.currentTimeMillis() / 1000
+                )
 
             viewModel.sendMsg(chatMessage)
         }
 
     }
 
-    private fun getUserImage() {
-        viewModel.userPhoto.observe(viewLifecycleOwner, { imageRes ->
-            imageRes?.let { img ->
-                photo = img
-
-            }
-
-        })
-    }
-
-
-    private suspend fun listenMsgs() {
-        viewModel.listenMsgs(userId, chatArgs.toId)
+    private suspend fun listenMsgs(fromId: String) {
+        viewModel.listenMsgs(fromId, chatArgs.toId)
 
     }
 
