@@ -20,9 +20,8 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
     private val _hasBeenSent =
         MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
-    private val _msg = MutableLiveData<Resource<Message>>()
     val hasBeenSent = _hasBeenSent
-    val msg = _msg
+    var msg: LiveData<Resource<Message>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
     val user: LiveData<Resource<User>> = userId.switchMap { id ->
 
@@ -53,15 +52,22 @@ class ChatViewModel @Inject constructor(
     }
 
 
-    suspend fun listenMsgs(fromId: String, toId: String) {
-        repository.listenMsgs(fromId, toId).collect { resource ->
-            resource?.let {
-                _msg.value = it
+    suspend fun listenMsgs(toId: String) {
 
+        msg = userId.switchMap { id ->
+            liveData {
+                if (id != null)
+                    repository.listenMsgs(id, toId).collect { resource ->
+                        resource?.let {
+                            emit(it)
+                        }
+
+                    }
             }
         }
 
     }
+
 
     // todo nested flow that rely on each other
     /* fun getUser(id: String) {

@@ -31,7 +31,13 @@ class ChatRoomFragment : Fragment() {
     ): View? {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
+
         validateSession()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.listenMsgs(chatArgs.toId)
+
+        }
+
 
         return view
     }
@@ -59,9 +65,6 @@ class ChatRoomFragment : Fragment() {
                          *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
                          *  to the livedata when the old observer is still there in the same fragment
                          **/
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            listenMsgs(from._id)
-                        }
 
 
                     }
@@ -76,28 +79,29 @@ class ChatRoomFragment : Fragment() {
                 }
             }
         })
-        viewModel.msg.observe(viewLifecycleOwner, { resource ->
-            when (resource.status) {
-                Resource.Status.SUCCESS -> {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.msg.observe(viewLifecycleOwner, { resource ->
+                when (resource.status) {
+                    Resource.Status.SUCCESS -> {
 
-                    resource?.let { msgsResource ->
+                        resource?.let { msgsResource ->
 
-                        msgsResource.data?.let { msg ->
-                            mAdapter.add(msg)
+                            msgsResource.data?.let { msg ->
+                                mAdapter.add(msg)
+                            }
+
+                            binding.rvChats.scrollToPosition(mAdapter.itemCount - 1)
+
                         }
-
-                        binding.rvChats.scrollToPosition(mAdapter.itemCount - 1)
-
                     }
-                }
-                Resource.Status.ERROR -> {
-                    requireActivity().toast(resource.message.toString())
-                }
+                    Resource.Status.ERROR -> {
+                        requireActivity().toast(resource.message.toString())
+                    }
 
-                Resource.Status.LOADING -> requireActivity().toast("loading")
-            }
-
-        })
+                    Resource.Status.LOADING -> requireActivity().toast("loading")
+                }
+            })
+        }
         viewModel.hasBeenSent.observe(viewLifecycleOwner,
             { hasBeenSent ->
                 when (hasBeenSent.status) {
@@ -120,6 +124,7 @@ class ChatRoomFragment : Fragment() {
 
 
     override fun onDestroyView() {
+
         super.onDestroyView()
         _binding = null
     }
@@ -150,11 +155,6 @@ class ChatRoomFragment : Fragment() {
 
             viewModel.sendMsg(chatMessage)
         }
-
-    }
-
-    private suspend fun listenMsgs(fromId: String) {
-        viewModel.listenMsgs(fromId, chatArgs.toId)
 
     }
 
