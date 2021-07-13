@@ -9,7 +9,7 @@ data class Message(
     val text: String,
     val senderPhoto: String,
     val senderName: String,
-    val timeStamp: Long
+    val timeStamp: Long = System.currentTimeMillis() / 1000
 ) {
     constructor() : this("", "", "", "", "", -1)
 
