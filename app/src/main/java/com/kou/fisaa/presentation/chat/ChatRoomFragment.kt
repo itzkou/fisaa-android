@@ -42,7 +42,6 @@ class ChatRoomFragment : Fragment() {
             if (id != null) {
                 setupUi(id)
                 viewModel.getUser(id)
-
             }
 
         })

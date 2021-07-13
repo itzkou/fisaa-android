@@ -21,13 +21,14 @@ class ChatViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore
 ) : ViewModel() {
-    val userId = prefsStore.getId().asLiveData()
     private val _hasBeenSent =
         MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
-    val hasBeenSent = _hasBeenSent
     private val _msg = MutableLiveData<Resource<Message>>()
+    val hasBeenSent = _hasBeenSent
     val msg = _msg
+    val userId = prefsStore.getId().asLiveData()
     val user = MutableLiveData<User?>()
+
 
 
     fun sendMsg(msg: Message) {
@@ -57,18 +58,17 @@ class ChatViewModel @Inject constructor(
     }
 
     // todo nested flow that rely on each other
-    suspend fun getUser(id: String) {
-        repository.getUser(id).collect { resUser ->
-            resUser?.let { me ->
-                user.value = me.data
+    fun getUser(id: String) {
+        viewModelScope.launch {
+            repository.getUser(id).collect { resUser ->
+                resUser?.let { me ->
+                    user.value = me.data
+                }
             }
-
         }
 
 
     }
-
-
 }
 
 
