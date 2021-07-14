@@ -55,6 +55,7 @@ class ChatAdapter(private val fromId: String) :
             TO -> {
                 with((holder as ToViewHolder).binding) {
                     tvTo.text = message.text
+                    tvTo.visibility = View.GONE
                     if (message.image.isNotEmpty()) {
                         msgPhoto.visibility = View.VISIBLE
                         msgPhoto.load(message.image)
@@ -66,7 +67,8 @@ class ChatAdapter(private val fromId: String) :
 
             FROM -> {
                 with((holder as FromViewHolder).binding) {
-                    tvFrom.text = message.text
+
+                tvFrom.text = message.text
                     if (message.image.isNotEmpty()) {
                         msgPhoto.visibility = View.VISIBLE
                         msgPhoto.load(message.image)

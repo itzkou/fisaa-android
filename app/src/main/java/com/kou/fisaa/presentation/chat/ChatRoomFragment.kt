@@ -83,7 +83,7 @@ class ChatRoomFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { from ->
                         me = from
-                        sendMsg(from._id, from.firstName, from.image ?: "", "")
+                        sendMsg(from._id, from.firstName, from.image ?: "", "", false)
 
                     }
                 }
@@ -123,7 +123,7 @@ class ChatRoomFragment : Fragment() {
             }
         })
         viewModel.imageUrl.observe(viewLifecycleOwner, { url ->
-            sendMsg(me._id, me.firstName, me.image ?: "", url)
+            sendMsg(me._id, me.firstName, me.image ?: "", url, true)
         })
 
         viewModel.hasBeenSent.observe(viewLifecycleOwner,
@@ -227,22 +227,39 @@ class ChatRoomFragment : Fragment() {
         fromId: String,
         senderName: String,
         senderPhoto: String,
-        image: String
+        image: String, mediaFlag: Boolean
     ) {
 
         binding.btnSend.setOnClickListener {
             val content = binding.edChat.text.toString()
-            val chatMessage =
-                Message(
-                    fromId,
-                    chatArgs.toId,
-                    content,
-                    senderPhoto,
-                    senderName,
-                    image
-                )
 
-            viewModel.sendMsg(chatMessage)
+            if (mediaFlag) {
+                val chatMessage =
+                    Message(
+                        fromId,
+                        chatArgs.toId,
+                        content,
+                        senderPhoto,
+                        senderName,
+                        image
+                    )
+                viewModel.sendMsg(chatMessage)
+
+            } else {
+                val chatMessage =
+                    Message(
+                        fromId,
+                        chatArgs.toId,
+                        content,
+                        senderPhoto,
+                        senderName,
+                        ""
+                    )
+                viewModel.sendMsg(chatMessage)
+
+            }
+
+
         }
 
     }
