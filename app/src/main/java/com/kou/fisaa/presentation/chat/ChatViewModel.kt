@@ -1,8 +1,12 @@
 package com.kou.fisaa.presentation.chat
 
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -22,15 +26,37 @@ class ChatViewModel @Inject constructor(
         MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
     val hasBeenSent = _hasBeenSent
     var msg: LiveData<Resource<Message>> = MutableLiveData()
+    var imageUrl: LiveData<Resource<String>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
     var other: LiveData<Resource<User>> = MutableLiveData()
     val user: LiveData<Resource<User>> = userId.switchMap { id ->
-
         liveData {
             if (id != null) {
                 repository.getUser(id).collect { resUser ->
                     resUser?.let {
                         emit(it)
+                    }
+                }
+            }
+        }
+    }
+    val storage = Firebase.storage.reference
+
+    fun persistImageFirestore(imageUri: Uri) {
+        viewModelScope.launch {
+            repository.uploadParcelImage(imageUri).collect { resource ->
+                resource?.data?.let { taskSnapshot ->
+                    taskSnapshot.task.addOnSuccessListener {
+                        storage.child("Chats")
+                            .child(imageUri.lastPathSegment!!).downloadUrl.addOnSuccessListener { url ->
+                                imageUrl = liveData {
+                                    emit(Resource.loading())
+                                    emit(Resource.success(url.toString()))
+                                }
+                            }.addOnFailureListener {
+
+                                Log.d("fireStorage Exception", it.message.toString())
+                            }
                     }
                 }
             }

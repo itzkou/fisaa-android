@@ -1,9 +1,14 @@
 package com.kou.fisaa.presentation.chat
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,7 +16,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Message
+import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.databinding.FragmentChatRoomBinding
+import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.presentation.transactions.adapter.ChatAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.loadAvatar
@@ -24,6 +31,19 @@ class ChatRoomFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val chatArgs: ChatRoomFragmentArgs by navArgs()
+    private var imageUri: Uri? = null
+    private val getUriFromCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result?.resultCode == Activity.RESULT_OK) {
+                imageUri = Uri.parse(result.data?.getStringExtra("cameraX"))
+                imageUri?.let {
+                    viewModel.persistImageFirestore(it)
+                }
+            } else
+                Log.d("ChatRoomFragment", "Uri from camera is null")
+        }
+    private lateinit var me: User
+    private lateinit var him: User
     private lateinit var mAdapter: ChatAdapter
 
     override fun onCreateView(
@@ -60,7 +80,8 @@ class ChatRoomFragment : Fragment() {
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { from ->
-                        sendMsg(from._id, from.firstName, from.image ?: "")
+                        me = from
+                        sendMsg(from._id, from.firstName, from.image ?: "", "")
 
                     }
                 }
@@ -78,6 +99,7 @@ class ChatRoomFragment : Fragment() {
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { other ->
+                        him = other
                         binding.edChat.hint = "Répondez à ${other.firstName}"
                         binding.otherAvatar.loadAvatar(other.image)
                         binding.otherAvatar.loadAvatar(other.image)
@@ -98,6 +120,27 @@ class ChatRoomFragment : Fragment() {
                 }
             }
         })
+        viewModel.imageUrl.observe(viewLifecycleOwner, { url ->
+            sendMsg(me._id, me.firstName, me.image ?: "", url)
+        })
+        viewModel.hasBeenSent.observe(viewLifecycleOwner,
+            { hasBeenSent ->
+                when (hasBeenSent.status) {
+                    Resource.Status.SUCCESS -> {
+                        requireActivity().toast("Sent")
+                        binding.edChat.text.clear()
+
+                    }
+
+                    Resource.Status.ERROR -> hasBeenSent?.let {
+                        requireActivity().toast(hasBeenSent.message.toString())
+                    }
+
+                    Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
+
+                }
+
+            })
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.msg.observe(viewLifecycleOwner, { resource ->
                 when (resource.status) {
@@ -121,24 +164,6 @@ class ChatRoomFragment : Fragment() {
                 }
             })
         }
-        viewModel.hasBeenSent.observe(viewLifecycleOwner,
-            { hasBeenSent ->
-                when (hasBeenSent.status) {
-                    Resource.Status.SUCCESS -> {
-                        requireActivity().toast("Sent")
-                        binding.edChat.text.clear()
-
-                    }
-
-                    Resource.Status.ERROR -> hasBeenSent?.let {
-                        requireActivity().toast(hasBeenSent.message.toString())
-                    }
-
-                    Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
-
-                }
-
-            })
     }
 
 
@@ -150,12 +175,16 @@ class ChatRoomFragment : Fragment() {
 
 
     private fun setupUi(fromId: String) {
+
         mAdapter = ChatAdapter(fromId)
         binding.rvChats.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
+        openCamera()
+
+
     }
 
     private fun listenMsgs() {
@@ -166,7 +195,6 @@ class ChatRoomFragment : Fragment() {
          **/
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.listenMsgs(chatArgs.toId)
-
         }
     }
 
@@ -177,10 +205,17 @@ class ChatRoomFragment : Fragment() {
         }
     }
 
+    private fun openCamera() {
+        binding.sendPhoto.setOnClickListener {
+            getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
+        }
+    }
+
     private fun sendMsg(
         fromId: String,
         senderName: String,
         senderPhoto: String,
+        image: String
     ) {
 
         binding.btnSend.setOnClickListener {
@@ -192,7 +227,7 @@ class ChatRoomFragment : Fragment() {
                     content,
                     senderPhoto,
                     senderName,
-                    "https://media.geeksforgeeks.org/wp-content/uploads/20210125162652/PersistentBottomSheetinAndroid-173x300.png"
+                    image
                 )
 
             viewModel.sendMsg(chatMessage)
