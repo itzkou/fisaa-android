@@ -32,6 +32,8 @@ class ChatRoomFragment : Fragment() {
     private val viewModel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val chatArgs: ChatRoomFragmentArgs by navArgs()
     private var imageUri: Uri? = null
+    private var imageUrl: String = ""
+
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result?.resultCode == Activity.RESULT_OK) {
@@ -45,7 +47,6 @@ class ChatRoomFragment : Fragment() {
                 Log.d("ChatRoomFragment", "Uri from camera is null")
         }
     private lateinit var me: User
-    private lateinit var him: User
     private lateinit var mAdapter: ChatAdapter
 
     override fun onCreateView(
@@ -58,6 +59,7 @@ class ChatRoomFragment : Fragment() {
         validateSession()
         getOtherUser()
         listenMsgs()
+
 
 
 
@@ -77,14 +79,12 @@ class ChatRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.user.observe(viewLifecycleOwner, { resUser ->
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { from ->
                         me = from
-                        sendMsg(from._id, from.firstName, from.image ?: "", "", false)
-
+                        sendMsg(from._id, from.firstName, from.image ?: "")
                     }
                 }
 
@@ -101,7 +101,7 @@ class ChatRoomFragment : Fragment() {
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { other ->
-                        him = other
+
                         binding.edChat.hint = "Répondez à ${other.firstName}"
                         binding.otherAvatar.loadAvatar(other.image)
                         binding.otherAvatar.loadAvatar(other.image)
@@ -123,27 +123,26 @@ class ChatRoomFragment : Fragment() {
             }
         })
         viewModel.imageUrl.observe(viewLifecycleOwner, { url ->
-            sendMsg(me._id, me.firstName, me.image ?: "", url, true)
+            imageUrl = url
+            sendMsg(me._id, me.firstName, me.image ?: "")
         })
-
-        viewModel.hasBeenSent.observe(viewLifecycleOwner,
-            { hasBeenSent ->
-                when (hasBeenSent.status) {
-                    Resource.Status.SUCCESS -> {
-                        requireActivity().toast("Sent")
-                        binding.edChat.text.clear()
-
-                    }
-
-                    Resource.Status.ERROR -> hasBeenSent?.let {
-                        requireActivity().toast(hasBeenSent.message.toString())
-                    }
-
-                    Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
+        viewModel.hasBeenSent.observe(viewLifecycleOwner, { hasBeenSent ->
+            when (hasBeenSent.status) {
+                Resource.Status.SUCCESS -> {
+                    requireActivity().toast("Sent")
+                    binding.edChat.text.clear()
 
                 }
 
-            })
+                Resource.Status.ERROR -> hasBeenSent?.let {
+                    requireActivity().toast(hasBeenSent.message.toString())
+                }
+
+                Resource.Status.LOADING -> hasBeenSent?.let { requireActivity().toast("loading") }
+
+            }
+
+        })
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.msg.observe(viewLifecycleOwner, { resource ->
                 when (resource.status) {
@@ -166,7 +165,6 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.LOADING -> requireActivity().toast("loading")
                 }
             })
-
             viewModel.uploadTask.observe(viewLifecycleOwner, { resUpload ->
                 when (resUpload.status) {
                     Resource.Status.SUCCESS -> requireActivity().toast("Image Uploaded")
@@ -174,8 +172,9 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
-
         }
+
+
     }
 
 
@@ -227,38 +226,21 @@ class ChatRoomFragment : Fragment() {
         fromId: String,
         senderName: String,
         senderPhoto: String,
-        image: String, mediaFlag: Boolean
-    ) {
 
+        ) {
         binding.btnSend.setOnClickListener {
             val content = binding.edChat.text.toString()
-
-            if (mediaFlag) {
-                val chatMessage =
-                    Message(
-                        fromId,
-                        chatArgs.toId,
-                        content,
-                        senderPhoto,
-                        senderName,
-                        image
-                    )
-                viewModel.sendMsg(chatMessage)
-
-            } else {
-                val chatMessage =
-                    Message(
-                        fromId,
-                        chatArgs.toId,
-                        content,
-                        senderPhoto,
-                        senderName,
-                        ""
-                    )
-                viewModel.sendMsg(chatMessage)
-
-            }
-
+            val chatMessage =
+                Message(
+                    fromId,
+                    chatArgs.toId,
+                    content,
+                    senderPhoto,
+                    senderName,
+                    imageUrl
+                )
+            viewModel.sendMsg(chatMessage)
+            imageUrl = ""
 
         }
 
