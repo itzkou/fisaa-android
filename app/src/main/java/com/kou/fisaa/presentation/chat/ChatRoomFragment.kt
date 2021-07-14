@@ -14,6 +14,7 @@ import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.FragmentChatRoomBinding
 import com.kou.fisaa.presentation.transactions.adapter.ChatAdapter
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.loadAvatar
 import com.kou.fisaa.utils.toast
 import kotlinx.coroutines.launch
 
@@ -33,10 +34,10 @@ class ChatRoomFragment : Fragment() {
         val view = binding.root
 
         validateSession()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.listenMsgs(chatArgs.toId)
+        getOtherUser()
+        listenMsgs()
 
-        }
+
 
 
         return view
@@ -60,13 +61,31 @@ class ChatRoomFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { from ->
                         sendMsg(from._id, from.firstName, from.image ?: "")
-                        /** if you call listenMsgs using viewModelScope and When you come back from Fragment X to ChatRoomFragment, then ChatRoomFragment gets reattached. As a result fragment's onViewCreated gets called second time and you observe the same instance of Flow second time.
-                         *  Other words, now you have one Flow with many observers,
-                         *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
-                         *  to the livedata when the old observer is still there in the same fragment
-                         **/
 
+                    }
+                }
 
+                Resource.Status.LOADING -> {
+                    requireActivity().toast("Loading")
+                }
+
+                Resource.Status.ERROR -> {
+                    requireActivity().toast(resUser.message.toString())
+                }
+            }
+        })
+        viewModel.other.observe(viewLifecycleOwner, { resUser ->
+            when (resUser.status) {
+                Resource.Status.SUCCESS -> {
+                    resUser.data?.let { other ->
+                        binding.edChat.hint = "Répondez à ${other.firstName}"
+                        binding.otherAvatar.loadAvatar(other.image)
+                        binding.otherAvatar.loadAvatar(other.image)
+                        binding.otherUsername.text = requireActivity().getString(
+                            R.string.fullname,
+                            other.firstName,
+                            other.lastName
+                        )
                     }
                 }
 
@@ -139,7 +158,30 @@ class ChatRoomFragment : Fragment() {
         }
     }
 
-    private fun sendMsg(fromId: String, senderName: String, senderPhoto: String) {
+    private fun listenMsgs() {
+        /** if you call listenMsgs using viewModelScope and When you come back from Fragment X to ChatRoomFragment, then ChatRoomFragment gets reattached. As a result fragment's onViewCreated gets called second time and you observe the same instance of Flow second time.
+         *  Other words, now you have one Flow with many observers,
+         *  and when the flow emits data, then many of them are called.which leads to duplicate msgs.The problem here is that when you dettach the fragment from the acitivity, both fragment and its viewmodel are not destroyed. When you come back, you add a new observer
+         *  to the livedata when the old observer is still there in the same fragment
+         **/
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.listenMsgs(chatArgs.toId)
+
+        }
+    }
+
+    private fun getOtherUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getOtherUser(chatArgs.toId)
+
+        }
+    }
+
+    private fun sendMsg(
+        fromId: String,
+        senderName: String,
+        senderPhoto: String,
+    ) {
 
         binding.btnSend.setOnClickListener {
             val content = binding.edChat.text.toString()
@@ -149,9 +191,8 @@ class ChatRoomFragment : Fragment() {
                     chatArgs.toId,
                     content,
                     senderPhoto,
-                    senderName,
-
-                    )
+                    senderName
+                )
 
             viewModel.sendMsg(chatMessage)
         }

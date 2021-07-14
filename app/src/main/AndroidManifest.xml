@@ -23,7 +23,7 @@
         <activity
             android:name=".presentation.host.HostActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="true" />

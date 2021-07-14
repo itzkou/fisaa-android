@@ -23,6 +23,7 @@ class ChatViewModel @Inject constructor(
     val hasBeenSent = _hasBeenSent
     var msg: LiveData<Resource<Message>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
+    var other: LiveData<Resource<User>> = MutableLiveData()
     val user: LiveData<Resource<User>> = userId.switchMap { id ->
 
         liveData {
@@ -69,17 +70,17 @@ class ChatViewModel @Inject constructor(
     }
 
 
-    // todo nested flow that rely on each other
-    /* fun getUser(id: String) {
-         viewModelScope.launch {
-             repository.getUser(id).collect { resUser ->
-                 resUser?.let { me ->
-                     user.value = me.data
-                 }
-             }
-         }
+    suspend fun getOtherUser(id: String) {
+        other = liveData {
+            repository.getUser(id).collect { resource ->
+                resource?.let {
+                    emit(it)
+                }
 
-     }*/
+            }
+        }
+
+    }
 }
 
 

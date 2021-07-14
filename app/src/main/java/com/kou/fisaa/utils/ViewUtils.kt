@@ -9,9 +9,11 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
+import com.kou.fisaa.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -82,6 +84,18 @@ fun ImageView.loadCircle(photoUrl: String?) =
         transformations(CircleCropTransformation())
 
     }
+
+fun ImageView.loadAvatar(photoUrl: String?) {
+    if (photoUrl.isNullOrEmpty()) {
+        this.load(ContextCompat.getDrawable(this.context, R.drawable.ic_face)) {
+            crossfade(true)
+            transformations(CircleCropTransformation())
+        }
+
+    } else
+        this.load(photoUrl)
+
+}
 
 
 fun formatRelativeTimestamp(start: Date, end: Date): CharSequence =

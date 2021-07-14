@@ -77,12 +77,6 @@ class ChatAdapter(private val fromId: String) :
             TO
     }
 
-    /* fun updateMsgs(newMsgs: List<Message>) {
-         val diffResult =
-             DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
-         this.messages = newMsgs
-         diffResult.dispatchUpdatesTo(this)
-     }*/
 
     fun add(chatMsg: Message) {
         messages.add(chatMsg)

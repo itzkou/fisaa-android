@@ -80,6 +80,8 @@
     <string name="lbl4">Non noté</string>
     <string name="lbl5">4 étoiles</string>
     <string name="lbl6">4 et 5 étoiles</string>
+    <string name="send">Envoyer</string>
+    <string name="transaction_header">Transaction avec:</string>
 
 
 </resources>
