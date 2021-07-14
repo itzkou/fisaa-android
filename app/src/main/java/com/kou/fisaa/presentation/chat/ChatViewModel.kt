@@ -45,17 +45,17 @@ class ChatViewModel @Inject constructor(
     }
     val storage = Firebase.storage.reference
 
-    fun persistImageFirestore(imageUri: Uri) {
-        viewModelScope.launch {
+    suspend fun persistImageFirestore(imageUri: Uri) {
 
-            repository.uploadParcelImage(imageUri).collect { restaskSnapshot ->
-                restaskSnapshot?.data?.let { taskSnapshot ->
-                    taskSnapshot.task.addOnSuccessListener {
-                        storage.child("parcels")
-                            .child(imageUri.lastPathSegment!!)
-                            .downloadUrl
-                            .addOnSuccessListener { url ->
-                                imageUrl.value = url.toString()
+
+        repository.uploadParcelImage(imageUri).collect { restaskSnapshot ->
+            restaskSnapshot?.data?.let { taskSnapshot ->
+                taskSnapshot.task.addOnSuccessListener {
+                    storage.child("parcels")
+                        .child(imageUri.lastPathSegment!!)
+                        .downloadUrl
+                        .addOnSuccessListener { url ->
+                            imageUrl.value = url.toString()
                             }
                     }
                     taskSnapshot.task.addOnFailureListener {
@@ -67,7 +67,6 @@ class ChatViewModel @Inject constructor(
             }
 
         }
-    }
 
 
     fun sendMsg(msg: Message) {

@@ -36,8 +36,10 @@ class ChatRoomFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result?.resultCode == Activity.RESULT_OK) {
                 imageUri = Uri.parse(result.data?.getStringExtra("cameraX"))
-                imageUri?.let {
-                    viewModel.persistImageFirestore(it)
+                imageUri?.let { uri ->
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.persistImageFirestore(uri)
+                    }
                 }
             } else
                 Log.d("ChatRoomFragment", "Uri from camera is null")
@@ -121,20 +123,9 @@ class ChatRoomFragment : Fragment() {
             }
         })
         viewModel.imageUrl.observe(viewLifecycleOwner, { url ->
-
-            val chatMessage =
-                Message(
-                    me._id,
-                    chatArgs.toId,
-                    "",
-                    me.image ?: "",
-                    me.firstName,
-                    url
-                )
-
-            viewModel.sendMsg(chatMessage)
-
+            sendMsg(me._id, me.firstName, me.image ?: "", url)
         })
+
         viewModel.hasBeenSent.observe(viewLifecycleOwner,
             { hasBeenSent ->
                 when (hasBeenSent.status) {
@@ -183,6 +174,7 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
+
         }
     }
 
