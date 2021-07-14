@@ -2,6 +2,7 @@ package com.kou.fisaa.presentation.host
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -44,6 +45,13 @@ class HostActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.chatRoomFragment)
+                binding.bottomNavigationView.visibility = View.GONE
+            else
+                binding.bottomNavigationView.visibility = View.VISIBLE
+
+        }
         binding.fab.setOnClickListener {
             navController.navigate(R.id.action_create_ads)
         }

@@ -191,7 +191,8 @@ class ChatRoomFragment : Fragment() {
                     chatArgs.toId,
                     content,
                     senderPhoto,
-                    senderName
+                    senderName,
+                    "https://media.geeksforgeeks.org/wp-content/uploads/20210125162652/PersistentBottomSheetinAndroid-173x300.png"
                 )
 
             viewModel.sendMsg(chatMessage)

@@ -1,8 +1,10 @@
 package com.kou.fisaa.presentation.transactions.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
@@ -13,6 +15,7 @@ class ChatAdapter(private val fromId: String) :
     companion object {
         const val FROM = 1
         const val TO = 2
+
     }
 
     private var messages = arrayListOf<Message>()
@@ -52,6 +55,11 @@ class ChatAdapter(private val fromId: String) :
             TO -> {
                 with((holder as ToViewHolder).binding) {
                     tvTo.text = message.text
+                    if (message.image.isNotEmpty()) {
+                        msgPhoto.visibility = View.VISIBLE
+                        msgPhoto.load(message.image)
+                    } else
+                        msgPhoto.visibility = View.GONE
 
                 }
             }
@@ -59,6 +67,11 @@ class ChatAdapter(private val fromId: String) :
             FROM -> {
                 with((holder as FromViewHolder).binding) {
                     tvFrom.text = message.text
+                    if (message.image.isNotEmpty()) {
+                        msgPhoto.visibility = View.VISIBLE
+                        msgPhoto.load(message.image)
+                    } else
+                        msgPhoto.visibility = View.GONE
 
                 }
             }

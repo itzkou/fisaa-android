@@ -16,9 +16,16 @@
         android:text="lui"
         android:textAlignment="textStart"
         android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/msgPhoto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551"
-        app:layout_goneMarginEnd="18sp" />
+        app:layout_constraintTop_toBottomOf="@id/tvTo"
+        app:layout_goneMarginEnd="18sp"
+        app:shapeAppearanceOverlay="@style/roundImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

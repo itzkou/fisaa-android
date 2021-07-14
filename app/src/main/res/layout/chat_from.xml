@@ -17,8 +17,16 @@
         android:text="moi"
         android:textAlignment="textStart"
         android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/msgPhoto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginEnd="18sp" />
+        app:layout_constraintTop_toBottomOf="@id/tvFrom"
+        app:layout_goneMarginEnd="18sp"
+        app:shapeAppearanceOverlay="@style/roundImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
