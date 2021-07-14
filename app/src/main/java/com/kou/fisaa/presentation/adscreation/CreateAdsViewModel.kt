@@ -60,7 +60,9 @@ class CreateAdsViewModel @Inject constructor(
                 resource?.data?.let { taskSnapshot ->
                     taskSnapshot.task.addOnSuccessListener {
                         storage.child("parcels")
-                            .child(imageUri.lastPathSegment!!).downloadUrl.addOnSuccessListener { url ->
+                            .child(imageUri.lastPathSegment!!)
+                            .downloadUrl
+                            .addOnSuccessListener { url ->
                                 prepareAndPostParcel(
                                     url.toString(),
                                     bonus,
@@ -69,9 +71,10 @@ class CreateAdsViewModel @Inject constructor(
                                     parcelType,
                                     weight
                                 )
-                            }.addOnFailureListener {
-                                Log.d("fireStorage Exception", it.message.toString())
                             }
+                    }
+                    taskSnapshot.task.addOnFailureListener {
+                        Log.d("fireStorage Exception", it.message.toString())
                     }
                 }
             }

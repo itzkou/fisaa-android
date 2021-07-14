@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
@@ -26,7 +27,9 @@ class ChatViewModel @Inject constructor(
         MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
     val hasBeenSent = _hasBeenSent
     var msg: LiveData<Resource<Message>> = MutableLiveData()
-    var imageUrl: LiveData<Resource<String>> = MutableLiveData()
+    val imageUrl: MutableLiveData<String> =
+        MutableLiveData()  //Using Livedata with emit inside a task doesn't subscribe to observer
+    val uploadTask: MutableLiveData<Resource<UploadTask.TaskSnapshot>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
     var other: LiveData<Resource<User>> = MutableLiveData()
     val user: LiveData<Resource<User>> = userId.switchMap { id ->
@@ -44,22 +47,25 @@ class ChatViewModel @Inject constructor(
 
     fun persistImageFirestore(imageUri: Uri) {
         viewModelScope.launch {
-            repository.uploadParcelImage(imageUri).collect { resource ->
-                resource?.data?.let { taskSnapshot ->
-                    taskSnapshot.task.addOnSuccessListener {
-                        storage.child("Chats")
-                            .child(imageUri.lastPathSegment!!).downloadUrl.addOnSuccessListener { url ->
-                                imageUrl = liveData {
-                                    emit(Resource.loading())
-                                    emit(Resource.success(url.toString()))
-                                }
-                            }.addOnFailureListener {
 
-                                Log.d("fireStorage Exception", it.message.toString())
+            repository.uploadParcelImage(imageUri).collect { restaskSnapshot ->
+                restaskSnapshot?.data?.let { taskSnapshot ->
+                    taskSnapshot.task.addOnSuccessListener {
+                        storage.child("parcels")
+                            .child(imageUri.lastPathSegment!!)
+                            .downloadUrl
+                            .addOnSuccessListener { url ->
+                                imageUrl.value = url.toString()
                             }
                     }
+                    taskSnapshot.task.addOnFailureListener {
+                        Log.d("fireStorage Exception", it.message.toString())
+                    }
+
                 }
+                uploadTask.value = restaskSnapshot
             }
+
         }
     }
 

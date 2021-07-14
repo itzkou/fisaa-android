@@ -209,6 +209,7 @@ class FisaaRepository @Inject constructor(
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
         return flow {
+            emit(Resource.loading())
             val snapshot = firestore.uploadParcelImage(imageUri)
             emit(Resource.success(snapshot))
         }.catch {

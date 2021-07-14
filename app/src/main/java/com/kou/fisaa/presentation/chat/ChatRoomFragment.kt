@@ -121,7 +121,19 @@ class ChatRoomFragment : Fragment() {
             }
         })
         viewModel.imageUrl.observe(viewLifecycleOwner, { url ->
-            sendMsg(me._id, me.firstName, me.image ?: "", url)
+
+            val chatMessage =
+                Message(
+                    me._id,
+                    chatArgs.toId,
+                    "",
+                    me.image ?: "",
+                    me.firstName,
+                    url
+                )
+
+            viewModel.sendMsg(chatMessage)
+
         })
         viewModel.hasBeenSent.observe(viewLifecycleOwner,
             { hasBeenSent ->
@@ -161,6 +173,14 @@ class ChatRoomFragment : Fragment() {
                     }
 
                     Resource.Status.LOADING -> requireActivity().toast("loading")
+                }
+            })
+
+            viewModel.uploadTask.observe(viewLifecycleOwner, { resUpload ->
+                when (resUpload.status) {
+                    Resource.Status.SUCCESS -> requireActivity().toast("Image Uploaded")
+                    Resource.Status.LOADING -> requireActivity().toast("Sending Image")
+                    Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
         }
