@@ -1,9 +1,6 @@
 package com.kou.fisaa.presentation.transactions
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepository
@@ -20,19 +17,23 @@ class TransactionViewModel @Inject constructor(
     private val repository: FisaaRepository
 ) :
     ViewModel() {
-    private val _transactions = MutableLiveData<Resource<List<Message>>>()
     val userId = prefsStore.getId().asLiveData()
-    val transactions = _transactions
+    var transaction: LiveData<Resource<Message>> = MutableLiveData()
 
     @ExperimentalCoroutinesApi
-    fun listenTransactions(fromId: String) {
+    fun listenTransactions() {
         viewModelScope.launch {
-            repository.listenTransactions(fromId).collect {
-                it?.let {
-                    _transactions.value = it
+            transaction = userId.switchMap { id ->
+                liveData {
+                    if (id != null)
+                        repository.listenTransactions(id).collect { resource ->
+                            resource?.let {
+                                emit(it)
+                            }
+
+                        }
                 }
             }
-
         }
     }
 }

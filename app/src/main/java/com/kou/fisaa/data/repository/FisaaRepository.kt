@@ -154,7 +154,6 @@ class FisaaRepository @Inject constructor(
                         Log.i("firestore.listenMsgs", "listenMsgs: $error")
                     } else if (snapshot != null) {
 
-
                         for (dc in snapshot.documentChanges) {
                             when (dc.type) {
                                 DocumentChange.Type.ADDED -> {
@@ -185,17 +184,32 @@ class FisaaRepository @Inject constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun listenTransactions(
-        fromId: String
-    ): Flow<Resource<List<Message>>?> {
+        toId: String
+    ): Flow<Resource<Message>?> {
         return channelFlow {
             val hisMsgsSubscription =
-                firestore.listenTransactions(fromId).addSnapshotListener { snapshot, error ->
+                firestore.listenTransactions(toId).addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         channel.offer(Resource.error(error.toString()))
                         Log.i("listenTransactions", error.toString())
                     } else if (snapshot != null) {
-                        val msgs = snapshot.toObjects(Message::class.java)
-                        channel.offer(Resource.success(msgs))
+                        for (dc in snapshot.documentChanges) {
+                            when (dc.type) {
+                                DocumentChange.Type.ADDED -> {
+                                    val msg: Message = dc.document.toObject(Message::class.java)
+                                    channel.offer(Resource.success(msg))
+                                    Log.i("mesageti", msg.toString())
+                                }
+                                DocumentChange.Type.MODIFIED -> Log.i(
+                                    "mesageti",
+                                    " modified one msg "
+                                )
+                                DocumentChange.Type.REMOVED -> Log.i(
+                                    "mesageti",
+                                    " removed one msg "
+                                )
+                            }
+                        }
                     }
                 }
 

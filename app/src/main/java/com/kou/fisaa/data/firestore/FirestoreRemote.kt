@@ -21,10 +21,9 @@ class FirestoreRemote @Inject constructor(
     private val firestore: FirebaseFirestore
 
 ) : FirestoreAbstraction {
-    val currentUser = firebaseAuth.currentUser
     val storage = Firebase.storage.reference
-    val usersCollectionReference = firestore.collection("users")
-    val chatsCollectionReference = firestore.collection("chat")
+    private val usersCollectionReference = firestore.collection("users")
+    private val chatsCollectionReference = firestore.collection("chat")
 
 
     override suspend fun signInWithGoogle(acct: GoogleSignInAccount): AuthResult =

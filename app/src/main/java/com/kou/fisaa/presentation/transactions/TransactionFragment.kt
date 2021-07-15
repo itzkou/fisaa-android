@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.FragmentTransactionBinding
 import com.kou.fisaa.presentation.transactions.adapter.TransactionAdapter
 import com.kou.fisaa.utils.Resource
@@ -24,6 +25,8 @@ class TransactionFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: TransactionViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val transArgs: TransactionFragmentArgs by navArgs()
+    private val latestMessagesMap = LinkedHashMap<String, Message>()
+
 
     @Inject
     lateinit var transactionAdapter: TransactionAdapter
@@ -40,6 +43,7 @@ class TransactionFragment : Fragment() {
 
         setupUi()
 
+
         return view
 
     }
@@ -47,18 +51,17 @@ class TransactionFragment : Fragment() {
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.userId.observe(viewLifecycleOwner, { id ->
-            id?.let {
-                listenTransactions(it)
-            }
-        })
-        viewModel.transactions.observe(viewLifecycleOwner, { resource ->
+        viewModel.listenTransactions()
+        viewModel.transaction.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    resource?.let {
-                        val msgs = resource.data
-                        if (!msgs.isNullOrEmpty())
-                            transactionAdapter.updateMsgs(msgs)
+                    resource?.let { resMsg ->
+                        val msg = resMsg.data
+                        val msgs = arrayListOf<Message>()
+                        if (msg != null) {
+                            latestMessagesMap[msg.fromId] = msg  // Populating the map
+                            transactionAdapter.updateMsgs(latestMessagesMap.values.toList())
+                        }
 
                     }
                 }
@@ -67,6 +70,8 @@ class TransactionFragment : Fragment() {
                 }
                 Resource.Status.LOADING -> requireActivity().toast("loading")
             }
+
+
         })
     }
 
@@ -92,13 +97,6 @@ class TransactionFragment : Fragment() {
                 )
             )
         }
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun listenTransactions(fromId: String) {
-        viewModel.listenTransactions(fromId)
-
-
     }
 
 

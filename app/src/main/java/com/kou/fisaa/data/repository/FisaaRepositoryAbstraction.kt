@@ -28,7 +28,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun getUsers(): Flow<Resource<List<User>>?>
     suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?>
     suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<Message>?>
-    suspend fun listenTransactions(fromId: String): Flow<Resource<List<Message>>?>
+    suspend fun listenTransactions(toId: String): Flow<Resource<Message>?>
 
 
     /*** Storage **/

@@ -64,10 +64,11 @@ class TransactionAdapter @Inject constructor() :
 
     fun updateMsgs(newMsgs: List<Message>) {
         val diffResult =
-            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.timeStamp })
+            DiffUtil.calculateDiff(SimpleCallback(this.messages, newMsgs) { it.fromId })
         this.messages = newMsgs
         diffResult.dispatchUpdatesTo(this)
     }
+
 
     fun setOnUserClickListener(callback: ((String) -> Unit)) {
         this.msgsItemListener = callback
