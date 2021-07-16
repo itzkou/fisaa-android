@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.text.*
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
+import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -45,6 +46,7 @@ class CustomTypefaceSpan(family: String?, private val newType: Typeface) : Typef
         }
     }
 }
+
 fun coordinateBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
 
     val watcher = object : TextWatcher {
@@ -169,14 +171,22 @@ fun TextView.setCaptionText(username: String, caption: String) {
     )
 
     captionSpannable.setSpan(
-        ContextCompat.getColor(this.context, R.color.bluewey), 0, captionSpannable.length,
+        regular?.let { CustomTypefaceSpan("", it) },
+        0,
+        captionSpannable.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    captionSpannable.setSpan(
+        ForegroundColorSpan(ContextCompat.getColor(this.context, R.color.bluewey)),
+        0,
+        captionSpannable.length,
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
 
     text = SpannableStringBuilder().apply {
         append(usernameSpannable)
         append(" ")
-        append(caption)
+        append(captionSpannable)
 
     }
     movementMethod = LinkMovementMethod.getInstance()

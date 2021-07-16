@@ -145,7 +145,8 @@ class ChatRoomFragment : Fragment() {
         })
         viewLifecycleOwner.lifecycleScope.launch {
             /** Observing outside this scope subscribes new observers and duplicate msgs are collected, observing inside lifecyclescope removes this issue
-             * a fragment is not always detached and his lifecycle can last longer than his view so when the user navigates back , a new view is created "OnViewCreated" thus a new observer is subscribed, lifecyclescope came to the rescue **/
+             * a fragment is not always detached and his lifecycle can last longer than his view so when the user navigates back , a new view is created "OnViewCreated"
+             * thus a new observer is subscribed, lifecyclescope came to the rescue  **/
             viewModel.msg.observe(viewLifecycleOwner, { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
@@ -175,7 +176,6 @@ class ChatRoomFragment : Fragment() {
                 }
             })
         }
-
 
     }
 

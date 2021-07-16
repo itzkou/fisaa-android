@@ -60,22 +60,32 @@
 
     <TextView
         android:id="@+id/latestMsg"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/poppins_regular"
+        android:maxLines="2"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/caption"
-        app:layout_constraintTop_toBottomOf="@+id/caption" />
+        app:layout_constraintTop_toBottomOf="@+id/caption"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:fontFamily="@font/poppins_regular"
+        android:layout_marginEnd="16dp"
+        android:maxLines="2"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
