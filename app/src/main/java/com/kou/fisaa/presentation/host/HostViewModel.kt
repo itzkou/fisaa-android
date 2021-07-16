@@ -1,9 +1,6 @@
 package com.kou.fisaa.presentation.host
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -23,7 +20,17 @@ class HostViewModel @Inject constructor(
 ) : ViewModel() {
     val darkThemeEnabled = prefsStore.isNightMode().asLiveData()
     val userId = prefsStore.getId().asLiveData()
-    val userPhoto = MutableLiveData<String?>()
+    val userPhoto: LiveData<String?> = userId.switchMap { id ->
+        liveData {
+            if (id != null) {
+                repository.getUser(id).collect { resUser ->
+                    resUser?.data.let { user ->
+                        emit(user?.image)
+                    }
+                }
+            }
+        }
+    }
 
     fun toggleNightMode() {
         viewModelScope.launch {
@@ -44,21 +51,6 @@ class HostViewModel @Inject constructor(
     }
 
 
-    fun getImage() {
-        viewModelScope.launch {
-            prefsStore.getId().collect { userIdRes ->
-                userIdRes?.let { id ->
-                    repository.getUser(id).collect { userRes ->
-                        userRes?.let {
-                            userPhoto.value = it.data?.image
-                        }
-                    }
-                }
-
-            }
-
-        }
-    }
 }
 
 

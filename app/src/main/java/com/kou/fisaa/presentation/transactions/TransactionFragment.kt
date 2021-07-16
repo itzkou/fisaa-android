@@ -42,6 +42,7 @@ class TransactionFragment : Fragment() {
 
 
         setupUi()
+        viewModel.listenTransactions()
 
 
         return view
@@ -51,7 +52,7 @@ class TransactionFragment : Fragment() {
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.listenTransactions()
+
         viewModel.transaction.observe(viewLifecycleOwner, { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
@@ -74,6 +75,12 @@ class TransactionFragment : Fragment() {
 
         })
     }
+/*
+    @ExperimentalCoroutinesApi
+    override fun onResume() {
+        super.onResume()
+        viewModel.listenTransactions()
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

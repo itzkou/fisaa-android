@@ -10,7 +10,9 @@ import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ItemUserBinding
 import com.kou.fisaa.utils.SimpleCallback
+import com.kou.fisaa.utils.setCaptionText
 import com.kou.fisaa.utils.setDate
+import java.util.*
 import javax.inject.Inject
 
 class TransactionAdapter @Inject constructor() :
@@ -37,7 +39,6 @@ class TransactionAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val message = messages[position]
-
         with(holder.binding) {
             root.setOnClickListener {
                 msgsItemListener?.let { callback ->
@@ -49,11 +50,11 @@ class TransactionAdapter @Inject constructor() :
             else
                 picture.load(message.senderPhoto)
 
-            date.setDate(message.timestampDate())
+            date.setDate(Date(message.timeStamp * 1000))
 
             latestMsg.text = message.text
 
-            username.text = message.senderName
+            caption.setCaptionText(message.senderName, " veut envoyer un iPhone X")
         }
 
 

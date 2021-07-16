@@ -8,22 +8,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import coil.ImageLoader
-import coil.request.ImageRequest
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
 import com.kou.fisaa.presentation.splash.SplashActivity
+import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHostBinding
     private val viewModel: HostViewModel by viewModels()
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +27,6 @@ class HostActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setUpUi()
-        viewModel.getImage()
         getUserImage()
         logout()
 
@@ -70,18 +64,7 @@ class HostActivity : AppCompatActivity() {
         viewModel.userPhoto.observe(this, { imageRes ->
             imageRes?.let { img ->
                 val menuProfile = binding.bottomNavigationView.menu[4]
-                coroutineScope.launch {
-                    val loader = ImageLoader(this@HostActivity)
-                    val request = ImageRequest.Builder(this@HostActivity)
-                        .data(img)
-                        .target {
-                            menuProfile.icon = it
-                        }
-                        .build()
-
-                    loader.execute(request)
-
-                }
+                this.toast(img)
             }
 
         })

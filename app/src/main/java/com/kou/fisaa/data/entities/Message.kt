@@ -1,7 +1,5 @@
 package com.kou.fisaa.data.entities
 
-import java.util.*
-
 data class Message(
     val fromId: String,
     val toId: String,
@@ -9,7 +7,7 @@ data class Message(
     val senderPhoto: String,
     val senderName: String,
     val image: String,
-    val timeStamp: Long = System.currentTimeMillis() / 1000
+    val timeStamp: Long
 ) {
     constructor() : this(
         "",
@@ -21,5 +19,5 @@ data class Message(
         -1
     )
 
-    fun timestampDate() = Date(timeStamp)
+
 }
