@@ -47,7 +47,6 @@ class ChatViewModel @Inject constructor(
 
     suspend fun persistImageFirestore(imageUri: Uri) {
 
-
         repository.uploadParcelImage(imageUri).collect { restaskSnapshot ->
             restaskSnapshot?.data?.let { taskSnapshot ->
                 taskSnapshot.task.addOnSuccessListener {
@@ -85,7 +84,6 @@ class ChatViewModel @Inject constructor(
 
 
     suspend fun listenMsgs(toId: String) {
-
         msg = userId.switchMap { id ->
             liveData {
                 if (id != null)

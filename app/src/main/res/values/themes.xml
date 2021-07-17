@@ -103,21 +103,13 @@
 
     </style>
 
-    <style name="ShapeAppearanceOverlay.Demo" parent="">
-        <item name="cornerSize">16dp</item>
-        <item name="cornerFamily">rounded</item>
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Demo.BottomSheetDialog</item>
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="ThemeOverlay.Demo.BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.Demo.BottomSheet</item>
-    </style>
-
-    <style name="Widget.Demo.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Demo</item>
-    </style>
 
 </resources>

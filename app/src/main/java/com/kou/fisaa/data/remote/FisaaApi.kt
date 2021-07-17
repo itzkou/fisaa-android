@@ -26,6 +26,9 @@ interface FisaaApi {
     @GET("advertisements")
     suspend fun getAds(): Response<AdsResponse>
 
+    @GET("advertisements/myads/{id}")
+    suspend fun getMyAds(@Path("id") id: String): Response<AdsResponse>
+
     @POST("advertisements/search/ads")
     suspend fun searchAds(@Body searchQuery: AdSearchQuery): Response<AdsResponse>
 

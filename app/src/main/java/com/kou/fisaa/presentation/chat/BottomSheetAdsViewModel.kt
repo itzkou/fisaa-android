@@ -1,8 +1,7 @@
 package com.kou.fisaa.presentation.chat
 
 import androidx.lifecycle.*
-import com.kou.fisaa.data.entities.Advertisement
-import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.entities.AdsResponse
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
@@ -15,13 +14,13 @@ class BottomSheetAdsViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore
 ) : ViewModel() {
-    var myAds: LiveData<List<Advertisement>> = MutableLiveData()
+
     val userId = prefsStore.getId().asLiveData()
-    val user: LiveData<Resource<User>> = userId.switchMap { id ->
+    var myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
         liveData {
             if (id != null) {
-                repository.getUser(id).collect { resUser ->
-                    resUser?.let {
+                repository.getMyAds(id).collect { resAds ->
+                    resAds?.let {
                         emit(it)
                     }
                 }
@@ -30,10 +29,7 @@ class BottomSheetAdsViewModel @Inject constructor(
     }
 
 
-    fun getMyAds() {
-        myAds =
-            liveData {
-            }
-    }
+
+
 
 }

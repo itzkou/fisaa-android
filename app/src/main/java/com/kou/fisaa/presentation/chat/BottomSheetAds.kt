@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.kou.fisaa.R
 import com.kou.fisaa.databinding.BottomSheetAdsBinding
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
+import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,6 +19,7 @@ import javax.inject.Inject
 class BottomSheetAds : BottomSheetDialogFragment() {
     private var _binding: BottomSheetAdsBinding? = null
     private val binding get() = _binding!!
+    private val viewmodel: BottomSheetAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
 
     @Inject
     lateinit var adsAdapter: AdsAdapter
@@ -30,6 +34,23 @@ class BottomSheetAds : BottomSheetDialogFragment() {
 
         setupUi()
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewmodel.myAds.observe(viewLifecycleOwner, { resAds ->
+            when (resAds.status) {
+                Resource.Status.SUCCESS -> {
+                    resAds.data?.ads?.let { ads ->
+                        if (ads.isNotEmpty())
+                            adsAdapter.updateAds(ads)
+                    }
+
+                }
+                Resource.Status.LOADING -> requireActivity().toast("loading my ads")
+                Resource.Status.ERROR -> requireActivity().toast("error fetching my ads")
+            }
+        })
     }
 
 

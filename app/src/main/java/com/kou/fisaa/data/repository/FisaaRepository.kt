@@ -331,6 +331,15 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun getMyAds(id: String): Flow<Resource<AdsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.getMyAds(id)
+            emit(response)
+
+        }.flowOn(ioDispatcher)
+    }
+
     override suspend fun searchAds(searchQuery: AdSearchQuery): Flow<Resource<AdsResponse>?> {
         return flow {
             emit(Resource.loading())
