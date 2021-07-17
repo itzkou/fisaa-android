@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
@@ -59,9 +60,6 @@ class ChatRoomFragment : Fragment() {
         validateSession()
         getOtherUser()
         listenMsgs()
-
-
-
 
 
         return view
@@ -196,6 +194,11 @@ class ChatRoomFragment : Fragment() {
             adapter = mAdapter
         }
         openCamera()
+
+        binding.openAds.setOnClickListener {
+            val action = ChatRoomFragmentDirections.actionChatRoomFragmentToBottomSheetAds()
+            findNavController().navigate(action)
+        }
 
 
     }

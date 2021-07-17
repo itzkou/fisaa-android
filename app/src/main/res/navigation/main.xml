@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_trans"
             app:destination="@id/trans" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_bottomSheetAds"
+            app:destination="@id/bottomSheetAds" />
     </fragment>
     <fragment
         android:id="@+id/searchAdsFragment"
@@ -132,4 +135,8 @@
             android:id="@+id/action_searchAdsFragment_to_ads"
             app:destination="@id/ads" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetAds"
+        android:name="com.kou.fisaa.presentation.chat.BottomSheetAds"
+        tools:layout="@layout/bottom_sheet_ads" />
 </navigation>

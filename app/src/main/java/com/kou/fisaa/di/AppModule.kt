@@ -16,7 +16,6 @@ import com.kou.fisaa.R
 import com.kou.fisaa.data.firestore.FirestoreAbstraction
 import com.kou.fisaa.data.firestore.FirestoreRemote
 import com.kou.fisaa.data.local.adLocalManager.AdLocalManager
-import com.kou.fisaa.data.local.authLocalManager.AuthLocalManager
 import com.kou.fisaa.data.local.flightLocalManager.FlightLocalManager
 import com.kou.fisaa.data.local.roomManager.FisaaDatabase
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -88,9 +87,6 @@ object AppModule {
     fun provideDatabase(@ApplicationContext appContext: Context) =
         FisaaDatabase.getDatabase(appContext)
 
-    @Singleton
-    @Provides
-    fun provideAuthDao(db: FisaaDatabase) = db.authDao()
 
     @Singleton
     @Provides
@@ -133,7 +129,6 @@ object AppModule {
     @Singleton
     fun provideFisaaRepositoryAbstraction(
         remote: FisaaRemote,
-        authLocalManager: AuthLocalManager,
         flightLocalManager: FlightLocalManager,
         adLocalManager: AdLocalManager,
         firestore: FirestoreRemote,

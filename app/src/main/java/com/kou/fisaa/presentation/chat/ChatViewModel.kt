@@ -56,17 +56,17 @@ class ChatViewModel @Inject constructor(
                         .downloadUrl
                         .addOnSuccessListener { url ->
                             imageUrl.value = url.toString()
-                            }
-                    }
-                    taskSnapshot.task.addOnFailureListener {
-                        Log.d("fireStorage Exception", it.message.toString())
-                    }
-
+                        }
                 }
-                uploadTask.value = restaskSnapshot
-            }
+                taskSnapshot.task.addOnFailureListener {
+                    Log.d("fireStorage Exception", it.message.toString())
+                }
 
+            }
+            uploadTask.value = restaskSnapshot
         }
+
+    }
 
 
     fun sendMsg(msg: Message) {

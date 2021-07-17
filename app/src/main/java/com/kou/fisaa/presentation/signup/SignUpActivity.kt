@@ -145,7 +145,9 @@ class SignUpActivity : AppCompatActivity() {
                 dateOfBirth = if (birthdate.isEmpty()) "N/A" else birthdate,
                 description = if (description.isEmpty()) "N/A" else description,
                 phoneNumber = if (phone.isEmpty()) 0 else phone.toLong(),
-                zipCode = if (zip.isEmpty()) 0 else zip.toInt()
+                zipCode = if (zip.isEmpty()) 0 else zip.toInt(),
+                myTransactions = listOf(),
+                publishedAdverts = listOf()
             )
 
             viewmodel.signUp(
