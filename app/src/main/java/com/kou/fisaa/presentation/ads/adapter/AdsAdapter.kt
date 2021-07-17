@@ -1,6 +1,7 @@
 package com.kou.fisaa.presentation.ads.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +23,8 @@ class AdsAdapter @Inject constructor() :
 
     private var ads = listOf<Advertisement>()
 
+    private var enableMyAds = false
+
     class ViewHolder(val binding: ItemAdsBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,6 +43,9 @@ class AdsAdapter @Inject constructor() :
 
 
         with(holder.binding) {
+            sendAds.visibility = if (enableMyAds) View.VISIBLE else View.GONE
+            cardie.visibility = if (!enableMyAds) View.VISIBLE else View.GONE
+
             if (ad.createdBy.image.isNullOrEmpty())
                 picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
             else
@@ -63,13 +69,13 @@ class AdsAdapter @Inject constructor() :
             if (ad.departureDate != null)
                 date.setDate(stringToDate(ad.departureDate))
 
-            holder.binding.root.setOnClickListener {
+
+            sendAds.setOnClickListener {
                 adsItemClickListener?.let { callback ->
                     callback(ad._id)
                 }
+
             }
-
-
         }
 
     }
@@ -87,5 +93,8 @@ class AdsAdapter @Inject constructor() :
         this.adsItemClickListener = callback
     }
 
+    fun setEnableMyAds(flag: Boolean) {
+        this.enableMyAds = flag
+    }
 
 }

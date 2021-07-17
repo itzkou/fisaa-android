@@ -1,10 +1,13 @@
 package com.kou.fisaa.presentation.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kou.fisaa.R
@@ -19,7 +22,9 @@ import javax.inject.Inject
 class BottomSheetAds : BottomSheetDialogFragment() {
     private var _binding: BottomSheetAdsBinding? = null
     private val binding get() = _binding!!
-    private val viewmodel: BottomSheetAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private val viewmodel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private val chatArgs: ChatRoomFragmentArgs by navArgs()
+
 
     @Inject
     lateinit var adsAdapter: AdsAdapter
@@ -47,8 +52,8 @@ class BottomSheetAds : BottomSheetDialogFragment() {
                     }
 
                 }
-                Resource.Status.LOADING -> requireActivity().toast("loading my ads")
-                Resource.Status.ERROR -> requireActivity().toast("error fetching my ads")
+                Resource.Status.LOADING -> Log.i("loadingBottomSheet", "onViewCreated: Loading")
+                Resource.Status.ERROR -> Log.i("errorBomsheet", "onViewCreated: error ")
             }
         })
     }
@@ -60,14 +65,18 @@ class BottomSheetAds : BottomSheetDialogFragment() {
     }
 
     private fun setupUi() {
+        adsAdapter.setEnableMyAds(true)
+
         binding.rvAds.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-            adsAdapter.setOnAdListener {
-                requireActivity().toast(it)
-            }
             adapter = adsAdapter
+        }
+        adsAdapter.setOnAdListener { id ->
+            requireActivity().toast(id)
 
+
+            findNavController().popBackStack()
         }
     }
 

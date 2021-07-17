@@ -77,6 +77,8 @@ class AdsFragment : Fragment() {
             val action = AdsFragmentDirections.actionAdsToSearchAdsFragment()
             findNavController().navigate(action)
         }
+
+        adsAdapter.setEnableMyAds(false)
     }
 
     private fun loadAds() {

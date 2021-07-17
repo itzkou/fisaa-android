@@ -126,6 +126,10 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_bottomSheetAds"
             app:destination="@id/bottomSheetAds" />
+        <argument
+            android:name="transactionId"
+            android:defaultValue="none"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchAdsFragment"
@@ -138,5 +142,10 @@
     <dialog
         android:id="@+id/bottomSheetAds"
         android:name="com.kou.fisaa.presentation.chat.BottomSheetAds"
-        tools:layout="@layout/bottom_sheet_ads" />
+        tools:layout="@layout/bottom_sheet_ads">
+
+        <action
+            android:id="@+id/action_bottomSheetAds_to_chatRoomFragment2"
+            app:destination="@id/chatRoomFragment" />
+    </dialog>
 </navigation>

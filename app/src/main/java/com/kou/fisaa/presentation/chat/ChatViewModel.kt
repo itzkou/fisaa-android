@@ -8,6 +8,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import com.kou.fisaa.data.entities.AdsResponse
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -15,7 +16,6 @@ import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +23,8 @@ class ChatViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore
 ) : ViewModel() {
-    private val _hasBeenSent =
-        MutableLiveData<Resource<DocumentReference>>() //TODO  search viewmodel encapsulation
-    val hasBeenSent = _hasBeenSent
+
+    var hasBeenSent: LiveData<Resource<DocumentReference>> = MutableLiveData()
     var msg: LiveData<Resource<Message>> = MutableLiveData()
     val imageUrl: MutableLiveData<String> =
         MutableLiveData()  //Using Livedata with emit inside a task doesn't subscribe to observer
@@ -43,7 +42,19 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
+    var myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
+        liveData {
+            if (id != null) {
+                repository.getMyAds(id).collect { resAds ->
+                    resAds?.let {
+                        emit(it)
+                    }
+                }
+            }
+        }
+    }
     val storage = Firebase.storage.reference
+
 
     suspend fun persistImageFirestore(imageUri: Uri) {
 
@@ -67,22 +78,6 @@ class ChatViewModel @Inject constructor(
 
     }
 
-
-    fun sendMsg(msg: Message) {
-
-        viewModelScope.launch {
-            repository.sendMsg(msg).collect { resource ->
-                resource?.let {
-                    _hasBeenSent.value = it
-
-                }
-            }
-
-        }
-
-    }
-
-
     suspend fun listenMsgs(toId: String) {
         msg = userId.switchMap { id ->
             liveData {
@@ -98,6 +93,9 @@ class ChatViewModel @Inject constructor(
 
     }
 
+    suspend fun sendTransaction(id: String) {
+
+    }
 
     suspend fun getOtherUser(id: String) {
         other = liveData {
@@ -110,6 +108,21 @@ class ChatViewModel @Inject constructor(
         }
 
     }
+
+    fun sendMsg(msg: Message) {
+
+        hasBeenSent = liveData {
+            repository.sendMsg(msg).collect { resource ->
+                resource?.let {
+                    emit(it)
+
+                }
+            }
+        }
+
+    }
+
+
 }
 
 
