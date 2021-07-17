@@ -4,21 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.data.entities.Flight
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.local.adLocalManager.AdDao
 import com.kou.fisaa.data.local.authLocalManager.AuthDao
-import com.kou.fisaa.data.local.converters.ListAdvertisementConverter
 import com.kou.fisaa.data.local.flightLocalManager.FlightDao
 
 @Database(
     entities = [User::class, Flight::class, Advertisement::class],
-    version = 18,
+    version = 19,
     exportSchema = false
 )
-@TypeConverters(ListAdvertisementConverter::class)
 abstract class FisaaDatabase : RoomDatabase() {
 
     abstract fun authDao(): AuthDao

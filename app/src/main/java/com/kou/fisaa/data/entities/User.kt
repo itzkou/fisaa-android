@@ -20,10 +20,10 @@ data class User(
     val firstName: String,
     val lastName: String,
     val image: String? = null,
-    val myTransactions: List<Advertisement>,  // type converter needed
+    val myTransactions: List<String?>,  // type converter needed if String was "Advertisement"
     val password: String,
     val phoneNumber: Long? = null,
-    val publishedAdverts: List<Advertisement>,
+    val publishedAdverts: List<String?>,
     val zipCode: Int? = null
 ) {
     constructor() : this("", "", 0, "", "", "", "", "", "", "", "", listOf(), "", 0L, listOf(), 0)
