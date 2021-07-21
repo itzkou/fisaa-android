@@ -147,5 +147,9 @@
         <action
             android:id="@+id/action_bottomSheetAds_to_chatRoomFragment2"
             app:destination="@id/chatRoomFragment" />
+        <argument
+            android:name="toId"
+            android:defaultValue="none"
+            app:argType="string" />
     </dialog>
 </navigation>

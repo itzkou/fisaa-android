@@ -7,6 +7,7 @@ data class Message(
     val senderPhoto: String,
     val senderName: String,
     val image: String,
+    var parcel: Parcel?,
     val timeStamp: Long
 ) {
     constructor() : this(
@@ -16,6 +17,7 @@ data class Message(
         "",
         "",
         "",
+        null,
         -1
     )
 

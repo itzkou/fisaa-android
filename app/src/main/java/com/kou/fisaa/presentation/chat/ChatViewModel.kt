@@ -16,6 +16,7 @@ import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,10 +25,9 @@ class ChatViewModel @Inject constructor(
     private val prefsStore: PrefsStore
 ) : ViewModel() {
 
-    var hasBeenSent: LiveData<Resource<DocumentReference>> = MutableLiveData()
+    val hasBeenSent: MutableLiveData<Resource<DocumentReference>> = MutableLiveData()
     var msg: LiveData<Resource<Message>> = MutableLiveData()
-    val imageUrl: MutableLiveData<String> =
-        MutableLiveData()  //Using Livedata with emit inside a task doesn't subscribe to observer
+    val imageUrl: MutableLiveData<String> = MutableLiveData()
     val uploadTask: MutableLiveData<Resource<UploadTask.TaskSnapshot>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
     var other: LiveData<Resource<User>> = MutableLiveData()
@@ -93,9 +93,35 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    suspend fun sendTransaction(id: String) {
 
+    fun sendTransaction(idAd: String, toId: String) {
+
+        viewModelScope.launch {
+            repository.getAd(idAd).collect { resAd ->
+                if (resAd != null) {
+                    val parcel = resAd.data?.parcel
+                    if (parcel != null) {
+                        user.value?.data?.let { user ->
+                            val msg = Message(
+                                user._id,
+                                toId,
+                                "${user.firstName} veut envoyer un produit",
+                                user.image ?: "",
+                                user.firstName,
+                                "",
+                                parcel,
+                                System.currentTimeMillis() / 1000
+                            )
+                            sendMsg(msg)
+                        }
+
+                    }
+
+                }
+            }
+        }
     }
+
 
     suspend fun getOtherUser(id: String) {
         other = liveData {
@@ -109,16 +135,19 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    fun sendMsg(msg: Message) {
-
-        hasBeenSent = liveData {
+    fun sendMsg(msg: Message) {                 // when you use LiveDataScope with Livedata the flow won't collect I wonder why
+        viewModelScope.launch {
+            Log.i(
+                "TAGsendMsg:", "sendMsg"
+            )
             repository.sendMsg(msg).collect { resource ->
                 resource?.let {
-                    emit(it)
-
+                    hasBeenSent.value = it
                 }
             }
+
         }
+
 
     }
 

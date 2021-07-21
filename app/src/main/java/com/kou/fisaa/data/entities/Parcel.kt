@@ -8,4 +8,15 @@ data class Parcel(
     val parcelType: String,
     val photo: String,
     val weight: String
-)
+) {
+    constructor() : this(
+        "",
+        0,
+        "",
+        "",
+        "",
+        "",
+        ""
+    )
+
+}

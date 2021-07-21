@@ -23,7 +23,7 @@ class BottomSheetAds : BottomSheetDialogFragment() {
     private var _binding: BottomSheetAdsBinding? = null
     private val binding get() = _binding!!
     private val viewmodel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
-    private val chatArgs: ChatRoomFragmentArgs by navArgs()
+    private val bottomSheetAdsArgs: BottomSheetAdsArgs by navArgs()
 
 
     @Inject
@@ -72,12 +72,16 @@ class BottomSheetAds : BottomSheetDialogFragment() {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = adsAdapter
         }
-        adsAdapter.setOnAdListener { id ->
-            requireActivity().toast(id)
 
+        adsAdapter.setOnAdListener { adId ->
+            requireActivity().toast(adId)
+
+            viewmodel.sendTransaction(adId, bottomSheetAdsArgs.toId)
 
             findNavController().popBackStack()
         }
+
+
     }
 
 }

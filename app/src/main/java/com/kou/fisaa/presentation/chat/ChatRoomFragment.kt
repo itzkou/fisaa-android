@@ -34,6 +34,7 @@ class ChatRoomFragment : Fragment() {
     private val chatArgs: ChatRoomFragmentArgs by navArgs()
     private var imageUri: Uri? = null
     private var imageUrl: String = ""
+    private var him: User? = null
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -99,7 +100,7 @@ class ChatRoomFragment : Fragment() {
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
                     resUser.data?.let { other ->
-
+                        him = other
                         binding.edChat.hint = "Répondez à ${other.firstName}"
                         binding.otherAvatar.loadAvatar(other.image)
                         binding.otherAvatar.loadAvatar(other.image)
@@ -196,8 +197,12 @@ class ChatRoomFragment : Fragment() {
         openCamera()
 
         binding.openAds.setOnClickListener {
-            val action = ChatRoomFragmentDirections.actionChatRoomFragmentToBottomSheetAds()
-            findNavController().navigate(action)
+            him?.let { user ->
+                val action =
+                    ChatRoomFragmentDirections.actionChatRoomFragmentToBottomSheetAds(toId = user._id)
+                findNavController().navigate(action)
+            }
+
         }
 
 
@@ -217,7 +222,6 @@ class ChatRoomFragment : Fragment() {
     private fun getOtherUser() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getOtherUser(chatArgs.toId)
-
         }
     }
 
@@ -233,6 +237,7 @@ class ChatRoomFragment : Fragment() {
         senderPhoto: String,
 
         ) {
+
         binding.btnSend.setOnClickListener {
             val content = binding.edChat.text.toString()
             val chatMessage =
@@ -242,13 +247,12 @@ class ChatRoomFragment : Fragment() {
                     content,
                     senderPhoto,
                     senderName,
-                    imageUrl, System.currentTimeMillis() / 1000
+                    imageUrl, null, System.currentTimeMillis() / 1000
                 )
             viewModel.sendMsg(chatMessage)
             imageUrl = ""
 
         }
-
     }
 
 

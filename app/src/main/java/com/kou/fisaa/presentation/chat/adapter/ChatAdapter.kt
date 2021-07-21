@@ -63,7 +63,12 @@ class ChatAdapter(private val fromId: String) :
                     } else
                         msgPhoto.visibility = View.GONE
 
+                    myTransaction.visibility =
+                        if (message.parcel != null) View.VISIBLE else View.GONE
+
                 }
+
+
             }
 
             FROM -> {
@@ -76,6 +81,13 @@ class ChatAdapter(private val fromId: String) :
                         msgPhoto.load(message.image)
                     } else
                         msgPhoto.visibility = View.GONE
+
+                    if (message.parcel != null) {
+                        myTransaction.visibility = View.VISIBLE
+                        parcelPhoto.load(message.parcel?.photo)
+                    } else
+                        myTransaction.visibility = View.GONE
+
 
                 }
             }

@@ -23,6 +23,10 @@ interface FisaaApi {
 
 
     /** ads **/
+
+    @GET("advertisements/{id}")
+    suspend fun getAd(@Path("id") id: String): Response<Advertisement>
+
     @GET("advertisements")
     suspend fun getAds(): Response<AdsResponse>
 
