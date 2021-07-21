@@ -7,7 +7,7 @@ data class Message(
     val senderPhoto: String,
     val senderName: String,
     val image: String,
-    var parcel: Parcel?,
+    var advertisement: Advertisement?,
     val timeStamp: Long
 ) {
     constructor() : this(

@@ -95,12 +95,11 @@ class ChatViewModel @Inject constructor(
 
 
     fun sendTransaction(idAd: String, toId: String) {
-
         viewModelScope.launch {
             repository.getAd(idAd).collect { resAd ->
                 if (resAd != null) {
-                    val parcel = resAd.data?.parcel
-                    if (parcel != null) {
+                    val advertisement = resAd.data
+                    if (advertisement != null) {
                         user.value?.data?.let { user ->
                             val msg = Message(
                                 user._id,
@@ -109,7 +108,7 @@ class ChatViewModel @Inject constructor(
                                 user.image ?: "",
                                 user.firstName,
                                 "",
-                                parcel,
+                                advertisement,
                                 System.currentTimeMillis() / 1000
                             )
                             sendMsg(msg)

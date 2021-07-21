@@ -12,11 +12,22 @@ data class Advertisement(
     val _id: String,
     val arivalDate: String? = null,
     @Embedded(prefix = "user")
-    val createdBy: AdCreator,
+    val createdBy: AdCreator? = null,
     val departure: String,
     val departureDate: String? = null,
     val destination: String,
     val type: String,
     @Embedded(prefix = "parcel")
     val parcel: Parcel? = null
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        null,
+        "",
+        "",
+        "",
+        "",
+        null
+    )
+}

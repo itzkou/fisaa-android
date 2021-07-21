@@ -63,8 +63,7 @@ class ChatAdapter(private val fromId: String) :
                     } else
                         msgPhoto.visibility = View.GONE
 
-                    myTransaction.visibility =
-                        if (message.parcel != null) View.VISIBLE else View.GONE
+
 
                 }
 
@@ -81,12 +80,10 @@ class ChatAdapter(private val fromId: String) :
                         msgPhoto.load(message.image)
                     } else
                         msgPhoto.visibility = View.GONE
+                    /* myTransaction.visibility =
+                         if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
 
-                    if (message.parcel != null) {
-                        myTransaction.visibility = View.VISIBLE
-                        parcelPhoto.load(message.parcel?.photo)
-                    } else
-                        myTransaction.visibility = View.GONE
+                     parcelPhoto.load(message.advertisement?.parcel?.photo)*/
 
 
                 }

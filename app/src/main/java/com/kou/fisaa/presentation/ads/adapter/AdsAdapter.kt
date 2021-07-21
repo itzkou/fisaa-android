@@ -45,16 +45,18 @@ class AdsAdapter @Inject constructor() :
         with(holder.binding) {
             sendAds.visibility = if (enableMyAds) View.VISIBLE else View.GONE
             cardie.visibility = if (!enableMyAds) View.VISIBLE else View.GONE
+            ad.createdBy?.let { creator ->
+                if (creator.image.isNullOrEmpty())
+                    picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
+                else
+                    picture.load(creator.image)
+                name.text = holder.itemView.context.getString(
+                    R.string.fullname,
+                    creator.firstName,
+                    creator.lastName
+                )
+            }
 
-            if (ad.createdBy.image.isNullOrEmpty())
-                picture.load(ContextCompat.getDrawable(picture.context, R.drawable.ic_face))
-            else
-                picture.load(ad.createdBy.image)
-            name.text = holder.itemView.context.getString(
-                R.string.fullname,
-                ad.createdBy.firstName,
-                ad.createdBy.lastName
-            )
             departure.text = ad.departure
             arrival.text = ad.destination
             when (ad.type) {
