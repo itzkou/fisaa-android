@@ -22,6 +22,7 @@ class ChatAdapter(private val fromId: String) :
     }
 
     private var messages = arrayListOf<Message>()
+    private var modifyParcelListener: ((String) -> Unit)? = null
 
     class FromViewHolder(val binding: ChatFromBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -79,6 +80,11 @@ class ChatAdapter(private val fromId: String) :
                                 holder.itemView.context.getString(R.string.currency, parcel.bonus)
                             parcelPhoto.load(parcel.photo)
                             weight.text = parcel.weight
+                            modifyDeal.setOnClickListener {
+                                modifyParcelListener?.let { callback ->
+                                    callback(adv._id)
+                                }
+                            }
                         }
                         adv.departureDate?.let {
                             date.setDate(stringToDate(it))
@@ -113,7 +119,11 @@ class ChatAdapter(private val fromId: String) :
                                 holder.itemView.context.getString(R.string.currency, parcel.bonus)
                             weight.text = parcel.weight
                             parcelPhoto.load(parcel.photo)
-
+                            modifyDeal.setOnClickListener {
+                                modifyParcelListener?.let { callback ->
+                                    callback(adv._id)
+                                }
+                            }
                         }
                         adv.departureDate?.let {
                             date.setDate(stringToDate(it))
@@ -144,5 +154,8 @@ class ChatAdapter(private val fromId: String) :
         notifyItemInserted(messages.size)
     }
 
+    fun setOnModifyParcelListener(callback: ((String) -> Unit)) {
+        this.modifyParcelListener = callback
+    }
 
 }

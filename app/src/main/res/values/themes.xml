@@ -24,6 +24,7 @@
         <item name="android:background">@drawable/auth_inputs</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="desc_input">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">150dp</item>
@@ -109,6 +110,11 @@
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ThemeOverlay.Fisaa.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
 

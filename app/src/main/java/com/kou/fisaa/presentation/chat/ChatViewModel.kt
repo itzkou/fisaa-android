@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.kou.fisaa.data.entities.AdsResponse
+import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.data.preferences.PrefsStore
@@ -53,6 +54,7 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
+    val myAd = MutableLiveData<Advertisement>()
     val storage = Firebase.storage.reference
 
 
@@ -93,13 +95,27 @@ class ChatViewModel @Inject constructor(
 
     }
 
+    suspend fun getOtherUser(id: String) {
+        other = liveData {
+            repository.getUser(id).collect { resource ->
+                resource?.let {
+                    emit(it)
+                }
+
+            }
+        }
+
+    }
 
     fun sendTransaction(idAd: String, toId: String) {
         viewModelScope.launch {
             repository.getAd(idAd).collect { resAd ->
                 if (resAd != null) {
-                    val advertisement = resAd.data
-                    if (advertisement != null) {
+                    //val advertisement = resAd.data
+                    resAd.data?.let { advertisement ->
+                        /** saving ad instance for navcomponent **/
+                        myAd.value = advertisement
+                        /** persisting transaction/ad as firestore msg **/
                         user.value?.data?.let { user ->
                             val msg = Message(
                                 user._id,
@@ -119,19 +135,6 @@ class ChatViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-
-    suspend fun getOtherUser(id: String) {
-        other = liveData {
-            repository.getUser(id).collect { resource ->
-                resource?.let {
-                    emit(it)
-                }
-
-            }
-        }
-
     }
 
     fun sendMsg(msg: Message) {                 // when you use LiveDataScope with Livedata the flow won't collect I wonder why

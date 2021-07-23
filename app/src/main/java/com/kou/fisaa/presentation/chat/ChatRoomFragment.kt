@@ -142,6 +142,14 @@ class ChatRoomFragment : Fragment() {
             }
 
         })
+        viewModel.myAd.observe(viewLifecycleOwner, { advertisement ->
+            mAdapter.setOnModifyParcelListener {
+                requireActivity().toast(advertisement._id)
+                /* val action = ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(it)
+                 findNavController().navigate(action)*/
+            }
+
+        })
         viewLifecycleOwner.lifecycleScope.launch {
             /** Observing outside this scope subscribes new observers and duplicate msgs are collected, observing inside lifecyclescope removes this issue
              * a fragment is not always detached and his lifecycle can last longer than his view so when the user navigates back , a new view is created "OnViewCreated"
@@ -194,8 +202,8 @@ class ChatRoomFragment : Fragment() {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
-        openCamera()
 
+        openCamera()
         binding.openAds.setOnClickListener {
             him?.let { user ->
                 val action =

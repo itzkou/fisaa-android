@@ -82,6 +82,8 @@
     <string name="lbl6">4 et 5 étoiles</string>
     <string name="send">Envoyer</string>
     <string name="transaction_header">Transaction avec:</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

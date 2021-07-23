@@ -130,6 +130,9 @@
             android:name="transactionId"
             android:defaultValue="none"
             app:argType="string" />
+        <action
+            android:id="@+id/action_chatRoomFragment_to_modifyAdsFragment"
+            app:destination="@id/modifyAdsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchAdsFragment"
@@ -152,4 +155,46 @@
             android:defaultValue="none"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/modifyAdsFragment"
+        android:name="com.kou.fisaa.presentation.transactions.ModifyAdsFragment"
+        android:label="fragment_modify_ads"
+        tools:layout="@layout/fragment_modify_ads">
+        <argument
+            android:name="idAd"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="depDate"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="departure"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="destination"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="dimension"
+            android:defaultValue="medium"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="photo"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="bonus"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 </navigation>
