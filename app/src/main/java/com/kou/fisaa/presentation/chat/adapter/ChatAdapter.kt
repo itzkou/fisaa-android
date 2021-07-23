@@ -108,6 +108,7 @@ class ChatAdapter(private val fromId: String) :
                         msgPhoto.load(message.image)
                     } else
                         msgPhoto.visibility = View.GONE
+
                     if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
 
                     message.advertisement?.let { adv ->

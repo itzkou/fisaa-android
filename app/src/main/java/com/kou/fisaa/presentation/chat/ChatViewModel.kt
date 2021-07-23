@@ -121,7 +121,6 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAd(idAd).collect { resAd ->
                 if (resAd != null) {
-                    //val advertisement = resAd.data
                     resAd.data?.let { advertisement ->
                         /** persisting transaction/ad as firestore msg **/
                         user.value?.data?.let { user ->

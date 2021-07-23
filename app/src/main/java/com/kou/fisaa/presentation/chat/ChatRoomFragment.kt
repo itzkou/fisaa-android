@@ -180,6 +180,7 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
+
         }
 
 
