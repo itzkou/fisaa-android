@@ -9,6 +9,8 @@ import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
+import com.kou.fisaa.utils.setDate
+import com.kou.fisaa.utils.stringToDate
 
 class ChatAdapter(private val fromId: String) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -76,6 +78,10 @@ class ChatAdapter(private val fromId: String) :
                             parcelBonus.text =
                                 holder.itemView.context.getString(R.string.currency, parcel.bonus)
                             parcelPhoto.load(parcel.photo)
+                            weight.text = parcel.weight
+                        }
+                        adv.departureDate?.let {
+                            date.setDate(stringToDate(it))
                         }
                     }
 
@@ -105,7 +111,12 @@ class ChatAdapter(private val fromId: String) :
                             destination.text = parcel.description
                             parcelBonus.text =
                                 holder.itemView.context.getString(R.string.currency, parcel.bonus)
+                            weight.text = parcel.weight
                             parcelPhoto.load(parcel.photo)
+
+                        }
+                        adv.departureDate?.let {
+                            date.setDate(stringToDate(it))
                         }
                     }
 
