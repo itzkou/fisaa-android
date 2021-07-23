@@ -70,6 +70,9 @@ class ChatAdapter(private val fromId: String) :
                     } else
                         msgPhoto.visibility = View.GONE
                     if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
+                    myTransaction.visibility =
+                        if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
+
 
                     message.advertisement?.let { adv ->
                         adv.parcel?.let { parcel ->
@@ -109,7 +112,8 @@ class ChatAdapter(private val fromId: String) :
                     } else
                         msgPhoto.visibility = View.GONE
 
-                    if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
+                    myTransaction.visibility =
+                        if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
 
                     message.advertisement?.let { adv ->
                         adv.parcel?.let { parcel ->
