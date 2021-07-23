@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/CreateAd"
+            android:text="modification de l'offre"
             android:textAllCaps="true"
             android:textColor="@color/bluewey"
             android:textSize="14sp"
@@ -22,57 +22,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:background="#F7F7F7"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8">
-
-
-            <RadioButton
-                android:id="@+id/rdParcel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@string/colis"
-
-                android:textColor="@color/bluewey" />
-
-            <RadioButton
-                android:id="@+id/rdTravel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@string/travelad"
-                android:textColor="@color/bluewey" />
-
-            <RadioButton
-                android:id="@+id/rdTransport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="@string/Purchase"
-                android:textColor="@color/bluewey" />
-
-
-        </RadioGroup>
-
         <ImageView
             android:id="@+id/imageView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="48dp"
             android:src="@drawable/ic_dates_blue"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radio_group" />
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
         <TextView
             android:id="@+id/textView9"
@@ -511,6 +469,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/consToHide" />
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

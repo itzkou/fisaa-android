@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kou.fisaa.R
+import com.kou.fisaa.data.entities.Advertisement
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.data.entities.User
 import com.kou.fisaa.databinding.FragmentChatRoomBinding
@@ -58,7 +59,7 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        validateSession()
+
         getOtherUser()
         listenMsgs()
 
@@ -77,7 +78,7 @@ class ChatRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        validateSession()
         viewModel.user.observe(viewLifecycleOwner, { resUser ->
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
@@ -143,12 +144,9 @@ class ChatRoomFragment : Fragment() {
 
         })
         viewModel.myAd.observe(viewLifecycleOwner, { advertisement ->
-            mAdapter.setOnModifyParcelListener {
-                requireActivity().toast(advertisement._id)
-                /* val action = ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(it)
-                 findNavController().navigate(action)*/
+            him?.let {
+                navigateModifyTransaction(advertisement, it._id)
             }
-
         })
         viewLifecycleOwner.lifecycleScope.launch {
             /** Observing outside this scope subscribes new observers and duplicate msgs are collected, observing inside lifecyclescope removes this issue
@@ -184,6 +182,7 @@ class ChatRoomFragment : Fragment() {
             })
         }
 
+
     }
 
 
@@ -197,13 +196,14 @@ class ChatRoomFragment : Fragment() {
     private fun setupUi(fromId: String) {
 
         mAdapter = ChatAdapter(fromId)
+        mAdapter.setOnModifyParcelListener { idAdvertisement ->
+            viewModel.getAd(idAdvertisement)
+        }
         binding.rvChats.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
-
-        openCamera()
         binding.openAds.setOnClickListener {
             him?.let { user ->
                 val action =
@@ -213,6 +213,7 @@ class ChatRoomFragment : Fragment() {
 
         }
 
+        openCamera()
 
     }
 
@@ -231,6 +232,27 @@ class ChatRoomFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getOtherUser(chatArgs.toId)
         }
+    }
+
+    private fun navigateModifyTransaction(adv: Advertisement, toId: String) {
+
+        adv.parcel?.let { parcel ->
+            val action =
+                ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(
+                    adv._id,
+                    adv.departureDate.toString(),
+                    adv.departure,
+                    adv.destination,
+                    parcel.dimension,
+                    parcel.parcelType,
+                    parcel.photo,
+                    parcel.description,
+                    parcel.bonus,
+                    toId
+                )
+            findNavController().navigate(action)
+        }
+
     }
 
     private fun openCamera() {

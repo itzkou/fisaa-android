@@ -196,5 +196,12 @@
             android:name="bonus"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_modifyAdsFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
+        <argument
+            android:name="toId"
+            android:defaultValue="none"
+            app:argType="string" />
     </fragment>
 </navigation>
