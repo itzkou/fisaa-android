@@ -40,7 +40,9 @@ class ModifyAdsFragment : Fragment() {
         binding.description.setText(modifyAdsArgs.description)
         binding.txBonus.setText(modifyAdsArgs.bonus.toString())
         binding.back.setOnClickListener {
-            findNavController().popBackStack()
+            val action =
+                ModifyAdsFragmentDirections.actionModifyAdsFragmentToChatRoomFragment(modifyAdsArgs.toId)
+            findNavController().navigate(action)
         }
 
 

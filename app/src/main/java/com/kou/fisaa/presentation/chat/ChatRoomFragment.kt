@@ -143,11 +143,6 @@ class ChatRoomFragment : Fragment() {
             }
 
         })
-        viewModel.myAd.observe(viewLifecycleOwner, { advertisement ->
-            him?.let {
-                navigateModifyTransaction(advertisement, it._id)
-            }
-        })
         viewLifecycleOwner.lifecycleScope.launch {
             /** Observing outside this scope subscribes new observers and duplicate msgs are collected, observing inside lifecyclescope removes this issue
              * a fragment is not always detached and his lifecycle can last longer than his view so when the user navigates back , a new view is created "OnViewCreated"
@@ -180,7 +175,9 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
-
+            viewModel.selectedAd.observe(viewLifecycleOwner, { advertisement ->
+                navigateModifyTransaction(advertisement)
+            })
         }
 
 
@@ -195,16 +192,25 @@ class ChatRoomFragment : Fragment() {
 
 
     private fun setupUi(fromId: String) {
+        setAdapter(fromId)
+        openMyAds()
+        openCamera()
 
+    }
+
+    private fun setAdapter(fromId: String) {
         mAdapter = ChatAdapter(fromId)
-        mAdapter.setOnModifyParcelListener { idAdvertisement ->
-            viewModel.getAd(idAdvertisement)
-        }
         binding.rvChats.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
+        mAdapter.setOnModifyParcelListener { idAdvertisement ->
+            viewModel.getAd(idAdvertisement)
+        }
+    }
+
+    private fun openMyAds() {
         binding.openAds.setOnClickListener {
             him?.let { user ->
                 val action =
@@ -213,9 +219,6 @@ class ChatRoomFragment : Fragment() {
             }
 
         }
-
-        openCamera()
-
     }
 
     private fun listenMsgs() {
@@ -235,24 +238,26 @@ class ChatRoomFragment : Fragment() {
         }
     }
 
-    private fun navigateModifyTransaction(adv: Advertisement, toId: String) {
-
-        adv.parcel?.let { parcel ->
-            val action =
-                ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(
-                    adv._id,
-                    adv.departureDate.toString(),
-                    adv.departure,
-                    adv.destination,
-                    parcel.dimension,
-                    parcel.parcelType,
-                    parcel.photo,
-                    parcel.description,
-                    parcel.bonus,
-                    toId
-                )
-            findNavController().navigate(action)
+    private fun navigateModifyTransaction(adv: Advertisement) {
+        him?.let {
+            adv.parcel?.let { parcel ->
+                val action =
+                    ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(
+                        adv._id,
+                        adv.departureDate.toString(),
+                        adv.departure,
+                        adv.destination,
+                        parcel.dimension,
+                        parcel.parcelType,
+                        parcel.photo,
+                        parcel.description,
+                        parcel.bonus,
+                        it._id
+                    )
+                findNavController().navigate(action)
+            }
         }
+
 
     }
 

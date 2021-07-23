@@ -27,11 +27,9 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     val hasBeenSent: MutableLiveData<Resource<DocumentReference>> = MutableLiveData()
-    var msg: LiveData<Resource<Message>> = MutableLiveData()
     val imageUrl: MutableLiveData<String> = MutableLiveData()
     val uploadTask: MutableLiveData<Resource<UploadTask.TaskSnapshot>> = MutableLiveData()
     val userId = prefsStore.getId().asLiveData()
-    var other: LiveData<Resource<User>> = MutableLiveData()
     val user: LiveData<Resource<User>> = userId.switchMap { id ->
         liveData {
             if (id != null) {
@@ -43,7 +41,8 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
-    var myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
+    val selectedAd = MutableLiveData<Advertisement>()
+    val myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
         liveData {
             if (id != null) {
                 repository.getMyAds(id).collect { resAds ->
@@ -54,8 +53,9 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
-    val myAd = MutableLiveData<Advertisement>()
     val storage = Firebase.storage.reference
+    var other: LiveData<Resource<User>> = MutableLiveData()
+    var msg: LiveData<Resource<Message>> = MutableLiveData()
 
 
     suspend fun persistImageFirestore(imageUri: Uri) {
@@ -111,7 +111,7 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAd(id).collect { resAd ->
                 resAd?.data?.let { adv ->
-                    myAd.value = adv
+                    selectedAd.value = adv
                 }
             }
         }
