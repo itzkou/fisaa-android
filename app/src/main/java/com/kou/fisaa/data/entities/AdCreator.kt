@@ -5,4 +5,11 @@ data class AdCreator(
     val firstName: String = "",
     val image: String? = null,
     val lastName: String = ""
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        "",
+        ""
+    )
+}

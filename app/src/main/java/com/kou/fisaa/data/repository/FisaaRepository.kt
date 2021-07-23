@@ -125,8 +125,6 @@ class FisaaRepository @Inject constructor(
                         channel.offer(Resource.error(error.toString()))
                         Log.i("firestore.listenMsgs", "listenMsgs: $error")
                     } else if (snapshot != null) {
-
-
                         for (dc in snapshot.documentChanges) {
                             when (dc.type) {
                                 DocumentChange.Type.ADDED -> {

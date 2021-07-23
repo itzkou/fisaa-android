@@ -53,8 +53,8 @@
 
     <!-- Adapter Flights -->
     <string name="fullname">%s %s</string>
-
-
+    <!-- Adapter chat currency-->
+    <string name="currency"> %d€</string>
     <!-- Camera -->
     <string name="rqCameraPerms">Veuillez autoriser les permissions</string>
 

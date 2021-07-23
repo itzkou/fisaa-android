@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Message
 import com.kou.fisaa.databinding.ChatFromBinding
 import com.kou.fisaa.databinding.ChatToBinding
@@ -54,36 +55,59 @@ class ChatAdapter(private val fromId: String) :
         when (holder.itemViewType) {
             TO -> {
                 with((holder as ToViewHolder).binding) {
-                    if (message.text.isNotEmpty())
-                        tvTo.text = message.text
 
+                    if (message.text.isNotEmpty()) {
+                        tvTo.visibility = View.VISIBLE
+                        tvTo.text = message.text
+                    } else
+                        tvTo.visibility = View.GONE
                     if (message.image.isNotEmpty()) {
                         msgPhoto.visibility = View.VISIBLE
                         msgPhoto.load(message.image)
                     } else
                         msgPhoto.visibility = View.GONE
+                    if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
 
+                    message.advertisement?.let { adv ->
+                        adv.parcel?.let { parcel ->
+                            destination.text = adv.destination
+                            departure.text = adv.departure
+                            destination.text = parcel.description
+                            parcelBonus.text =
+                                holder.itemView.context.getString(R.string.currency, parcel.bonus)
+                            parcelPhoto.load(parcel.photo)
+                        }
+                    }
 
 
                 }
-
-
             }
 
             FROM -> {
                 with((holder as FromViewHolder).binding) {
 
-                    if (message.text.isNotEmpty())
+                    if (message.text.isNotEmpty()) {
+                        tvFrom.visibility = View.VISIBLE
                         tvFrom.text = message.text
+                    } else
+                        tvFrom.visibility = View.GONE
                     if (message.image.isNotEmpty()) {
                         msgPhoto.visibility = View.VISIBLE
                         msgPhoto.load(message.image)
                     } else
                         msgPhoto.visibility = View.GONE
-                    /* myTransaction.visibility =
-                         if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
+                    if (message.advertisement?.parcel != null) View.VISIBLE else View.GONE
 
-                     parcelPhoto.load(message.advertisement?.parcel?.photo)*/
+                    message.advertisement?.let { adv ->
+                        adv.parcel?.let { parcel ->
+                            destination.text = adv.destination
+                            departure.text = adv.departure
+                            destination.text = parcel.description
+                            parcelBonus.text =
+                                holder.itemView.context.getString(R.string.currency, parcel.bonus)
+                            parcelPhoto.load(parcel.photo)
+                        }
+                    }
 
 
                 }
