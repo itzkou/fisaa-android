@@ -22,9 +22,7 @@ import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
 import com.kou.fisaa.databinding.FragmentModifyAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
-import com.kou.fisaa.utils.BuilderDatePicker
-import com.kou.fisaa.utils.BuilderLoading
-import com.kou.fisaa.utils.MaterialAdapter
+import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -72,6 +70,14 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
         Log.i("modifyyAdsfragment", modifyAdsArgs.toString())
         return view
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewmodel.imageUrl.observe(viewLifecycleOwner, { url ->
+            requireActivity().toast(url)
+
+        })
     }
 
 
@@ -222,6 +228,29 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
     private fun openCamera() {
         getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
+    }
+
+    private fun modifyParcel() {
+        binding.publish.isEnabled = false
+        binding.consToHide.visibility = View.VISIBLE
+        coordinateBtnAndInputs(
+            binding.publish,
+            binding.departure,
+            binding.destination,
+            binding.txBonus,
+            binding.description
+        )
+
+        binding.publish.setOnClickListener {
+            builderLoading.showDialog("loading")
+            val bonus = binding.txBonus.text.toString()
+            val description = binding.description.text.toString()
+            imageUri?.let { imageUri ->
+                viewmodel.postParcelImage(imageUri)
+
+            }
+
+        }
     }
 
 

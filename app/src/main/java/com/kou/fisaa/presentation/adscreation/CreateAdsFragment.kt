@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.lifecycleScope
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.AdsQuery
 import com.kou.fisaa.data.entities.Parcel
@@ -24,9 +23,6 @@ import com.kou.fisaa.databinding.FragmentCreateAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import id.zelory.compressor.Compressor
-import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 //TODO other generates 503
@@ -267,22 +263,6 @@ class CreateAdsFragment : Fragment(), View.OnClickListener {
         getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
     }
 
-    private fun compressImage(uri: Uri): Uri {
-        var compressedImageFile = File(uri.path ?: "")
-        viewLifecycleOwner.lifecycleScope.launch {
-            compressedImageFile =
-                Compressor.compress(
-                    requireActivity(),
-                    compressedImageFile
-                ) {
-                    /*resolution(1280, 720)
-                    quality(80)
-                    format(Bitmap.CompressFormat.WEBP)
-                    size(2_097_152)*/
-                }
-        }
-        return Uri.fromFile(compressedImageFile)
-    }
 
     private fun postFlights() {
         binding.publish.isEnabled = false

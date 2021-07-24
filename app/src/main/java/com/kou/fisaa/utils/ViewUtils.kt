@@ -3,6 +3,7 @@ package com.kou.fisaa.utils
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.net.Uri
 import android.text.*
 import android.text.format.DateUtils
 import android.text.method.LinkMovementMethod
@@ -13,10 +14,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
 import com.kou.fisaa.R
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -198,6 +204,22 @@ fun View.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun compressImage(uri: Uri, lifecycleOwner: LifecycleOwner, context: Context): Uri {
+    var compressedImageFile = File(uri.path ?: "")
+    lifecycleOwner.lifecycleScope.launch {
+        compressedImageFile =
+            Compressor.compress(
+                context,
+                compressedImageFile
+            ) {
+                /*resolution(1280, 720)
+                quality(80)
+                format(Bitmap.CompressFormat.WEBP)
+                size(2_097_152)*/
+            }
+    }
+    return Uri.fromFile(compressedImageFile)
+}
 
 
 

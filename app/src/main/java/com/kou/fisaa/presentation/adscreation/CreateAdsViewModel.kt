@@ -24,9 +24,8 @@ import kotlin.collections.set
 @HiltViewModel
 class CreateAdsViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
-    private val prefsStore: PrefsStore,
-
-    ) :
+    private val prefsStore: PrefsStore
+) :
     ViewModel() {
     private val _adCreationResponse = MutableLiveData<Resource<AdsQuery>>()
     val adCreationResponse = _adCreationResponse
