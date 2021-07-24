@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.chat
+package com.kou.fisaa.presentation.chat.myAds
 
 import androidx.lifecycle.*
 import com.kou.fisaa.data.entities.AdsResponse

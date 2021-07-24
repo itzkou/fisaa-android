@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.transactions
+package com.kou.fisaa.presentation.transactions.modifyOffer
 
 import androidx.lifecycle.ViewModel
 import com.kou.fisaa.data.repository.FisaaRepository

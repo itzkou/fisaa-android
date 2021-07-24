@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.chat
+package com.kou.fisaa.presentation.chat.chatroom
 
 import android.app.Activity
 import android.content.Intent
@@ -252,7 +252,8 @@ class ChatRoomFragment : Fragment() {
                         parcel.photo,
                         parcel.description,
                         parcel.bonus,
-                        it._id
+                        it._id,
+                        weight = parcel.weight
                     )
                 findNavController().navigate(action)
             }

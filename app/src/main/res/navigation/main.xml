@@ -113,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatRoomFragment"
-        android:name="com.kou.fisaa.presentation.chat.ChatRoomFragment"
+        android:name="com.kou.fisaa.presentation.chat.chatroom.ChatRoomFragment"
         android:label="fragment_chat_room"
         tools:layout="@layout/fragment_chat_room">
         <argument
@@ -144,7 +144,7 @@
     </fragment>
     <dialog
         android:id="@+id/bottomSheetAds"
-        android:name="com.kou.fisaa.presentation.chat.BottomSheetAds"
+        android:name="com.kou.fisaa.presentation.chat.myAds.BottomSheetAds"
         tools:layout="@layout/bottom_sheet_ads">
 
         <action
@@ -157,7 +157,7 @@
     </dialog>
     <fragment
         android:id="@+id/modifyAdsFragment"
-        android:name="com.kou.fisaa.presentation.transactions.ModifyAdsFragment"
+        android:name="com.kou.fisaa.presentation.transactions.modifyOffer.ModifyAdsFragment"
         android:label="fragment_modify_ads"
         tools:layout="@layout/fragment_modify_ads">
         <argument
@@ -201,6 +201,10 @@
             app:destination="@id/chatRoomFragment" />
         <argument
             android:name="toId"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="weight"
             android:defaultValue="none"
             app:argType="string" />
     </fragment>

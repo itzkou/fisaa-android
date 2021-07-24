@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.chat
+package com.kou.fisaa.presentation.chat.chatroom
 
 
 import android.net.Uri

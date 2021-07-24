@@ -1,4 +1,4 @@
-package com.kou.fisaa.presentation.chat
+package com.kou.fisaa.presentation.chat.myAds
 
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.BottomSheetAdsBinding
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
+import com.kou.fisaa.presentation.chat.chatroom.ChatViewModel
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint

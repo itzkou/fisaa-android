@@ -60,4 +60,7 @@ interface FisaaApi {
     suspend fun postParcel(
         @PartMap() partMap: Map<String, RequestBody>
     ): Response<Parcel>
+
+    @PATCH
+    suspend fun modifyParcel(@Body parcelQuery: ParcelQuery): Response<ParcelUpdateResponse>
 }

@@ -56,6 +56,10 @@ class MaterialAdapter(mContext: Context, private val mData: ArrayList<Material>)
 
     override fun getCount(): Int = mData.size
 
+    fun getPosition(item: Material): Int {
+        return mData.indexOf(item)
+    }
+
     class ViewHolder(view: View) {
         lateinit var tvUsername: TextView
 
