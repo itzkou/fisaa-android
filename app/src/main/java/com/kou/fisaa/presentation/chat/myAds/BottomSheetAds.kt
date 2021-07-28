@@ -15,7 +15,6 @@ import com.kou.fisaa.databinding.BottomSheetAdsBinding
 import com.kou.fisaa.presentation.ads.adapter.AdsAdapter
 import com.kou.fisaa.presentation.chat.chatroom.ChatViewModel
 import com.kou.fisaa.utils.Resource
-import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -74,8 +73,7 @@ class BottomSheetAds : BottomSheetDialogFragment() {
             adapter = adsAdapter
         }
 
-        adsAdapter.setOnAdListener { adId ->
-            requireActivity().toast(adId)
+        adsAdapter.setAdClickListener { adId ->
 
             viewmodel.sendTransaction(adId, bottomSheetAdsArgs.toId)
 

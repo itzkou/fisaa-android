@@ -91,7 +91,7 @@ class AdsAdapter @Inject constructor() :
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun setOnAdListener(callback: ((String) -> Unit)) {
+    fun setAdClickListener(callback: ((String) -> Unit)) {
         this.adsItemClickListener = callback
     }
 

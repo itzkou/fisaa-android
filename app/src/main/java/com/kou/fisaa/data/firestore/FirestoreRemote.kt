@@ -70,6 +70,11 @@ class FirestoreRemote @Inject constructor(
     }
 
 
+    /* override suspend fun updateParcelFirestore(advertisement: Advertisement,fromId: String): Task<Void>{
+         return chatsCollectionReference.document(fromId).update("arivalDate","02-02-1997")
+     }*/
+
+
     override suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot {
         return storage.child("parcels").child(imageUri.lastPathSegment!!).putFile(imageUri).await()
     }

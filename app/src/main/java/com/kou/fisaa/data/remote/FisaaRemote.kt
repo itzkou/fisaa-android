@@ -52,5 +52,8 @@ class FisaaRemote @Inject constructor(
     suspend fun searchAds(searchQuery: AdSearchQuery) =
         getResource { fisaaApi.searchAds(searchQuery) }
 
+    suspend fun updateParcel(parcelQuery: ParcelQuery, id: String) =
+        getResource { fisaaApi.updateParcel(parcelQuery, id) }
+
 
 }

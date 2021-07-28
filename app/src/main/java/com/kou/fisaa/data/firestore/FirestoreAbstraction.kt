@@ -28,7 +28,9 @@ interface FirestoreAbstraction {
     suspend fun listenMsgs(fromId: String, toId: String): Query
     suspend fun listenTransactions(toId: String): Query
 
+
     /*** Storage ***/
     suspend fun uploadParcelImage(imageUri: Uri): UploadTask.TaskSnapshot
 
+    //suspend fun updateParcelFirestore(advertisement: Advertisement, fromId: String): Task<Void>
 }

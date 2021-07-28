@@ -20,6 +20,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.kou.fisaa.R
 import com.kou.fisaa.data.entities.Material
+import com.kou.fisaa.data.entities.ParcelQuery
 import com.kou.fisaa.databinding.FragmentModifyAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.utils.*
@@ -45,6 +46,9 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
             if (result?.resultCode == Activity.RESULT_OK) {
                 imageUri = Uri.parse(result.data?.getStringExtra("cameraX"))
                 binding.imageToUpload.setImageURI(imageUri)
+                imageUri?.let { imageUri ->
+                    viewmodel.postParcelImage(imageUri)
+                }
 
             } else Log.d("CreateAdsFragment", "Uri from camera is null")
         }
@@ -74,9 +78,27 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.imageUrl.observe(viewLifecycleOwner, { url ->
-            requireActivity().toast(url)
+        viewmodel.imageUrl.observe(viewLifecycleOwner, { resUrl ->
+            requireActivity().toast(resUrl)
+            resUrl?.let { imgUrl ->
+                requireActivity().toast("Image uploaded on firestore")
+                updateParcel(imgUrl, modifyAdsArgs.idParcel)
+            }
 
+        })
+
+        viewmodel.parcelUpdateResponse.observe(viewLifecycleOwner, { resParcelUpdate ->
+            when (resParcelUpdate.status) {
+                Resource.Status.SUCCESS -> {
+                    builderLoading.dialog.dismiss()
+                    navigateToChat("success")
+                }
+                Resource.Status.LOADING -> requireActivity().toast("Updating Parcel")
+                Resource.Status.ERROR -> {
+                    requireActivity().toast("Error Updating Parcel")
+                    builderLoading.dialog.dismiss()
+                }
+            }
         })
     }
 
@@ -84,6 +106,7 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        builderLoading.dialog.dismiss()
     }
 
     override fun onClick(view: View?) {
@@ -173,9 +196,7 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
         /** buttons **/
         binding.back.setOnClickListener {
-            val action =
-                ModifyAdsFragmentDirections.actionModifyAdsFragmentToChatRoomFragment(modifyAdsArgs.toId)
-            findNavController().navigate(action)
+            navigateToChat("none")
         }
         binding.uploadImage.setOnClickListener {
             openCamera()
@@ -230,9 +251,8 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
         getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
     }
 
-    private fun modifyParcel() {
+    private fun updateParcel(imageUrl: String, id: String) {
         binding.publish.isEnabled = false
-        binding.consToHide.visibility = View.VISIBLE
         coordinateBtnAndInputs(
             binding.publish,
             binding.departure,
@@ -243,14 +263,30 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
         binding.publish.setOnClickListener {
             builderLoading.showDialog("loading")
-            val bonus = binding.txBonus.text.toString()
+            val bonus = binding.txBonus.text.toString().toInt()
             val description = binding.description.text.toString()
-            imageUri?.let { imageUri ->
-                viewmodel.postParcelImage(imageUri)
 
-            }
+            viewmodel.updateParcel(
+                ParcelQuery(
+                    bonus,
+                    description,
+                    dimension,
+                    parcelType,
+                    imageUrl,
+                    parcelWeight
+                ), id
+            )
 
         }
+    }
+
+    private fun navigateToChat(source: String) {
+        val action =
+            ModifyAdsFragmentDirections.actionModifyAdsFragmentToChatRoomFragment(
+                modifyAdsArgs.toId,
+                source
+            )
+        this.findNavController().navigate(action)
     }
 
 

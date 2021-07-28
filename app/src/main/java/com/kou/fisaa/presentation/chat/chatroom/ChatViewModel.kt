@@ -41,7 +41,7 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
-    val selectedAd = MutableLiveData<Advertisement>()
+    val chosenAdToModify = MutableLiveData<Advertisement>()
     val myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
         liveData {
             if (id != null) {
@@ -111,7 +111,7 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAd(id).collect { resAd ->
                 resAd?.data?.let { adv ->
-                    selectedAd.value = adv
+                    chosenAdToModify.value = adv
                 }
             }
         }

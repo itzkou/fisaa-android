@@ -97,7 +97,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_flightsFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment" />
+            app:destination="@id/chatRoomFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/createAdsFragment"
@@ -126,13 +128,15 @@
         <action
             android:id="@+id/action_chatRoomFragment_to_bottomSheetAds"
             app:destination="@id/bottomSheetAds" />
-        <argument
-            android:name="transactionId"
-            android:defaultValue="none"
-            app:argType="string" />
         <action
             android:id="@+id/action_chatRoomFragment_to_modifyAdsFragment"
-            app:destination="@id/modifyAdsFragment" />
+            app:destination="@id/modifyAdsFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="source"
+            android:defaultValue="none"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchAdsFragment"
@@ -160,10 +164,6 @@
         android:name="com.kou.fisaa.presentation.transactions.modifyOffer.ModifyAdsFragment"
         android:label="fragment_modify_ads"
         tools:layout="@layout/fragment_modify_ads">
-        <argument
-            android:name="idAd"
-            android:defaultValue="none"
-            app:argType="string" />
         <argument
             android:name="depDate"
             android:defaultValue="none"
@@ -198,13 +198,19 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_modifyAdsFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment" />
+            app:destination="@id/chatRoomFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
         <argument
             android:name="toId"
             android:defaultValue="none"
             app:argType="string" />
         <argument
             android:name="weight"
+            android:defaultValue="none"
+            app:argType="string" />
+        <argument
+            android:name="idParcel"
             android:defaultValue="none"
             app:argType="string" />
     </fragment>

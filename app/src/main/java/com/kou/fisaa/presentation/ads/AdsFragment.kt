@@ -67,7 +67,7 @@ class AdsFragment : Fragment() {
         binding.rvAds.apply {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-            adsAdapter.setOnAdListener {
+            adsAdapter.setAdClickListener {
                 requireActivity().toast(it)
             }
             adapter = adsAdapter

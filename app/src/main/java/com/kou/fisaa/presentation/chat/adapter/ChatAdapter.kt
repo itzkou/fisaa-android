@@ -159,7 +159,7 @@ class ChatAdapter(private val fromId: String) :
         notifyItemInserted(messages.size)
     }
 
-    fun setOnModifyParcelListener(callback: ((String) -> Unit)) {
+    fun modifyAd(callback: ((String) -> Unit)) {
         this.modifyParcelListener = callback
     }
 

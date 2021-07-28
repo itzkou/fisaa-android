@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -75,12 +76,7 @@ class TransactionFragment : Fragment() {
 
         })
     }
-/*
-    @ExperimentalCoroutinesApi
-    override fun onResume() {
-        super.onResume()
-        viewModel.listenTransactions()
-    }*/
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -91,8 +87,9 @@ class TransactionFragment : Fragment() {
     private fun setupUi() {
 
         binding.rvUsers.apply {
-            transactionAdapter.setOnUserClickListener {
-                requireActivity().toast(it)
+            transactionAdapter.setOnUserClickListener { toId ->
+                requireActivity().toast(toId)
+                navigateChatroom(toId)
             }
             adapter = transactionAdapter
             layoutManager =
@@ -104,6 +101,11 @@ class TransactionFragment : Fragment() {
                 )
             )
         }
+    }
+
+    private fun navigateChatroom(toId: String) {
+        val action = TransactionFragmentDirections.actionTransToChatRoomFragment(toId)
+        findNavController().navigate(action)
     }
 
 

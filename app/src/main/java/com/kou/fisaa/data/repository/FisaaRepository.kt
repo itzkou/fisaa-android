@@ -217,6 +217,15 @@ class FisaaRepository @Inject constructor(
         }
     }
 
+    /* override suspend fun updateParcelFirestore(advertisement: Advertisement): Flow<Resource<Task<Void>>> {
+         return flow {
+             val snapshot = firestore.updateParcelFirestore(advertisement)
+            emit(Resource.success(snapshot))
+         }.catch {
+            // emit(Resource.error(it.message.toString()))
+         }.flowOn(ioDispatcher)
+     }*/
+
 
     /*** Storage ***/
     override suspend fun uploadParcelImage(imageUri: Uri): Flow<Resource<UploadTask.TaskSnapshot>?> {
@@ -367,6 +376,17 @@ class FisaaRepository @Inject constructor(
         return flow {
             emit(Resource.loading())
             val response = remote.postParcel(partMap)
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun updateParcelRemote(
+        parcelQuery: ParcelQuery,
+        id: String
+    ): Flow<Resource<ParcelUpdateResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.updateParcel(parcelQuery, id)
             emit(response)
         }.flowOn(ioDispatcher)
     }

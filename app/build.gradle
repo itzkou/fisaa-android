@@ -100,6 +100,7 @@ dependencies {
     implementation "io.coil-kt:coil:$coil_version"
     //Navigation Component
     def nav_version = "2.3.5"
+    def fragment_version ="1.4.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 

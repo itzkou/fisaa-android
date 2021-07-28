@@ -61,6 +61,9 @@ interface FisaaApi {
         @PartMap() partMap: Map<String, RequestBody>
     ): Response<Parcel>
 
-    @PATCH
-    suspend fun modifyParcel(@Body parcelQuery: ParcelQuery): Response<ParcelUpdateResponse>
+    @PATCH("parcels/{id}")
+    suspend fun updateParcel(
+        @Body parcelQuery: ParcelQuery,
+        @Path("id") id: String
+    ): Response<ParcelUpdateResponse>
 }

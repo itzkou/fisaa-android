@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.kou.fisaa.data.entities.ParcelQuery
+import com.kou.fisaa.data.entities.ParcelUpdateResponse
 import com.kou.fisaa.data.repository.FisaaRepository
+import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,6 +23,9 @@ class ModifyAdsViewModel @Inject constructor(
 ) : ViewModel() {
     val storage = Firebase.storage.reference
     val imageUrl = MutableLiveData<String>()
+    val parcelUpdateResponse = MutableLiveData<Resource<ParcelUpdateResponse>>()
+
+
     fun postParcelImage(imageUri: Uri) {
         viewModelScope.launch {
             repository.uploadParcelImage(imageUri).collect { resource ->
@@ -42,4 +48,15 @@ class ModifyAdsViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateParcel(parcelQuery: ParcelQuery, id: String) {
+        viewModelScope.launch {
+            repository.updateParcelRemote(parcelQuery, id).collect {
+                it?.let {
+                    parcelUpdateResponse.value = it
+                }
+            }
+        }
+    }
+
 }

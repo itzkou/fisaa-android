@@ -1,18 +1,24 @@
 package com.kou.fisaa.presentation.host
 
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import coil.ImageLoader
+import coil.request.SuccessResult
+import coil.transform.CircleCropTransformation
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
 import com.kou.fisaa.presentation.splash.SplashActivity
 import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
@@ -39,6 +45,7 @@ class HostActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+        binding.bottomNavigationView.itemIconTintList = null
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == R.id.chatRoomFragment)
                 binding.bottomNavigationView.visibility = View.GONE
@@ -49,6 +56,7 @@ class HostActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             navController.navigate(R.id.action_create_ads)
         }
+
     }
 
     private fun logout() {
@@ -61,14 +69,24 @@ class HostActivity : AppCompatActivity() {
     }
 
     private fun getUserImage() {
+        val menuProfile = binding.bottomNavigationView.menu[4]
         viewModel.userPhoto.observe(this, { imageRes ->
             imageRes?.let { img ->
-                val menuProfile = binding.bottomNavigationView.menu[4]
                 this.toast(img)
+                lifecycleScope.launch {
+                    val loader = ImageLoader(this@HostActivity)
+                    val request = coil.request.ImageRequest.Builder(this@HostActivity)
+                        .data(img)
+                        .transformations(CircleCropTransformation())
+                        .build()
+                    val result = (loader.execute(request) as SuccessResult).drawable
+                    val bitmap = (result as BitmapDrawable)
+                    menuProfile.icon = bitmap
+
+                }
             }
 
         })
-
 
     }
 }

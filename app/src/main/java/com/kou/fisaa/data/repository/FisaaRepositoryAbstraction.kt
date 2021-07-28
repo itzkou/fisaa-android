@@ -29,6 +29,7 @@ interface FisaaRepositoryAbstraction {
     suspend fun sendMsg(msg: Message): Flow<Resource<DocumentReference>?>
     suspend fun listenMsgs(fromId: String, toId: String): Flow<Resource<Message>?>
     suspend fun listenTransactions(toId: String): Flow<Resource<Message>?>
+    // suspend fun updateParcelFirestore(advertisement: Advertisement): Flow<Resource<Task<Void>>>
 
 
     /*** Storage **/
@@ -50,6 +51,10 @@ interface FisaaRepositoryAbstraction {
     suspend fun searchAds(searchQuery: AdSearchQuery): Flow<Resource<AdsResponse>?>
     suspend fun postAd(advertisement: AdsQuery): Flow<Resource<AdsQuery>?>
     suspend fun postParcel(partMap: Map<String, RequestBody>): Flow<Resource<Parcel>?>
+    suspend fun updateParcelRemote(
+        parcelQuery: ParcelQuery,
+        id: String
+    ): Flow<Resource<ParcelUpdateResponse>?>
 
 
 }

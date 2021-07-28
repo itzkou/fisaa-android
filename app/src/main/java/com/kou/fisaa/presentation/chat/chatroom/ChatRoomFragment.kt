@@ -52,6 +52,7 @@ class ChatRoomFragment : Fragment() {
     private lateinit var me: User
     private lateinit var mAdapter: ChatAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +60,7 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
+        Log.i("ChatRoomFragment", "onCreateView: $chatArgs")
         getOtherUser()
         listenMsgs()
 
@@ -67,17 +68,10 @@ class ChatRoomFragment : Fragment() {
         return view
     }
 
-    private fun validateSession() {
-        viewModel.userId.observe(viewLifecycleOwner, { id ->
-            if (id != null) {
-                setupUi(id)
-            }
-        })
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         validateSession()
         viewModel.user.observe(viewLifecycleOwner, { resUser ->
             when (resUser.status) {
@@ -175,7 +169,7 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
-            viewModel.selectedAd.observe(viewLifecycleOwner, { advertisement ->
+            viewModel.chosenAdToModify.observe(viewLifecycleOwner, { advertisement ->
                 navigateModifyTransaction(advertisement)
             })
         }
@@ -205,8 +199,9 @@ class ChatRoomFragment : Fragment() {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
-        mAdapter.setOnModifyParcelListener { idAdvertisement ->
+        mAdapter.modifyAd { idAdvertisement ->
             viewModel.getAd(idAdvertisement)
+
         }
     }
 
@@ -239,11 +234,10 @@ class ChatRoomFragment : Fragment() {
     }
 
     private fun navigateModifyTransaction(adv: Advertisement) {
-        him?.let {
+        him?.let { user ->
             adv.parcel?.let { parcel ->
                 val action =
                     ChatRoomFragmentDirections.actionChatRoomFragmentToModifyAdsFragment(
-                        adv._id,
                         adv.departureDate.toString(),
                         adv.departure,
                         adv.destination,
@@ -252,11 +246,16 @@ class ChatRoomFragment : Fragment() {
                         parcel.photo,
                         parcel.description,
                         parcel.bonus,
-                        it._id,
-                        weight = parcel.weight
+                        user._id,
+                        weight = parcel.weight,
+                        parcel._id
+
                     )
-                findNavController().navigate(action)
+                this.findNavController().navigate(action)
             }
+            if (chatArgs.source == "success")
+                viewModel.sendTransaction(adv._id, user._id)
+
         }
 
 
@@ -266,6 +265,15 @@ class ChatRoomFragment : Fragment() {
         binding.sendPhoto.setOnClickListener {
             getUriFromCamera.launch(Intent(requireActivity(), CameraActivity::class.java))
         }
+    }
+
+    private fun validateSession() {
+        viewModel.userId.observe(viewLifecycleOwner, { id ->
+            if (id != null) {
+                setupUi(id)
+            }
+        })
+
     }
 
     private fun sendMsg(
@@ -291,6 +299,5 @@ class ChatRoomFragment : Fragment() {
 
         }
     }
-
 
 }
