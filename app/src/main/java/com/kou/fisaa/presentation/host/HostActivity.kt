@@ -16,7 +16,6 @@ import coil.transform.CircleCropTransformation
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
 import com.kou.fisaa.presentation.splash.SplashActivity
-import com.kou.fisaa.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -72,7 +71,6 @@ class HostActivity : AppCompatActivity() {
         val menuProfile = binding.bottomNavigationView.menu[4]
         viewModel.userPhoto.observe(this, { imageRes ->
             imageRes?.let { img ->
-                this.toast(img)
                 lifecycleScope.launch {
                     val loader = ImageLoader(this@HostActivity)
                     val request = coil.request.ImageRequest.Builder(this@HostActivity)

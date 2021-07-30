@@ -2,6 +2,7 @@ package com.kou.fisaa.presentation.transactions.modifyOffer
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.kou.fisaa.data.entities.ParcelQuery
 import com.kou.fisaa.data.entities.ParcelUpdateResponse
 import com.kou.fisaa.data.repository.FisaaRepository
 import com.kou.fisaa.utils.Resource
+import com.kou.fisaa.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -21,6 +23,8 @@ import javax.inject.Inject
 class ModifyAdsViewModel @Inject constructor(
     private val repository: FisaaRepository
 ) : ViewModel() {
+    private val _goToChat = SingleLiveEvent<Unit>()
+    val goToChat: LiveData<Unit> = _goToChat
     val storage = Firebase.storage.reference
     val imageUrl = MutableLiveData<String>()
     val parcelUpdateResponse = MutableLiveData<Resource<ParcelUpdateResponse>>()

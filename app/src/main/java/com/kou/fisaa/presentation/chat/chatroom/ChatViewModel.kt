@@ -8,12 +8,10 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
-import com.kou.fisaa.data.entities.AdsResponse
-import com.kou.fisaa.data.entities.Advertisement
-import com.kou.fisaa.data.entities.Message
-import com.kou.fisaa.data.entities.User
+import com.kou.fisaa.data.entities.*
 import com.kou.fisaa.data.preferences.PrefsStore
 import com.kou.fisaa.data.repository.FisaaRepositoryAbstraction
+import com.kou.fisaa.utils.ConsumableValue
 import com.kou.fisaa.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -25,7 +23,8 @@ class ChatViewModel @Inject constructor(
     private val repository: FisaaRepositoryAbstraction,
     private val prefsStore: PrefsStore
 ) : ViewModel() {
-
+    private val _goToChat = MutableLiveData<ConsumableValue<String>>()
+    val goToChat: LiveData<ConsumableValue<String>> = _goToChat
     val hasBeenSent: MutableLiveData<Resource<DocumentReference>> = MutableLiveData()
     val imageUrl: MutableLiveData<String> = MutableLiveData()
     val uploadTask: MutableLiveData<Resource<UploadTask.TaskSnapshot>> = MutableLiveData()
@@ -41,7 +40,7 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
-    val chosenAdToModify = MutableLiveData<Advertisement>()
+    var chosenAdToModify = MutableLiveData<ConsumableValue<Advertisement>>()
     val myAds: LiveData<Resource<AdsResponse>> = userId.switchMap { id ->
         liveData {
             if (id != null) {
@@ -111,7 +110,7 @@ class ChatViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAd(id).collect { resAd ->
                 resAd?.data?.let { adv ->
-                    chosenAdToModify.value = adv
+                    chosenAdToModify.value = ConsumableValue(adv)
                 }
             }
         }
@@ -158,6 +157,42 @@ class ChatViewModel @Inject constructor(
         }
 
 
+    }
+
+    fun postParcelImage(imageUri: Uri) {
+        viewModelScope.launch {
+            repository.uploadParcelImage(imageUri).collect { resource ->
+                resource?.data?.let { taskSnapshot ->
+                    taskSnapshot.task.addOnSuccessListener {
+                        storage.child("parcels")
+                            .child(imageUri.lastPathSegment!!)
+                            .downloadUrl
+                            .addOnSuccessListener { url ->
+                                imageUrl.value = url.toString()
+                            }
+                            .addOnFailureListener {
+                                imageUrl.value = "Error uploading Image"
+                            }
+                    }
+                    taskSnapshot.task.addOnFailureListener {
+                        Log.d("fireStorage Exception", it.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateParcel(parcelQuery: ParcelQuery, id: String) {
+        viewModelScope.launch {
+            repository.updateParcelRemote(parcelQuery, id).collect {
+                it?.let { resUpdate ->
+                    resUpdate.data?.let { response ->
+                        if (response.updatedAt.isNotEmpty())
+                            _goToChat.value = ConsumableValue("ParcelUpdated")
+                    }
+                }
+            }
+        }
     }
 
 

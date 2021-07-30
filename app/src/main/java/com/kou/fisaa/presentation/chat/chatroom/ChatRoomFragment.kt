@@ -24,6 +24,7 @@ import com.kou.fisaa.presentation.camera.CameraActivity
 import com.kou.fisaa.presentation.transactions.adapter.ChatAdapter
 import com.kou.fisaa.utils.Resource
 import com.kou.fisaa.utils.loadAvatar
+import com.kou.fisaa.utils.safeNavigate
 import com.kou.fisaa.utils.toast
 import kotlinx.coroutines.launch
 
@@ -36,6 +37,7 @@ class ChatRoomFragment : Fragment() {
     private var imageUri: Uri? = null
     private var imageUrl: String = ""
     private var him: User? = null
+    private var idAdvertisement: String? = null
 
     private val getUriFromCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -60,19 +62,24 @@ class ChatRoomFragment : Fragment() {
         _binding = FragmentChatRoomBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        Log.i("ChatRoomFragment", "onCreateView: $chatArgs")
+        validateSession()
         getOtherUser()
         listenMsgs()
-
+        sendUpdatedParcel()
 
         return view
+    }
+
+    private fun sendUpdatedParcel() {
+        if (chatArgs.parcelUpdateStatus)
+            viewModel.sendTransaction(chatArgs.idAdvertisement, chatArgs.toId)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        validateSession()
+
         viewModel.user.observe(viewLifecycleOwner, { resUser ->
             when (resUser.status) {
                 Resource.Status.SUCCESS -> {
@@ -138,8 +145,10 @@ class ChatRoomFragment : Fragment() {
 
         })
         viewLifecycleOwner.lifecycleScope.launch {
-            /** Observing outside this scope subscribes new observers and duplicate msgs are collected, observing inside lifecyclescope removes this issue
-             * a fragment is not always detached and his lifecycle can last longer than his view so when the user navigates back , a new view is created "OnViewCreated"
+            /** Observing outside this scope subscribes new observers and duplicate msgs are collected,
+             *  observing inside the lifecycleScope of "viewlifecycleOwner" removes this issue
+             * a fragment is not always detached and his lifecycle can last longer than his view so
+             * when the user navigates back , a new view is created "OnViewCreated"
              * thus a new observer is subscribed, lifecyclescope came to the rescue  **/
             viewModel.msg.observe(viewLifecycleOwner, { resource ->
                 when (resource.status) {
@@ -169,9 +178,14 @@ class ChatRoomFragment : Fragment() {
                     Resource.Status.ERROR -> requireActivity().toast(resUpload.message.toString())
                 }
             })
-            viewModel.chosenAdToModify.observe(viewLifecycleOwner, { advertisement ->
-                navigateModifyTransaction(advertisement)
+            viewModel.chosenAdToModify.observe(viewLifecycleOwner, { consumableAdv ->
+                consumableAdv.consume {
+                    val adv = consumableAdv.getConsumedValue()
+                    navigateModifyTransaction(adv)
+                }
             })
+
+
         }
 
 
@@ -192,6 +206,7 @@ class ChatRoomFragment : Fragment() {
 
     }
 
+
     private fun setAdapter(fromId: String) {
         mAdapter = ChatAdapter(fromId)
         binding.rvChats.apply {
@@ -199,9 +214,8 @@ class ChatRoomFragment : Fragment() {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
         }
-        mAdapter.modifyAd { idAdvertisement ->
-            viewModel.getAd(idAdvertisement)
-
+        mAdapter.modifyAd { idAd ->
+            viewModel.getAd(idAd)
         }
     }
 
@@ -248,13 +262,15 @@ class ChatRoomFragment : Fragment() {
                         parcel.bonus,
                         user._id,
                         weight = parcel.weight,
-                        parcel._id
-
+                        parcel._id,
+                        idAdvertisement = adv._id
                     )
-                this.findNavController().navigate(action)
+
+
+                Log.i("goToModifyTransaction", "observing")
+                findNavController().safeNavigate(action)
             }
-            if (chatArgs.source == "success")
-                viewModel.sendTransaction(adv._id, user._id)
+
 
         }
 

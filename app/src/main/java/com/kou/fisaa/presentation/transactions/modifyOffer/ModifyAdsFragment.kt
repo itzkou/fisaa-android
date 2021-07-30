@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -23,15 +24,17 @@ import com.kou.fisaa.data.entities.Material
 import com.kou.fisaa.data.entities.ParcelQuery
 import com.kou.fisaa.databinding.FragmentModifyAdsBinding
 import com.kou.fisaa.presentation.camera.CameraActivity
+import com.kou.fisaa.presentation.chat.chatroom.ChatViewModel
 import com.kou.fisaa.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ModifyAdsFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentModifyAdsBinding? = null
     private val binding get() = _binding!!
-    private val viewmodel: ModifyAdsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private val viewmodel: ChatViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
     private val modifyAdsArgs: ModifyAdsFragmentArgs by navArgs()
     private var imageUri: Uri? = null
     private val parcelTypes =
@@ -48,6 +51,7 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
                 binding.imageToUpload.setImageURI(imageUri)
                 imageUri?.let { imageUri ->
                     viewmodel.postParcelImage(imageUri)
+                    builderLoading.showDialog("loading")
                 }
 
             } else Log.d("CreateAdsFragment", "Uri from camera is null")
@@ -71,6 +75,7 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
         _binding = FragmentModifyAdsBinding.inflate(inflater, container, false)
         val view = binding.root
         setupUi()
+        updateParcel(modifyAdsArgs.photo, modifyAdsArgs.idParcel)
         Log.i("modifyyAdsfragment", modifyAdsArgs.toString())
         return view
 
@@ -78,28 +83,24 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewmodel.imageUrl.observe(viewLifecycleOwner, { resUrl ->
-            requireActivity().toast(resUrl)
             resUrl?.let { imgUrl ->
                 requireActivity().toast("Image uploaded on firestore")
+                builderLoading.dialog.dismiss()
+
                 updateParcel(imgUrl, modifyAdsArgs.idParcel)
             }
 
         })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewmodel.goToChat.observe(viewLifecycleOwner, { consumableStatus ->
+                consumableStatus.consume {
+                    navigateToChat(true)
+                }
+            })
+        }
 
-        viewmodel.parcelUpdateResponse.observe(viewLifecycleOwner, { resParcelUpdate ->
-            when (resParcelUpdate.status) {
-                Resource.Status.SUCCESS -> {
-                    builderLoading.dialog.dismiss()
-                    navigateToChat("success")
-                }
-                Resource.Status.LOADING -> requireActivity().toast("Updating Parcel")
-                Resource.Status.ERROR -> {
-                    requireActivity().toast("Error Updating Parcel")
-                    builderLoading.dialog.dismiss()
-                }
-            }
-        })
     }
 
 
@@ -107,6 +108,8 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
         super.onDestroyView()
         _binding = null
         builderLoading.dialog.dismiss()
+
+
     }
 
     override fun onClick(view: View?) {
@@ -196,7 +199,7 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
 
         /** buttons **/
         binding.back.setOnClickListener {
-            navigateToChat("none")
+            navigateToChat(false)
         }
         binding.uploadImage.setOnClickListener {
             openCamera()
@@ -280,13 +283,15 @@ class ModifyAdsFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun navigateToChat(source: String) {
+    private fun navigateToChat(status: Boolean) {
         val action =
-            ModifyAdsFragmentDirections.actionModifyAdsFragmentToChatRoomFragment(
+            ModifyAdsFragmentDirections.actionModifyAdsFragmentToChatRoomFragment2(
                 modifyAdsArgs.toId,
-                source
+                status,
+                modifyAdsArgs.idAdvertisement
             )
-        this.findNavController().navigate(action)
+        findNavController().safeNavigate(action)
+
     }
 
 

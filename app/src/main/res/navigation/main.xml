@@ -7,7 +7,7 @@
     <action
         android:id="@+id/action_create_ads"
         app:destination="@id/createAdsFragment"
-        app:launchSingleTop="true" />
+         />
     <fragment
         android:id="@+id/home"
         android:name="com.kou.fisaa.presentation.home.HomeFragment"
@@ -97,9 +97,7 @@
             app:argType="string" />
         <action
             android:id="@+id/action_flightsFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="false" />
+            app:destination="@id/chatRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/createAdsFragment"
@@ -130,11 +128,13 @@
             app:destination="@id/bottomSheetAds" />
         <action
             android:id="@+id/action_chatRoomFragment_to_modifyAdsFragment"
-            app:destination="@id/modifyAdsFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="false" />
+            app:destination="@id/modifyAdsFragment" />
         <argument
-            android:name="source"
+            android:name="parcelUpdateStatus"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="idAdvertisement"
             android:defaultValue="none"
             app:argType="string" />
     </fragment>
@@ -196,11 +196,6 @@
             android:name="bonus"
             android:defaultValue="0"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_modifyAdsFragment_to_chatRoomFragment"
-            app:destination="@id/chatRoomFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="false" />
         <argument
             android:name="toId"
             android:defaultValue="none"
@@ -211,6 +206,13 @@
             app:argType="string" />
         <argument
             android:name="idParcel"
+            android:defaultValue="none"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_modifyAdsFragment_to_chatRoomFragment2"
+            app:destination="@id/chatRoomFragment" />
+        <argument
+            android:name="idAdvertisement"
             android:defaultValue="none"
             app:argType="string" />
     </fragment>

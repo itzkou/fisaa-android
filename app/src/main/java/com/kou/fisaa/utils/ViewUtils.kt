@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.textfield.TextInputLayout
@@ -219,6 +221,10 @@ fun compressImage(uri: Uri, lifecycleOwner: LifecycleOwner, context: Context): U
             }
     }
     return Uri.fromFile(compressedImageFile)
+}
+
+fun NavController.safeNavigate(direction: NavDirections) {
+    currentDestination?.getAction(direction.actionId)?.run { navigate(direction) }
 }
 
 
