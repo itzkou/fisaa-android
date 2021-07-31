@@ -126,7 +126,7 @@ class ChatViewModel @Inject constructor(
                             val msg = Message(
                                 user._id,
                                 toId,
-                                "${user.firstName} veut envoyer un produit",
+                                "J'ai envoyé une transaction",
                                 user.image ?: "",
                                 user.firstName,
                                 "",

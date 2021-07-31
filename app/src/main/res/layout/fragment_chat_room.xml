@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView30"
+        android:id="@+id/goTrans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:padding="16dp"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,10 +21,10 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/transaction_header"
         android:textColor="@color/bluewey"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView30"
+        app:layout_constraintBottom_toBottomOf="@+id/goTrans"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imageView30"
-        app:layout_constraintTop_toTopOf="@+id/imageView30" />
+        app:layout_constraintStart_toStartOf="@+id/goTrans"
+        app:layout_constraintTop_toTopOf="@+id/goTrans" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"

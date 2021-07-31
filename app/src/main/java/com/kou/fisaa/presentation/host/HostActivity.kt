@@ -1,7 +1,6 @@
 package com.kou.fisaa.presentation.host
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import coil.ImageLoader
-import coil.request.SuccessResult
+import coil.request.ImageResult
 import coil.transform.CircleCropTransformation
 import com.kou.fisaa.R
 import com.kou.fisaa.databinding.ActivityHostBinding
@@ -56,6 +55,7 @@ class HostActivity : AppCompatActivity() {
             navController.navigate(R.id.action_create_ads)
         }
 
+
     }
 
     private fun logout() {
@@ -77,9 +77,11 @@ class HostActivity : AppCompatActivity() {
                         .data(img)
                         .transformations(CircleCropTransformation())
                         .build()
-                    val result = (loader.execute(request) as SuccessResult).drawable
-                    val bitmap = (result as BitmapDrawable)
-                    menuProfile.icon = bitmap
+                    val result: ImageResult = loader.execute(request)
+                    result.drawable?.let { bitmap ->
+                        menuProfile.icon = bitmap
+                    }
+
 
                 }
             }

@@ -54,7 +54,7 @@ class TransactionAdapter @Inject constructor() :
 
             latestMsg.text = message.text
 
-            caption.setCaptionText(message.senderName, "veut envoyer ")
+            caption.setCaptionText(message.senderName, "veut envoyer un produit")
         }
 
 

@@ -203,7 +203,14 @@ class ChatRoomFragment : Fragment() {
         setAdapter(fromId)
         openMyAds()
         openCamera()
+        navigateTransaction()
 
+    }
+
+    private fun navigateTransaction() {
+        binding.goTrans.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 
