@@ -1,260 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_glow_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
-        app:srcCompat="@drawable/white_circle" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/picture"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:shapeAppearanceOverlay="@style/circleImageView"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/txName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="TextView"
-        android:textColor="@color/primaryPurple"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/picture" />
-
-    <TextView
-        android:id="@+id/txDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-
-    <TextView
-        android:id="@+id/txBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txDesc" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bar_follows"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txBio">
-
-        <TextView
-            android:id="@+id/textView28"
-            style="@style/profile_text"
+        <ImageView
+            android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Voyages effectués"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/trips_count"
-            app:layout_constraintStart_toStartOf="@+id/trips_count"
-            app:layout_constraintTop_toBottomOf="@+id/trips_count" />
-
-        <TextView
-            android:id="@+id/trips_count"
-            style="@style/profile_text_count"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.15"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="200" />
-
-        <TextView
-            android:id="@+id/following_text"
-            style="@style/profile_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Colis envoyés"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/parcel_count"
-            app:layout_constraintStart_toStartOf="@+id/parcel_count"
-            app:layout_constraintTop_toBottomOf="@+id/parcel_count" />
-
-        <TextView
-            android:id="@+id/following_text2"
-            style="@style/profile_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Commentaires"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="@+id/comments_count"
-            app:layout_constraintStart_toStartOf="@+id/comments_count"
-            app:layout_constraintTop_toBottomOf="@+id/comments_count" />
-
-        <TextView
-            android:id="@+id/parcel_count"
-            style="@style/profile_text_count"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_glow_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="40" />
-
-        <TextView
-            android:id="@+id/comments_count"
-            style="@style/profile_text_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.85"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="40" />
-
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="|"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/parcel_count"
-            app:layout_constraintStart_toEndOf="@+id/trips_count"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45" />
-
-        <TextView
-            android:id="@+id/textView29"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="|"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/comments_count"
-            app:layout_constraintStart_toEndOf="@+id/parcel_count"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/imageView4"
+            app:srcCompat="@drawable/white_circle" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="16dp"
-        android:background="#F7F7F7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bar_follows">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/picture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintStart_toStartOf="@+id/imageView5"
+            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/textView31"
+            android:id="@+id/txName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Vérification"
+            android:text="TextView"
             android:textColor="@color/primaryPurple"
-            android:textSize="14sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/picture" />
 
         <TextView
-            android:id="@+id/phone_verif"
+            android:id="@+id/txDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <TextView
+            android:id="@+id/txBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Numéro de téléphone vérifié "
-            android:textColor="@color/bluewey"
-            android:textSize="14sp"
+            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView31" />
+            app:layout_constraintTop_toBottomOf="@+id/txDesc" />
 
-        <TextView
-            android:id="@+id/mail_verif"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bar_follows"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Adresse email vérifiée"
-            android:textColor="@color/bluewey"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/social_verif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_verif" />
+            app:layout_constraintTop_toBottomOf="@+id/txBio">
 
-        <TextView
-            android:id="@+id/social_verif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Facebook et Gmail vérifié"
-            android:textColor="@color/bluewey"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:id="@+id/textView28"
+                style="@style/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Voyages effectués"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/trips_count"
+                app:layout_constraintStart_toStartOf="@+id/trips_count"
+                app:layout_constraintTop_toBottomOf="@+id/trips_count" />
+
+            <TextView
+                android:id="@+id/trips_count"
+                style="@style/profile_text_count"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="200" />
+
+            <TextView
+                android:id="@+id/following_text"
+                style="@style/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Colis envoyés"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/parcel_count"
+                app:layout_constraintStart_toStartOf="@+id/parcel_count"
+                app:layout_constraintTop_toBottomOf="@+id/parcel_count" />
+
+            <TextView
+                android:id="@+id/following_text2"
+                style="@style/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Commentaires"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="@+id/comments_count"
+                app:layout_constraintStart_toStartOf="@+id/comments_count"
+                app:layout_constraintTop_toBottomOf="@+id/comments_count" />
+
+            <TextView
+                android:id="@+id/parcel_count"
+                style="@style/profile_text_count"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="40" />
+
+            <TextView
+                android:id="@+id/comments_count"
+                style="@style/profile_text_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.85"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="40" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="|"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/parcel_count"
+                app:layout_constraintStart_toEndOf="@+id/trips_count"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.45" />
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="|"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/comments_count"
+                app:layout_constraintStart_toEndOf="@+id/parcel_count"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:background="#F7F7F7"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bar_follows">
 
-        <ImageView
-            android:id="@+id/ic_phone_verif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/phone_verif"
-            app:layout_constraintEnd_toStartOf="@+id/phone_verif"
-            app:layout_constraintTop_toTopOf="@+id/phone_verif"
-            app:srcCompat="@drawable/ic_ticky" />
+            <TextView
+                android:id="@+id/textView31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Vérification"
+                android:textColor="@color/primaryPurple"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/ic_mail_verif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/mail_verif"
-            app:layout_constraintEnd_toStartOf="@+id/mail_verif"
-            app:layout_constraintTop_toTopOf="@+id/mail_verif"
-            app:srcCompat="@drawable/ic_ticky" />
+            <TextView
+                android:id="@+id/phone_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Numéro de téléphone vérifié "
+                android:textColor="@color/bluewey"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
-        <ImageView
-            android:id="@+id/ic_social_verif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/social_verif"
-            app:layout_constraintEnd_toStartOf="@+id/social_verif"
-            app:layout_constraintTop_toTopOf="@+id/social_verif"
-            app:srcCompat="@drawable/ic_ticky" />
+            <TextView
+                android:id="@+id/mail_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Adresse email vérifiée"
+                android:textColor="@color/bluewey"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/social_verif"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone_verif" />
+
+            <TextView
+                android:id="@+id/social_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Facebook et Gmail vérifié"
+                android:textColor="@color/bluewey"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/ic_phone_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/phone_verif"
+                app:layout_constraintEnd_toStartOf="@+id/phone_verif"
+                app:layout_constraintTop_toTopOf="@+id/phone_verif"
+                app:srcCompat="@drawable/ic_ticky" />
+
+            <ImageView
+                android:id="@+id/ic_mail_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/mail_verif"
+                app:layout_constraintEnd_toStartOf="@+id/mail_verif"
+                app:layout_constraintTop_toTopOf="@+id/mail_verif"
+                app:srcCompat="@drawable/ic_ticky" />
+
+            <ImageView
+                android:id="@+id/ic_social_verif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/social_verif"
+                app:layout_constraintEnd_toStartOf="@+id/social_verif"
+                app:layout_constraintTop_toTopOf="@+id/social_verif"
+                app:srcCompat="@drawable/ic_ticky" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

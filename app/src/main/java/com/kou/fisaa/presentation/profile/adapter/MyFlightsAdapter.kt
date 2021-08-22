@@ -2,47 +2,46 @@ package com.kou.fisaa.presentation.profile.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.kou.fisaa.databinding.FragmentMyFlightBinding
-import com.kou.fisaa.presentation.profile.placeholder.PlaceholderContent.PlaceholderItem
+import com.kou.fisaa.data.entities.PublishedAdvert
+import com.kou.fisaa.databinding.ItemMyTripsBinding
+import com.kou.fisaa.utils.SimpleCallback
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
-class MyFlightsAdapter(
-    private val values: List<PlaceholderItem>
-) : RecyclerView.Adapter<MyFlightsAdapter.ViewHolder>() {
+class MyFlightsAdapter : RecyclerView.Adapter<MyFlightsAdapter.ViewHolder>() {
+
+    private var trips = listOf<PublishedAdvert>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            FragmentMyFlightBinding.inflate(
+        return MyFlightsAdapter.ViewHolder(
+            ItemMyTripsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
-    }
+        val trip = trips[position]
+        with(holder.binding) {
 
-    override fun getItemCount(): Int = values.size
-
-    inner class ViewHolder(binding: FragmentMyFlightBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
         }
+
     }
 
+
+    override fun getItemCount(): Int {
+        return trips.size
+    }
+
+
+    fun updateTrips(newTrips: List<PublishedAdvert>) {
+        val diffResult =
+            DiffUtil.calculateDiff(SimpleCallback(this.trips, newTrips) { it._id })
+        this.trips = newTrips
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    class ViewHolder(val binding: ItemMyTripsBinding) : RecyclerView.ViewHolder(binding.root)
 }
