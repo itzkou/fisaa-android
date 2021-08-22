@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_bold"
-        android:text="rechercher une annonce"
+        android:text="@string/mon_profil"
         android:textAllCaps="true"
         android:textColor="@color/bluewey"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,9 +33,14 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+        app:layout_constraintTop_toBottomOf="@+id/textView26"
+        app:tabIndicatorGravity="top"
+        app:tabSelectedTextColor="@color/aqua"
+        app:tabTextAppearance="@style/tabText"
+        app:tabTextColor="@color/bluewey" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"

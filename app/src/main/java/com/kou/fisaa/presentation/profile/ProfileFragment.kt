@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kou.fisaa.databinding.FragmentProfileBinding
 import com.kou.fisaa.presentation.profile.adapter.PagerAdapter
+import com.kou.fisaa.presentation.profile.fragments.MyDetailsFragment
 import com.kou.fisaa.presentation.profile.fragments.MyFlightsFragment
 
 
@@ -23,7 +24,7 @@ class ProfileFragment : Fragment() {
         val view = binding.root
 
         val fragmentList = arrayListOf<Fragment>(
-            MyFlightsFragment(),
+            MyDetailsFragment(),
             MyFlightsFragment(),
             MyFlightsFragment()
         )
@@ -42,7 +43,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-            tab.text = "OBJECT ${(position + 1)}"
+            when (position) {
+                0 -> tab.text = "Info.générales"
+                1 -> tab.text = "Mes voyages"
+                2 -> tab.text = "Mes Avis"
+            }
+            //tab.text = "OBJECT ${(position + 1)}"
         }.attach()
     }
 

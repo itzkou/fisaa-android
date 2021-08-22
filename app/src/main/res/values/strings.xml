@@ -84,6 +84,7 @@
     <string name="transaction_header">Transaction avec:</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="mon_profil">mon profil</string>
 
 
 </resources>
