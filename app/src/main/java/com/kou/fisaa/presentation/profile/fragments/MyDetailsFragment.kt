@@ -18,6 +18,7 @@ class MyDetailsFragment : Fragment() {
     private var _binding: FragmentMyDetailsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MyDetailsViewModel by hiltNavGraphViewModels(R.id.nav_host_fragment)
+    private var id: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +36,7 @@ class MyDetailsFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     val user = resUser.data
                     user?.let {
+                        id = it._id
                         binding.picture.load(it.image)
                         binding.txBio.text = it.description
                         binding.txName.text = it.firstName + " " + it.lastName
@@ -47,6 +49,12 @@ class MyDetailsFragment : Fragment() {
                         .show()
                 }
             }
+        })
+        id?.let {
+            viewModel.showMyFlights(it)
+        }
+        viewModel.myFlights.observe(viewLifecycleOwner, { flights ->
+            binding.tripsCount.text = flights.size.toString()
         })
     }
 
