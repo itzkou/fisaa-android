@@ -66,4 +66,7 @@ interface FisaaApi {
         @Body parcelQuery: ParcelQuery,
         @Path("id") id: String
     ): Response<ParcelUpdateResponse>
+
+    @GET("flights/{id}")
+    suspend fun showMyFlights(@Path("id") id: String): Response<MyFlightsResponse>
 }

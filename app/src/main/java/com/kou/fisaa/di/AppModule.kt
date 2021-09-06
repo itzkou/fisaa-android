@@ -44,7 +44,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(gson: Gson): Retrofit = Retrofit.Builder()
-        .baseUrl("https://fisaa.herokuapp.com/")
+        .baseUrl("https://fisaafinal.herokuapp.com/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 

@@ -391,6 +391,14 @@ class FisaaRepository @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
+    override suspend fun showMyFlights(id: String): Flow<Resource<MyFlightsResponse>?> {
+        return flow {
+            emit(Resource.loading())
+            val response = remote.showMyFlights(id)
+            emit(response)
+        }.flowOn(ioDispatcher)
+    }
+
 
     /****  Room ***/
     private fun getUpcomingFlightsCached(): Resource<FlightsResponse>? =

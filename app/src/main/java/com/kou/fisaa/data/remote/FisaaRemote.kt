@@ -55,5 +55,7 @@ class FisaaRemote @Inject constructor(
     suspend fun updateParcel(parcelQuery: ParcelQuery, id: String) =
         getResource { fisaaApi.updateParcel(parcelQuery, id) }
 
+    suspend fun showMyFlights(id: String) =
+        getResource { fisaaApi.showMyFlights(id) }
 
 }

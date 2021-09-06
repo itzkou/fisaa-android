@@ -57,5 +57,7 @@ interface FisaaRepositoryAbstraction {
         id: String
     ): Flow<Resource<ParcelUpdateResponse>?>
 
+    suspend fun showMyFlights(id: String): Flow<Resource<MyFlightsResponse>?>
+
 
 }
