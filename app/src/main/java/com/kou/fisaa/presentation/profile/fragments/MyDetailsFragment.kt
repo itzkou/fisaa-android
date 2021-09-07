@@ -36,9 +36,9 @@ class MyDetailsFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     val user = resUser.data
                     user?.let {
-                        id = it._id
+                        //viewModel.showMyFlights(it._id)
                         binding.picture.load(it.image)
-                        binding.txBio.text = it.description
+                       // binding.txBio.text = it.description
                         binding.txName.text = it.firstName + " " + it.lastName
                     }
                 }
@@ -50,9 +50,7 @@ class MyDetailsFragment : Fragment() {
                 }
             }
         })
-        id?.let {
-            viewModel.showMyFlights(it)
-        }
+
         viewModel.myFlights.observe(viewLifecycleOwner, { flights ->
             binding.tripsCount.text = flights.size.toString()
         })

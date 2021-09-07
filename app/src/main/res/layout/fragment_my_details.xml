@@ -60,7 +60,7 @@
             android:layout_marginTop="8dp"
 
             android:fontFamily="@font/poppins_regular"
-            android:text="Paris France, Inscrit depuis Janvier 2020 "
+            android:text="Paris France, Inscrit depuis Janvier 2021 "
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,12 +104,12 @@
             <TextView
                 android:id="@+id/trips_count"
                 style="@style/profile_text_count"
+                android:text="15"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.15"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="200" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/following_text"
@@ -136,23 +136,23 @@
             <TextView
                 android:id="@+id/parcel_count"
                 style="@style/profile_text_count"
+                android:text="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="40" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/comments_count"
                 style="@style/profile_text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.85"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="40" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView21"
